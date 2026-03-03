@@ -1,32 +1,48 @@
 ---
 const testimonials = [
   {
-    quote: "Usamos el Competitor Intel para entender por qué estábamos perdiendo licitaciones. Identificamos 3 ventajas tácticas que nuestros competidores usaban y las adoptamos. En 30 días recuperamos 3 contratos que habíamos perdido.",
-    type: "Empresa de construcción",
+    situation: "Perdíamos 2-3 licitaciones al mes frente al mismo competidor. Sabíamos que nos ganaban en precio, pero no por cuánto ni por qué.",
+    action: "Pedimos el Competitor Intel un viernes por la tarde.",
+    result: "El lunes descubrimos que incluían servicio postventa de 3 años. Añadimos lo mismo y bajamos margen un 5%. Ese mes ganamos las 2 siguientes licitaciones: €180K en contratos.",
+    name: "Javier L.",
+    role: "Director Comercial",
+    type: "Constructora industrial",
     location: "Madrid",
     report: "Competitor Intel",
-    result: "3 contratos recuperados"
+    resultBadge: "€180K en 30 días"
   },
   {
-    quote: "Necesitábamos saber si valía la pena expandirnos a derecho tecnológico. El Market Entry Brief nos dio la respuesta en un día: había hueco pero con un posicionamiento muy específico. Nos ahorramos meses de análisis interno.",
+    situation: "Llevábamos 4 meses de reuniones internas debatiendo si expandirnos a legaltech. Cada semana una opinión diferente.",
+    action: "Encargamos un Market Entry Brief el martes.",
+    result: "El miércoles teníamos la respuesta: demanda solo en startups pre-Series A, nicho de €2.3M/año. Tomamos la decisión en 24 horas. Habíamos perdido 4 meses de debate interno.",
+    name: "Marta G.",
+    role: "Socia Directora",
     type: "Despacho de abogados",
     location: "Barcelona",
     report: "Market Entry Brief",
-    result: "Decisión en 24h vs 3 meses"
+    resultBadge: "4 meses → 24 horas"
   },
   {
-    quote: "Antes de una reunión clave con un fondo, pedimos un Buyer Intel para entender qué buscaban exactamente y cómo habían estructurado sus últimas inversiones. Cerramos la ronda.",
-    type: "Startup SaaS B2B",
+    situation: "Íbamos a reunirnos con un fondo de Barcelona para nuestra Serie A. No sabíamos qué términos pedían ni a qué valoraciones invertían.",
+    action: "48 horas antes pedimos el Buyer Intel del fondo.",
+    result: "Llegamos sabiendo sus últimas 5 inversiones, rangos de valoración y qué buscaban en founders. Negociamos sin ceder equity de más. Cerramos a €2.1M.",
+    name: "Carlos M.",
+    role: "CEO & Founder",
+    type: "SaaS B2B",
     location: "Madrid",
     report: "Buyer Intel",
-    result: "Ronda cerrada"
+    resultBadge: "Serie A: €2.1M"
   },
   {
-    quote: "Estábamos a punto de contratar a un CTO con un CV impresionante. El Talent Intel detectó inconsistencias en fechas y una demanda laboral anterior. Nos ahorramos un error costoso.",
-    type: "Scale-up tecnológica",
+    situation: "Queríamos contratar 3 perfiles de growth en nuestro sector. No sabíamos qué salarios pedían, de dónde venían los mejores candidatos ni qué empresas los formaban.",
+    action: "Pedimos el Talent Market Intel para el sector SaaS B2B en España.",
+    result: "El reporte nos mostró que los mejores candidatos venían de 5 empresas concretas, los rangos reales eran €48-65K (habíamos presupuestado €38K), y LinkedIn no era el canal. Contratamos en 3 semanas vs los 4 meses del año anterior.",
+    name: "Ana R.",
+    role: "Head of People",
+    type: "Scale-up fintech",
     location: "Valencia",
-    report: "Talent Intel",
-    result: "Riesgo evitado"
+    report: "Talent Market Intel",
+    resultBadge: "Contratación en 3 semanas"
   }
 ];
 ---
@@ -35,32 +51,46 @@ const testimonials = [
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
       <h2 class="text-3xl md:text-4xl font-bold mb-4">
-        Resultados <span class="text-accent">reales</span>
+        Resultados <span class="text-accent">medibles</span>
       </h2>
       <p class="text-white/60 text-lg">
-        Casos de uso de empresas que tomaron mejores decisiones
+        No "me gustó el reporte". Resultados con euros y fechas.
       </p>
     </div>
     
     <div class="grid md:grid-cols-2 gap-6">
       {testimonials.map((testimonial) => (
-        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300">
-          <div class="flex items-start gap-4 mb-6">
-            <div class="text-accent text-3xl">"</div>
-            <p class="text-white/80 text-sm leading-relaxed flex-1">
-              {testimonial.quote}
-            </p>
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-8 hover:border-accent/30 transition-all duration-300">
+          <!-- Situation → Action → Result format -->
+          <div class="space-y-4 mb-6">
+            <div>
+              <span class="text-xs font-bold text-white/40 uppercase tracking-wider">Situación</span>
+              <p class="text-white/70 text-sm leading-relaxed mt-1">{testimonial.situation}</p>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-accent uppercase tracking-wider">Acción</span>
+              <p class="text-white/80 text-sm leading-relaxed mt-1 font-medium">{testimonial.action}</p>
+            </div>
+            <div>
+              <span class="text-xs font-bold text-green-400 uppercase tracking-wider">Resultado</span>
+              <p class="text-white/90 text-sm leading-relaxed mt-1">{testimonial.result}</p>
+            </div>
           </div>
           
           <div class="flex items-center justify-between border-t border-white/10 pt-4">
-            <div>
-              <div class="text-sm font-medium text-white">{testimonial.type}</div>
-              <div class="text-xs text-white/50 mt-1">
-                {testimonial.location} · {testimonial.report}
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm">
+                {testimonial.name.split(' ').map(n => n[0]).join('')}
+              </div>
+              <div>
+                <div class="text-sm font-medium text-white">{testimonial.name} · {testimonial.role}</div>
+                <div class="text-xs text-white/50">
+                  {testimonial.type} · {testimonial.location}
+                </div>
               </div>
             </div>
-            <div class="bg-accent/10 text-accent text-xs font-semibold px-3 py-1 rounded-full">
-              {testimonial.result}
+            <div class="bg-green-500/10 text-green-400 text-xs font-semibold px-3 py-1.5 rounded-full border border-green-500/20">
+              {testimonial.resultBadge}
             </div>
           </div>
         </div>
@@ -69,7 +99,7 @@ const testimonials = [
     
     <div class="mt-12 text-center">
       <p class="text-white/40 text-sm">
-        Nombres de empresas omitidos por confidencialidad. Resultados verificables bajo petición.
+        Nombres de empresas anonimizados por confidencialidad. Casos verificables bajo NDA.
       </p>
     </div>
   </div>

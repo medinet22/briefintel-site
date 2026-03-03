@@ -1,0 +1,289 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const reportTypes = [
+  { value: 'competitor-intel', label: 'Competitor Intel — ¿Qué hace tu competidor?' },
+  { value: 'market-entry', label: 'Market Entry Brief — ¿Vale la pena entrar al mercado?' },
+  { value: 'buyer-intel', label: 'Buyer Intel M&A — ¿Quién compraría tu empresa?' },
+  { value: 'talent-market', label: 'Talent Market Intel — ¿Cómo es el mercado de talento?' },
+  { value: 'pack-completo', label: 'Pack Completo — Los 4 reportes' },
+];
+---
+
+<Layout title="Brief de tu reporte — BriefIntel">
+  <div class="min-h-screen bg-dark pt-8 pb-24 px-6">
+    <div class="max-w-2xl mx-auto">
+
+      <!-- Header -->
+      <div class="text-center mb-12 pt-8">
+        <a href="/" class="inline-block mb-8">
+          <span class="text-accent font-black text-2xl tracking-tight">BRIEF<span class="text-white">INTEL</span></span>
+        </a>
+        <div class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
+          <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+          Pago confirmado — Último paso
+        </div>
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">
+          Cuéntanos qué necesitas saber
+        </h1>
+        <p class="text-white/60 text-lg max-w-lg mx-auto">
+          5 minutos. Con esta información analizamos y te entregamos el reporte en menos de 24 horas.
+        </p>
+      </div>
+
+      <!-- Progress -->
+      <div class="flex items-center justify-center gap-3 mb-10 text-sm">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-green-500 flex items-center justify-center text-white font-bold text-xs">✓</div>
+          <span class="text-white/40">Pago</span>
+        </div>
+        <div class="w-8 h-px bg-white/20"></div>
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-accent flex items-center justify-center text-dark font-bold text-xs">2</div>
+          <span class="text-white font-medium">Brief</span>
+        </div>
+        <div class="w-8 h-px bg-white/20"></div>
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white/40 font-bold text-xs">3</div>
+          <span class="text-white/40">Reporte en 24h</span>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form
+        action="https://formspree.io/f/hello@getbriefintel.com"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-6"
+      >
+
+        <!-- Tipo de reporte -->
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
+          <label class="block text-sm font-semibold text-accent uppercase tracking-wider mb-3">
+            ¿Qué reporte has pedido?
+          </label>
+          <select
+            name="tipo_reporte"
+            required
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-accent/50 appearance-none cursor-pointer"
+          >
+            <option value="" disabled selected class="bg-dark">Selecciona el tipo de reporte</option>
+            {reportTypes.map(r => (
+              <option value={r.value} class="bg-dark">{r.label}</option>
+            ))}
+          </select>
+        </div>
+
+        <!-- Tu empresa -->
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-4">
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Tu empresa</h3>
+
+          <div>
+            <label class="block text-sm text-white/70 mb-2">Nombre de tu empresa <span class="text-accent">*</span></label>
+            <input
+              type="text"
+              name="empresa_nombre"
+              required
+              placeholder="Ej: Reformas García S.L."
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-accent/50"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm text-white/70 mb-2">Tu web <span class="text-accent">*</span></label>
+            <input
+              type="url"
+              name="empresa_web"
+              required
+              placeholder="https://tuempresa.com"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-accent/50"
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-white/70 mb-2">Sector <span class="text-accent">*</span></label>
+              <select
+                name="sector"
+                required
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-accent/50 appearance-none"
+              >
+                <option value="" disabled selected class="bg-dark">Tu sector</option>
+                <option value="construccion" class="bg-dark">Construcción / Reformas</option>
+                <option value="tecnologia" class="bg-dark">Tecnología / Software</option>
+                <option value="servicios-profesionales" class="bg-dark">Servicios profesionales</option>
+                <option value="retail-ecommerce" class="bg-dark">Retail / Ecommerce</option>
+                <option value="salud" class="bg-dark">Salud / Bienestar</option>
+                <option value="educacion" class="bg-dark">Educación / Formación</option>
+                <option value="hosteleria" class="bg-dark">Hostelería / Restauración</option>
+                <option value="inmobiliaria" class="bg-dark">Inmobiliaria</option>
+                <option value="legal" class="bg-dark">Legal / Asesoría</option>
+                <option value="otro" class="bg-dark">Otro</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm text-white/70 mb-2">Tamaño empresa</label>
+              <select
+                name="tamano"
+                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-accent/50 appearance-none"
+              >
+                <option value="1" class="bg-dark">Solo yo</option>
+                <option value="2-10" class="bg-dark">2-10 personas</option>
+                <option value="11-50" selected class="bg-dark">11-50 personas</option>
+                <option value="50+" class="bg-dark">Más de 50</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- El sujeto del análisis -->
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-4">
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">El sujeto del análisis</h3>
+          <p class="text-xs text-white/40">El competidor, mercado, comprador potencial, o sector de talento que quieres analizar.</p>
+
+          <div>
+            <label class="block text-sm text-white/70 mb-2">Nombre del sujeto a analizar <span class="text-accent">*</span></label>
+            <input
+              type="text"
+              name="sujeto_nombre"
+              required
+              placeholder="Ej: Empresa Reformas Madrid S.L. / Sector coaching online / Fondo XYZ"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-accent/50"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm text-white/70 mb-2">Web o LinkedIn del sujeto (si tiene)</label>
+            <input
+              type="text"
+              name="sujeto_web"
+              placeholder="https://competidor.com o linkedin.com/in/..."
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-accent/50"
+            />
+          </div>
+        </div>
+
+        <!-- La decisión -->
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-4">
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">La decisión que necesitas tomar</h3>
+
+          <div>
+            <label class="block text-sm text-white/70 mb-2">¿Qué decisión vas a tomar con este reporte? <span class="text-accent">*</span></label>
+            <textarea
+              name="decision"
+              required
+              rows="3"
+              placeholder="Ej: Decidir si bajar precios para competir, evaluar si entrar al mercado de reformas de lujo, preparar pitch para inversores..."
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-accent/50 resize-none"
+            ></textarea>
+          </div>
+
+          <div>
+            <label class="block text-sm text-white/70 mb-2">¿Cuáles son las 3 preguntas clave que debe responder el reporte? <span class="text-accent">*</span></label>
+            <textarea
+              name="preguntas_clave"
+              required
+              rows="4"
+              placeholder="1. ¿Qué precios usa exactamente mi competidor y cómo los justifica?&#10;2. ¿Qué canales de captación está usando que yo no?&#10;3. ¿Cuáles son sus puntos débiles que puedo explotar?"
+              class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-accent/50 resize-none"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Archivos -->
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider mb-2">Documentos adicionales (opcional)</h3>
+          <p class="text-xs text-white/40 mb-4">Propuestas, análisis previos, informes internos o cualquier contexto que nos ayude. PDF, Word, Excel. Máx. 10MB por archivo.</p>
+
+          <div
+            class="border-2 border-dashed border-white/10 rounded-xl p-8 text-center hover:border-accent/30 transition-colors duration-200 cursor-pointer"
+            onclick="document.getElementById('file-upload').click()"
+          >
+            <div class="text-3xl mb-3">📎</div>
+            <p class="text-sm text-white/50 mb-2">Arrastra archivos aquí o haz click para seleccionar</p>
+            <p class="text-xs text-white/30">PDF, Word, Excel · Máx. 10MB cada uno</p>
+            <input
+              id="file-upload"
+              type="file"
+              name="archivos"
+              multiple
+              accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx"
+              class="hidden"
+            />
+          </div>
+
+          <p class="text-xs text-white/30 mt-3 text-center">
+            Si los archivos son grandes, puedes enviarlos a <span class="text-accent">hello@getbriefintel.com</span> tras enviar el brief.
+          </p>
+        </div>
+
+        <!-- Email -->
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
+          <label class="block text-sm text-white/70 mb-2">Tu email para recibir el reporte <span class="text-accent">*</span></label>
+          <input
+            type="email"
+            name="_replyto"
+            required
+            placeholder="tu@empresa.com"
+            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm placeholder-white/30 focus:outline-none focus:border-accent/50"
+          />
+          <p class="text-xs text-white/30 mt-2">Aquí recibirás el reporte en menos de 24 horas.</p>
+        </div>
+
+        <!-- Hidden fields -->
+        <input type="hidden" name="_subject" value="Nuevo Brief BriefIntel" />
+        <input type="hidden" name="_next" value="https://getbriefintel.com/gracias" />
+        <input type="text" name="_gotcha" class="hidden" />
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="w-full bg-accent hover:bg-accent/90 text-dark py-4 rounded-xl text-lg font-bold transition-all duration-200 hover:scale-[1.02] flex items-center justify-center gap-2"
+        >
+          Enviar brief y empezar análisis
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+
+        <p class="text-center text-xs text-white/30">
+          🔒 Tus datos son confidenciales y no se compartirán con terceros. · Recibirás el reporte en <strong class="text-white/50">menos de 24 horas</strong>.
+        </p>
+
+      </form>
+
+      <!-- What happens next -->
+      <div class="mt-12 bg-white/[0.02] border border-white/10 rounded-2xl p-6">
+        <h3 class="text-sm font-semibold text-white/50 uppercase tracking-wider mb-4">Qué pasa después de enviar</h3>
+        <div class="space-y-4">
+          <div class="flex gap-4">
+            <div class="w-8 h-8 bg-accent/10 border border-accent/20 rounded-lg flex items-center justify-center text-accent font-bold text-sm flex-shrink-0">1</div>
+            <div>
+              <p class="text-sm font-medium text-white">Confirmación inmediata</p>
+              <p class="text-xs text-white/40">Recibirás un email en segundos confirmando que hemos recibido tu brief.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-8 h-8 bg-accent/10 border border-accent/20 rounded-lg flex items-center justify-center text-accent font-bold text-sm flex-shrink-0">2</div>
+            <div>
+              <p class="text-sm font-medium text-white">Análisis en profundidad</p>
+              <p class="text-xs text-white/40">Nuestro equipo de IA + analistas senior investiga durante las próximas horas.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <div class="w-8 h-8 bg-accent/10 border border-accent/20 rounded-lg flex items-center justify-center text-accent font-bold text-sm flex-shrink-0">3</div>
+            <div>
+              <p class="text-sm font-medium text-white">Reporte en tu bandeja en &lt;24h</p>
+              <p class="text-xs text-white/40">PDF ejecutivo con insights priorizados, fuentes verificadas y plan de acción de 30 días.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</Layout>
+
+<style>
+  select option { background: #111; color: white; }
+</style>

@@ -13,7 +13,8 @@ const reports = [
       "Plan de ataque concreto para los próximos 30 días"
     ],
     icon: "🎯",
-    useCase: "Ideal si: pierdes clientes y no sabes por qué, o tu competidor crece más rápido"
+    useCase: "Ideal si: pierdes clientes y no sabes por qué, o tu competidor crece más rápido",
+    link: "https://buy.stripe.com/eVq4gA0rSg2pdjc8pDaEE05"
   },
   {
     name: "MARKET ENTRY BRIEF",
@@ -28,7 +29,8 @@ const reports = [
       "Cuándo y cómo atacar — recomendación go/no-go"
     ],
     icon: "🌍",
-    useCase: "Ideal si: evalúas expansión geográfica o nuevo segmento de clientes"
+    useCase: "Ideal si: evalúas expansión geográfica o nuevo segmento de clientes",
+    link: "https://buy.stripe.com/aFabJ2b6w2bz6UO21faEE04"
   },
   {
     name: "BUYER INTEL · M&A",
@@ -43,22 +45,24 @@ const reports = [
       "Cómo posicionarte para máxima valoración"
     ],
     icon: "💼",
-    useCase: "Ideal si: preparas un exit, buscas tu ronda de inversión o evalúas potenciales compradores"
+    useCase: "Ideal si: preparas un exit, buscas tu ronda de inversión o evalúas potenciales compradores",
+    link: "https://buy.stripe.com/00w00keiIcQd5QKbBPaEE03"
   },
   {
-    name: "TALENT INTEL",
-    question: "¿El candidato es quien dice ser?",
+    name: "TALENT MARKET INTEL",
+    question: "¿Cómo es el mercado de talento en tu sector?",
     price: "€19",
     delivery: "Entrega 24h",
-    description: "Antes de contratar o colaborar con alguien clave: saber quién es realmente, qué dice internet de él, inconsistencias en su trayectoria y señales de riesgo.",
+    description: "Análisis del perfil de talento en tu sector o nicho: qué perfiles dominan el mercado, qué habilidades escasean, qué pagan los competidores y dónde están los mejores candidatos. Como el reporte de BollBox Media sobre coaches.",
     features: [
-      "Verificación de trayectoria profesional",
-      "Qué dice internet de esta persona",
-      "Inconsistencias o señales de riesgo",
-      "Evaluación de fit con tu empresa"
+      "Mapa de perfiles dominantes en tu sector",
+      "Rangos salariales y condiciones del mercado",
+      "Dónde están y cómo atraer a los mejores",
+      "Tendencias emergentes en el mercado de talento"
     ],
-    icon: "👤",
-    useCase: "Ideal si: contratas un C-level, socio clave o evaluás un proveedor importante"
+    icon: "📊",
+    useCase: "Ideal si: quieres entender el mercado de talento de tu sector antes de contratar o posicionarte como employer",
+    link: "https://buy.stripe.com/14A4gAb6w03r7YScFTaEE06"
   }
 ];
 ---
@@ -103,12 +107,17 @@ const reports = [
           <p class="text-xs text-accent/70 mb-6 italic">{report.useCase}</p>
           
           <a 
-            href={`mailto:hello@getbriefintel.com?subject=Solicitud%20${encodeURIComponent(report.name)}%20${encodeURIComponent(report.price)}&body=Hola%2C%20quiero%20pedir%20un%20${encodeURIComponent(report.name)}.%0A%0AMi%20empresa%3A%20%0ASector%3A%20%0AQu%C3%A9%20necesito%20analizar%3A%20`}
-            class="inline-flex items-center gap-2 text-accent text-sm font-medium group-hover:gap-3 transition-all duration-200"
+            href={report.link}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent/90 text-dark py-3 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-[1.02]"
           >
-            Solicitar este reporte →
+            Pagar ahora · {report.price}
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
           </a>
-          <p class="text-xs text-white/30 mt-2">Respuesta en &lt;2h · {report.price} · 24h entrega</p>
+          <p class="text-xs text-white/30 mt-2 text-center">🔒 Checkout seguro Stripe · Factura automática</p>
         </div>
       ))}
     </div>

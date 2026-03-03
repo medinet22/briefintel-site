@@ -3,42 +3,61 @@
 
 <section class="py-24 px-6">
   <div class="max-w-4xl mx-auto">
-    <div class="relative bg-gradient-to-br from-accent/10 via-accent/5 to-transparent border border-accent/20 rounded-3xl p-12 md:p-16 text-center overflow-hidden">
+    <div class="relative bg-gradient-to-br from-accent/10 via-accent/5 to-transparent border border-accent/30 rounded-3xl p-12 md:p-16 text-center overflow-hidden">
       <!-- Decorative elements -->
       <div class="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
       <div class="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
       
       <div class="relative z-10">
+        <!-- Urgency badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-sm text-amber-400 mb-8">
+          <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+          Capacidad: 5 reportes/día · Normalmente entregamos antes de las 24h
+        </div>
+        
         <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-          Tu primera decisión inteligente<br />
-          <span class="text-accent">en 24 horas.</span>
+          Esa decisión que llevas semanas<br />
+          <span class="text-accent">posponiendo por "falta de datos"</span>
         </h2>
         
-        <p class="text-lg text-white/60 mb-10 max-w-xl mx-auto">
-          Empieza por el reporte que más impacto tenga en tu decisión de esta semana. Si no te aporta valor, te devolvemos el dinero.
+        <p class="text-lg text-white/70 mb-4 max-w-xl mx-auto">
+          Pagas hoy. Mañana a esta hora tienes el reporte en tu email. 
+          <strong class="text-white/90">Pasado mañana ya estás ejecutando.</strong>
         </p>
         
-        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+        <p class="text-md text-white/50 mb-10 max-w-lg mx-auto">
+          ¿Y si no te aporta nada nuevo? Te devolvemos el dinero en 7 días. Sin preguntas, sin excusas.
+        </p>
+        
+        <div class="flex flex-col items-center gap-4 mb-8">
           <a 
             href="#pack" 
-            class="inline-flex items-center gap-3 bg-accent text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent/20"
+            class="inline-flex items-center gap-3 bg-accent text-dark px-10 py-5 rounded-xl text-xl font-bold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent/25"
           >
-            Ver Pack Estratégico €99
+            Quiero mi reporte mañana
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
-          <a 
-            href="#precios" 
-            class="inline-flex items-center justify-center gap-2 bg-white/5 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-white/10 transition-all duration-300 border border-white/10"
-          >
-            Ver reportes individuales
-          </a>
+          <span class="text-sm text-white/40">Pack Estratégico €119 (ahorra €43) · Individuales desde €19</span>
         </div>
         
-        <p class="text-sm text-white/40">
-          Pago único · Sin suscripción · Factura automática · Garantía 7 días
-        </p>
+        <div class="flex flex-wrap justify-center gap-6 text-sm text-white/50">
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            Garantía 7 días sin excusas
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            Factura automática
+          </span>
+          <span class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            Pago único, sin suscripciones
+          </span>
+        </div>
       </div>
     </div>
   </div>

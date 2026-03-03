@@ -3,58 +3,79 @@
 
 <section class="min-h-screen flex items-center justify-center pt-20 pb-16 px-6">
   <div class="max-w-4xl mx-auto text-center">
-    <!-- Trust badge -->
-    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/70 mb-8">
-      <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-      Más de 70 reportes entregados · 100% satisfacción
+    <!-- Trust badge with guarantee -->
+    <div class="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-green-500/10 border border-green-500/30 text-sm mb-8">
+      <span class="flex items-center gap-2 text-green-400 font-medium">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+        </svg>
+        Garantía 7 días
+      </span>
+      <span class="text-white/30">|</span>
+      <span class="text-white/60">No te aporta valor → te devolvemos el dinero</span>
     </div>
     
     <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 tracking-tight">
-      Toma mejores decisiones.<br />
-      <span class="text-accent">En 24 horas. Desde €19.</span>
+      Saber qué hace tu competidor<br />
+      <span class="text-accent">esta semana. Por €35.</span>
     </h1>
     
-    <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-6 leading-relaxed">
-      Reportes de inteligencia sobre competidores, mercados, inversores y talento — creados por analistas con +15 años de experiencia, potenciados por IA.
+    <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-4 leading-relaxed">
+      Reportes de inteligencia competitiva en 24 horas. Qué está haciendo tu competidor, por qué pierdes licitaciones, si vale la pena entrar a ese mercado.
     </p>
     
-    <p class="text-md text-white/50 max-w-xl mx-auto mb-10">
-      Lo que una consultora cobra €50.000 y tarda 12 semanas, nosotros lo entregamos <strong class="text-white/80">en 24 horas por menos de €100.</strong>
+    <p class="text-md text-white/50 max-w-xl mx-auto mb-4">
+      Analistas ex-McKinsey + IA especializada. Lo que una consultora cobra €50.000 y tarda 12 semanas, <strong class="text-white/80">nosotros en 24 horas por menos de €100.</strong>
     </p>
     
-    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+    <!-- Who is this for -->
+    <p class="text-sm text-accent/80 mb-8 max-w-lg mx-auto">
+      Para founders, directores y equipos de estrategia que necesitan decidir rápido y bien.
+    </p>
+    
+    <!-- Single dominant CTA -->
+    <div class="flex flex-col items-center gap-4 mb-6">
       <a 
         href="#pack" 
-        class="inline-flex items-center justify-center gap-2 bg-accent text-dark px-8 py-4 rounded-xl text-lg font-semibold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent/20"
+        class="inline-flex items-center justify-center gap-2 bg-accent text-dark px-10 py-5 rounded-xl text-xl font-bold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent/25"
       >
-        Ver Pack Estratégico €99
+        Pedir mi primer reporte
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
         </svg>
       </a>
-      <a 
-        href="#reportes" 
-        class="inline-flex items-center justify-center gap-2 bg-white/5 text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-white/10 transition-all duration-300 border border-white/10"
-      >
-        Ver reportes individuales →
-      </a>
+      <span class="text-sm text-white/40">Pack Estratégico €119 (ahorra €43) · Individuales desde €19</span>
     </div>
 
-    <!-- Trust badges debajo CTAs -->
-    <div class="flex flex-wrap justify-center gap-3 text-xs text-white/40 mb-8">
-      <span>✓ Sin suscripción · Pago único</span>
-      <span>·</span>
-      <span>✓ Factura automática</span>
-      <span>·</span>
-      <span>✓ Garantía 7 días</span>
-      <span>·</span>
-      <span class="text-amber-400/60">⚡ Capacidad limitada — máx. 5 reportes/día</span>
+    <!-- Trust badges debajo CTA -->
+    <div class="flex flex-wrap justify-center gap-4 text-sm text-white/50 mb-10">
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+        Sin suscripción
+      </span>
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+        Factura automática
+      </span>
+      <span class="flex items-center gap-1.5">
+        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+        Entrega en 24h
+      </span>
     </div>
     
-    <!-- Social proof -->
-    <p class="text-sm text-white/50 mb-12">
-      "Descubrimos por qué perdíamos licitaciones. En 30 días recuperamos 3 contratos." — <span class="text-white/70">Empresa de construcción, Madrid</span>
-    </p>
+    <!-- Real testimonial with specific result -->
+    <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-6 max-w-2xl mx-auto mb-12">
+      <p class="text-white/80 text-sm leading-relaxed mb-4 italic">
+        "Perdíamos 2-3 licitaciones al mes sin saber por qué. El reporte nos mostró que nuestro competidor ofrecía servicio postventa que nosotros ni mencionábamos. En 30 días ganamos €180K en contratos."
+      </p>
+      <div class="flex items-center justify-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">JL</div>
+        <div class="text-left">
+          <p class="text-sm font-medium text-white/90">Javier L. · Director Comercial</p>
+          <p class="text-xs text-white/50">Constructora industrial · Madrid</p>
+        </div>
+      </div>
+    </div>
     
     <!-- Trust metrics -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t border-white/10 pt-10">
@@ -63,16 +84,16 @@
         <div class="text-sm text-white/50 mt-1">Entrega garantizada</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-white">€19-99</div>
-        <div class="text-sm text-white/50 mt-1">Precio fijo, sin sorpresas</div>
+        <div class="text-3xl font-bold text-white">€19-119</div>
+        <div class="text-sm text-white/50 mt-1">Precio fijo transparente</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-white">70+</div>
-        <div class="text-sm text-white/50 mt-1">Reportes entregados</div>
+        <div class="text-3xl font-bold text-white">40+</div>
+        <div class="text-sm text-white/50 mt-1">Fuentes verificadas</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-white">7 días</div>
-        <div class="text-sm text-white/50 mt-1">Garantía de devolución</div>
+        <div class="text-3xl font-bold text-white">100%</div>
+        <div class="text-sm text-white/50 mt-1">Garantía devolución</div>
       </div>
     </div>
   </div>

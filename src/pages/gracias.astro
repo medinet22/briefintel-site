@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Brief enviado — BriefIntel">
+  <div class="min-h-screen bg-dark flex items-center justify-center px-6">
+    <div class="max-w-lg mx-auto text-center">
+      <div class="w-20 h-20 bg-green-500/10 border border-green-500/20 rounded-full flex items-center justify-center mx-auto mb-8">
+        <svg class="w-10 h-10 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold mb-4">Brief recibido. <span class="text-accent">Estamos en ello.</span></h1>
+      <p class="text-white/60 text-lg mb-8">
+        Recibirás una confirmación por email ahora mismo. Tu reporte estará en tu bandeja en <strong class="text-white">menos de 24 horas.</strong>
+      </p>
+      <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 text-left mb-8">
+        <h3 class="text-sm font-semibold text-accent uppercase tracking-wider mb-4">Mientras tanto</h3>
+        <ul class="space-y-3 text-sm text-white/60">
+          <li class="flex gap-3"><span class="text-accent">→</span> Revisa tu carpeta de spam si no ves la confirmación</li>
+          <li class="flex gap-3"><span class="text-accent">→</span> Si tienes archivos adicionales, envíalos a <span class="text-accent">hello@getbriefintel.com</span></li>
+          <li class="flex gap-3"><span class="text-accent">→</span> ¿Preguntas? Responde al email de confirmación</li>
+        </ul>
+      </div>
+      <a href="/" class="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors">
+        ← Volver a getbriefintel.com
+      </a>
+    </div>
+  </div>
+</Layout>

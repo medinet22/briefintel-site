@@ -28,7 +28,10 @@ const currentYear = new Date().getFullYear();
     
     <div class="mt-8 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/30">
       <p>© {currentYear} BriefIntel. Todos los derechos reservados.</p>
-      <p>Inteligencia competitiva bajo demanda.</p>
+      <div class="flex items-center gap-6">
+        <a href="/privacidad" class="hover:text-white/50 transition-colors">Política de Privacidad</a>
+        <a href="/terminos" class="hover:text-white/50 transition-colors">Términos y Condiciones</a>
+      </div>
     </div>
   </div>
 </footer>

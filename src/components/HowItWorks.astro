@@ -3,20 +3,30 @@ const steps = [
   {
     number: "01",
     title: "Elige tu reporte y paga",
-    description: "Checkout en 1 minuto con Stripe. Factura automática inmediata.",
-    icon: "💳"
+    description: "Checkout seguro con Stripe en menos de 1 minuto. Factura automática. Precio fijo, sin sorpresas.",
+    icon: "💳",
+    detail: "Pago único · Sin suscripción · Factura automática"
   },
   {
     number: "02",
-    title: "Completa el brief (5 min)",
-    description: "Cuéntanos qué necesitas saber y por qué. Unas pocas preguntas para enfocar la investigación.",
-    icon: "📝"
+    title: "Rellena tu brief (5 min)",
+    description: "Te redirigimos a un formulario donde nos dices: tu web, el sujeto a analizar, la decisión que necesitas tomar y tus 3 preguntas clave. Puedes adjuntar archivos.",
+    icon: "📋",
+    detail: "Web · Archivos · 3 preguntas clave · Decisión objetivo"
   },
   {
     number: "03",
-    title: "Recibe tu reporte en 24h",
-    description: "PDF ejecutivo con insights priorizados, acciones concretas y un plan para los próximos 30 días.",
-    icon: "📊"
+    title: "Investigamos en profundidad",
+    description: "Nuestra IA + analistas senior analizan fuentes verificadas: registros oficiales, LinkedIn, prensa, señales digitales y bases de datos premium.",
+    icon: "🔍",
+    detail: "IA propietaria + revisión humana · 40+ fuentes"
+  },
+  {
+    number: "04",
+    title: "Recibes tu reporte en 24h",
+    description: "PDF ejecutivo de 12-25 páginas con resumen, insights priorizados, nivel de confianza por dato y plan de acción de 30 días. Listo para tomar decisiones.",
+    icon: "📊",
+    detail: "PDF ejecutivo · Fuentes citadas · Plan de acción 30 días"
   }
 ];
 
@@ -24,22 +34,22 @@ const methodology = [
   {
     icon: "🤖",
     title: "IA entrenada en miles de casos",
-    description: "No es un chatbot genérico. Nuestra IA está entrenada específicamente en inteligencia competitiva y análisis de mercados."
+    description: "No es un chatbot genérico. IA entrenada específicamente en inteligencia competitiva y análisis de mercados con miles de informes reales."
   },
   {
     icon: "👨‍💼",
     title: "Analistas con +15 años de experiencia",
-    description: "Ex-consultores de McKinsey, BCG y KPMG revisan cada reporte antes de enviarlo."
+    description: "Ex-consultores de McKinsey, BCG y KPMG revisan y validan cada reporte antes de enviarlo. Siempre hay un humano detrás."
   },
   {
     icon: "📡",
-    title: "Fuentes verificadas en tiempo real",
-    description: "Registros oficiales, bases de datos premium, LinkedIn, señales digitales, y 40+ fuentes más."
+    title: "40+ fuentes verificadas en tiempo real",
+    description: "Registros oficiales, LinkedIn, prensa sectorial, bases de datos premium, señales digitales y datos de mercado actualizados."
   },
   {
     icon: "✅",
     title: "22 puntos de control de calidad",
-    description: "Metodología propietaria: cada dato triangulado, cada insight con nivel de confianza, cada acción concreta."
+    description: "Metodología propietaria: cada dato triangulado, cada insight con nivel de confianza (CONFIRMADO / INFERIDO / SEÑAL EMERGENTE), cada acción concreta."
   }
 ];
 ---
@@ -52,39 +62,43 @@ const methodology = [
         De tu pregunta a <span class="text-accent">decisión informada</span>
       </h2>
       <p class="text-white/60 text-lg">
-        Tres pasos. 24 horas. Cero complicaciones.
+        Cuatro pasos. 24 horas. Cero ambigüedad.
       </p>
     </div>
-    
-    <div class="relative mb-24">
-      <!-- Connection line -->
-      <div class="hidden md:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent -translate-y-1/2"></div>
-      
-      <div class="grid md:grid-cols-3 gap-8 md:gap-12">
-        {steps.map((step, index) => (
-          <div class="relative text-center group">
-            <div class="relative z-10 bg-dark">
-              <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-4xl group-hover:border-accent/50 group-hover:bg-accent/5 transition-all duration-300">
-                {step.icon}
-              </div>
-              
-              <div class="text-accent text-sm font-mono mb-2">{step.number}</div>
-              <h3 class="text-xl font-semibold mb-3">{step.title}</h3>
-              <p class="text-white/50 text-sm leading-relaxed">{step.description}</p>
-            </div>
-            
-            {index < steps.length - 1 && (
-              <div class="hidden md:block absolute top-10 -right-6 text-accent/30">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            )}
+
+    <div class="grid md:grid-cols-4 gap-6 mb-6">
+      {steps.map((step, index) => (
+        <div class="relative group">
+          <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 h-full hover:border-accent/30 transition-all duration-300 hover:bg-white/[0.04]">
+            <div class="text-3xl mb-4">{step.icon}</div>
+            <div class="text-accent text-xs font-mono font-bold mb-2">{step.number}</div>
+            <h3 class="text-base font-bold mb-2 leading-tight">{step.title}</h3>
+            <p class="text-white/50 text-xs leading-relaxed mb-3">{step.description}</p>
+            <div class="text-xs text-accent/60 border-t border-white/5 pt-3 leading-relaxed">{step.detail}</div>
           </div>
-        ))}
-      </div>
+          {index < steps.length - 1 && (
+            <div class="hidden md:flex absolute top-8 -right-3 z-10 w-6 h-6 bg-dark border border-white/10 rounded-full items-center justify-center">
+              <svg class="w-3 h-3 text-accent/50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+          )}
+        </div>
+      ))}
     </div>
-    
+
+    <!-- Brief highlight -->
+    <div class="bg-accent/5 border border-accent/20 rounded-2xl p-6 mb-20 flex flex-col md:flex-row items-center gap-6">
+      <div class="text-4xl">📋</div>
+      <div class="flex-1">
+        <h3 class="font-bold text-white mb-1">El brief es la clave del reporte</h3>
+        <p class="text-white/60 text-sm">Después de pagar, te pedimos: <strong class="text-white/80">tu web</strong>, el <strong class="text-white/80">sujeto a analizar</strong> (con su URL o LinkedIn), la <strong class="text-white/80">decisión que necesitas tomar</strong> y tus <strong class="text-white/80">3 preguntas clave</strong>. Puedes adjuntar archivos (PDFs, Excel) hasta 10MB. Cuanto mejor sea el brief, más accionable será el reporte.</p>
+      </div>
+      <a href="/brief" class="bg-accent text-dark px-6 py-3 rounded-xl font-bold text-sm hover:bg-accent/90 transition-colors whitespace-nowrap flex-shrink-0">
+        Ver el formulario →
+      </a>
+    </div>
+
     <!-- Methodology -->
     <div class="border-t border-white/10 pt-20">
       <div class="text-center mb-12">
@@ -93,17 +107,17 @@ const methodology = [
           No es un chatbot. No es Google.
         </h3>
         <p class="text-white/60 text-lg max-w-2xl mx-auto">
-          BriefIntel combina tecnología propietaria con experiencia humana real. <br />
-          <strong class="text-white/80">Resultado: inteligencia de nivel McKinsey. Precio de startup.</strong>
+          BriefIntel combina tecnología propietaria con experiencia humana real.<br />
+          <strong class="text-white/80">Inteligencia de nivel McKinsey. Precio de startup.</strong>
         </p>
       </div>
-      
+
       <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {methodology.map((item) => (
           <div class="bg-white/[0.02] border border-white/10 rounded-xl p-6 hover:border-accent/30 transition-all duration-300">
             <div class="text-3xl mb-4">{item.icon}</div>
-            <h4 class="font-semibold mb-2 text-white/90">{item.title}</h4>
-            <p class="text-sm text-white/50 leading-relaxed">{item.description}</p>
+            <h4 class="font-semibold mb-2 text-white/90 text-sm">{item.title}</h4>
+            <p class="text-xs text-white/50 leading-relaxed">{item.description}</p>
           </div>
         ))}
       </div>

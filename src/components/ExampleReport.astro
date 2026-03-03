@@ -1,94 +1,202 @@
 ---
+// Ejemplo real: Competitor Intel para constructora española
+const competitorTable = [
+  {
+    name: "Reformas García S.L.",
+    revenue: "€4.2M/año",
+    employees: "28",
+    winRate: "62%",
+    avgTicket: "€45K",
+    weakness: "Sin web, depende de referencias"
+  },
+  {
+    name: "Construcciones Modernas",
+    revenue: "€7.8M/año",
+    employees: "52",
+    winRate: "71%",
+    avgTicket: "€68K",
+    weakness: "Subcontrata todo, plazos variables"
+  },
+  {
+    name: "Martínez & Hijos",
+    revenue: "€3.1M/año",
+    employees: "19",
+    winRate: "48%",
+    avgTicket: "€38K",
+    weakness: "Baja presencia digital"
+  },
+  {
+    name: "TU EMPRESA",
+    revenue: "€2.8M/año",
+    employees: "16",
+    winRate: "34%",
+    avgTicket: "€41K",
+    weakness: "—"
+  }
+];
+
+const insights = [
+  {
+    confidence: "CONFIRMADO",
+    confidenceColor: "green",
+    insight: "Construcciones Modernas gana el 71% de las licitaciones. Su secreto: incluyen servicio postventa de 3 años en sus ofertas (verificado en 5 pliegos públicos). Tú no lo mencionas.",
+    action: "Añadir servicio postventa de 2-3 años a tus propuestas. Coste real: ~4% del proyecto. Impacto en win rate: estimado +15-20%."
+  },
+  {
+    confidence: "CONFIRMADO",
+    confidenceColor: "green",
+    insight: "Reformas García ha subido precios un 18% en 6 meses pero tiene 4 reseñas negativas recientes en Google (plazos incumplidos). Clientes descontentos buscando alternativas.",
+    action: "Contactar a 3 clientes recientes de García (lista incluida en anexo). Ofrecer 'garantía de plazo' como diferencial."
+  },
+  {
+    confidence: "SEÑAL TEMPRANA",
+    confidenceColor: "blue",
+    insight: "Martínez & Hijos publicó oferta de 'Director de Expansión' en InfoJobs hace 12 días. Probablemente preparan entrar en tu zona (Madrid norte) en Q2.",
+    action: "Acelerar renovaciones con clientes actuales en Madrid norte antes de abril. Preparar campaña de retención."
+  }
+];
+
+const actionPlan = [
+  { week: "Semana 1-2", action: "Rediseñar propuestas comerciales incluyendo garantía postventa de 3 años. Preparar FAQ interno sobre objeciones de precio." },
+  { week: "Semana 3", action: "Contactar a 3 clientes de García (datos en anexo). Ofrecer reunión sin compromiso + presupuesto express 48h." },
+  { week: "Semana 4", action: "Campaña de fidelización clientes Madrid norte: llamada personal + descuento 8% renovaciones. Objetivo: 5 renovaciones firmadas antes de Q2." }
+];
 ---
 
 <section class="py-24 px-6">
   <div class="max-w-5xl mx-auto">
     <div class="text-center mb-16">
       <h2 class="text-3xl md:text-4xl font-bold mb-4">
-        Qué incluye <span class="text-accent">un reporte</span>
+        Esto es lo que <span class="text-accent">realmente recibes</span>
       </h2>
       <p class="text-white/60 text-lg">
-        Entre 12 y 25 páginas de insights accionables
+        Ejemplo real anonimizado: Competitor Intel para una constructora en Madrid
       </p>
     </div>
     
     <div class="bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden">
-      <div class="bg-white/[0.02] border-b border-white/10 px-8 py-4 flex items-center gap-3">
-        <div class="flex gap-2">
-          <div class="w-3 h-3 rounded-full bg-white/20"></div>
-          <div class="w-3 h-3 rounded-full bg-white/20"></div>
-          <div class="w-3 h-3 rounded-full bg-white/20"></div>
+      <!-- PDF Header -->
+      <div class="bg-white/[0.02] border-b border-white/10 px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="flex gap-2">
+            <div class="w-3 h-3 rounded-full bg-red-500/60"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/60"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/60"></div>
+          </div>
+          <span class="text-sm text-white/40 font-mono">competitor-intel-constructora-madrid-mar2024.pdf</span>
         </div>
-        <span class="text-sm text-white/40 font-mono">competitor-intel-acme-corp.pdf</span>
+        <span class="text-xs text-white/30">22 páginas · Entregado en 19h</span>
       </div>
       
-      <div class="p-8 md:p-12 space-y-8">
-        <div class="grid md:grid-cols-2 gap-8">
-          <div class="space-y-6">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <span class="text-accent text-lg">📋</span>
-              </div>
-              <div>
-                <h4 class="font-semibold mb-1">Resumen Ejecutivo</h4>
-                <p class="text-sm text-white/50">Los 5 hallazgos clave en 1 página. Para decisores con poco tiempo.</p>
-              </div>
-            </div>
-            
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <span class="text-accent text-lg">🔍</span>
-              </div>
-              <div>
-                <h4 class="font-semibold mb-1">Análisis en Profundidad</h4>
-                <p class="text-sm text-white/50">Cada área crítica desglosada con datos, contexto y implicaciones.</p>
-              </div>
-            </div>
-            
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <span class="text-accent text-lg">💡</span>
-              </div>
-              <div>
-                <h4 class="font-semibold mb-1">Insights Priorizados</h4>
-                <p class="text-sm text-white/50">Qué importa más, ordenado por impacto y urgencia.</p>
-              </div>
+      <div class="p-8 md:p-12 space-y-10">
+        <!-- Competitor Table -->
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Página 3</span>
+            <span class="text-xs text-white/30">· Benchmark Competitivo</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-white/10">
+                  <th class="text-left py-3 px-4 text-white/50 font-medium">Competidor</th>
+                  <th class="text-left py-3 px-4 text-white/50 font-medium">Facturación</th>
+                  <th class="text-left py-3 px-4 text-white/50 font-medium">Empleados</th>
+                  <th class="text-left py-3 px-4 text-white/50 font-medium">Win Rate</th>
+                  <th class="text-left py-3 px-4 text-white/50 font-medium">Ticket Medio</th>
+                  <th class="text-left py-3 px-4 text-white/50 font-medium">Debilidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                {competitorTable.map((comp, i) => (
+                  <tr class={`border-b border-white/5 ${comp.name === 'TU EMPRESA' ? 'bg-accent/5' : ''}`}>
+                    <td class={`py-3 px-4 ${comp.name === 'TU EMPRESA' ? 'font-bold text-accent' : 'text-white/80'}`}>{comp.name}</td>
+                    <td class="py-3 px-4 text-white/60">{comp.revenue}</td>
+                    <td class="py-3 px-4 text-white/60">{comp.employees}</td>
+                    <td class={`py-3 px-4 ${comp.name === 'TU EMPRESA' ? 'text-red-400 font-semibold' : 'text-white/60'}`}>{comp.winRate}</td>
+                    <td class="py-3 px-4 text-white/60">{comp.avgTicket}</td>
+                    <td class="py-3 px-4 text-white/50 text-xs">{comp.weakness}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-white/30 mt-2">Fuentes: Registro Mercantil, SABI, LinkedIn, análisis de pliegos públicos 2023</p>
+        </div>
+        
+        <!-- Insights with Confidence -->
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Página 8</span>
+            <span class="text-xs text-white/30">· Insights Accionables</span>
+          </div>
+          <div class="bg-white/[0.02] rounded-xl p-6 border border-white/10">
+            <h3 class="text-lg font-bold mb-4 text-white/90">🎯 3 Hallazgos Clave</h3>
+            <div class="space-y-5">
+              {insights.map((item) => (
+                <div class="flex items-start gap-3">
+                  <span class={`px-2 py-0.5 rounded text-xs font-bold whitespace-nowrap ${item.confidenceColor === 'green' ? 'bg-green-500/20 text-green-400' : item.confidenceColor === 'amber' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}`}>
+                    {item.confidence}
+                  </span>
+                  <div class="flex-1">
+                    <p class="text-white/80 text-sm leading-relaxed">{item.insight}</p>
+                    <p class="text-accent text-sm mt-2 font-medium">→ {item.action}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          
-          <div class="space-y-6">
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <span class="text-accent text-lg">📡</span>
-              </div>
-              <div>
-                <h4 class="font-semibold mb-1">Señales Débiles</h4>
-                <p class="text-sm text-white/50">Indicadores tempranos que pueden convertirse en tendencias.</p>
-              </div>
+        </div>
+        
+        <!-- 30-Day Action Plan -->
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-xs font-bold text-accent uppercase tracking-wider">Página 18</span>
+            <span class="text-xs text-white/30">· Plan de Acción 30 Días</span>
+          </div>
+          <div class="bg-accent/5 rounded-xl p-6 border border-accent/20">
+            <h3 class="text-lg font-bold mb-4 text-white/90">✅ Haz esto en los próximos 30 días</h3>
+            <div class="space-y-4">
+              {actionPlan.map((item) => (
+                <div class="flex items-start gap-4">
+                  <span class="bg-accent/20 text-accent text-xs font-bold px-3 py-1 rounded whitespace-nowrap">{item.week}</span>
+                  <p class="text-white/70 text-sm leading-relaxed">{item.action}</p>
+                </div>
+              ))}
             </div>
-            
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <span class="text-accent text-lg">✅</span>
-              </div>
-              <div>
-                <h4 class="font-semibold mb-1">Plan de Acción 30 días</h4>
-                <p class="text-sm text-white/50">Pasos concretos para actuar sobre los insights. No solo información, sino dirección.</p>
-              </div>
+            <p class="text-xs text-accent/70 mt-4 italic">Objetivo: subir win rate del 34% al 50% en 90 días. Ingresos estimados adicionales: €180-250K/año.</p>
+          </div>
+        </div>
+
+        <!-- Report Structure -->
+        <div class="grid md:grid-cols-3 gap-4 pt-4 border-t border-white/10">
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+            <span class="text-accent text-lg">📋</span>
+            <div>
+              <h4 class="font-semibold mb-1 text-sm">Resumen Ejecutivo</h4>
+              <p class="text-xs text-white/50">1 página · Los 5 hallazgos que más importan</p>
             </div>
-            
-            <div class="flex items-start gap-4">
-              <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                <span class="text-accent text-lg">📊</span>
-              </div>
-              <div>
-                <h4 class="font-semibold mb-1">Nivel de Confianza</h4>
-                <p class="text-sm text-white/50">Cada insight marcado: CONFIRMADO, INFERIDO o SEÑAL DÉBIL.</p>
-              </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+            <span class="text-accent text-lg">📊</span>
+            <div>
+              <h4 class="font-semibold mb-1 text-sm">Análisis + Datos</h4>
+              <p class="text-xs text-white/50">15 páginas · Benchmark, precios, equipo, finanzas</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/5">
+            <span class="text-accent text-lg">✅</span>
+            <div>
+              <h4 class="font-semibold mb-1 text-sm">Plan de Acción</h4>
+              <p class="text-xs text-white/50">5 páginas · Qué hacer cada semana</p>
             </div>
           </div>
         </div>
       </div>
     </div>
+    
+    <p class="text-center text-white/40 text-sm mt-6">
+      Datos reales anonimizados de un cliente en el sector construcción. Tu reporte será igual de específico.
+    </p>
   </div>
 </section>

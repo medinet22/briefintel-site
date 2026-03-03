@@ -2,19 +2,19 @@
 const methodologySteps = [
   {
     title: 'Fuentes primarias verificadas',
-    description: 'LinkedIn, Glassdoor, G2, Crunchbase, registros mercantiles, Google Ads Transparency, y 40+ fuentes más.',
+    description: 'LinkedIn, Glassdoor, Crunchbase, Registro Mercantil, SABI, patentes EUIPO, job postings y 40+ fuentes más.',
   },
   {
     title: 'Señales en tiempo real',
-    description: 'Job postings, cambios de pricing, contrataciones, rotación de empleados — las pistas que predicen movimientos.',
+    description: 'No datos de hace 6 meses. Job postings activos, cambios de precio de esta semana, contrataciones de este mes.',
   },
   {
     title: 'Triangulación obligatoria',
-    description: 'Cada insight verificado con 2+ fuentes independientes. Si no podemos confirmarlo, lo etiquetamos claramente.',
+    description: 'Cada insight verificado con 2+ fuentes independientes. Si no podemos confirmarlo, lo etiquetamos como "señal temprana".',
   },
   {
     title: 'Niveles de confianza explícitos',
-    description: 'CONFIRMADO, INFERIDO, o SEÑAL TEMPRANA. Siempre sabes cuánto confiar en cada dato.',
+    description: 'CONFIRMADO (2+ fuentes), INFERIDO (1 fuente + contexto), SEÑAL TEMPRANA (indicios). Siempre sabes cuánto confiar.',
   },
 ];
 
@@ -23,6 +23,15 @@ const trustBadges = [
   { icon: "📄", label: "Factura automática" },
   { icon: "↩️", label: "Garantía 7 días" },
   { icon: "🕐", label: "Entrega en 24h" },
+];
+
+const qualityChecks = [
+  "¿Hay un insight que el cliente no podría haber encontrado solo?",
+  "¿Cada dato tiene interpretación y acción concreta?",
+  "¿Las acciones dicen 'haz esto' y no 'considera esto'?",
+  "¿Cada claim tiene fuente citada y verificable?",
+  "¿Los datos son frescos (<30 días)?",
+  "¿El plan de acción es ejecutable en 30 días?"
 ];
 ---
 
@@ -37,7 +46,8 @@ const trustBadges = [
           <span class="text-accent">Es proceso riguroso.</span>
         </h2>
         <p class="text-white/60 text-lg mb-8 leading-relaxed">
-          Usamos las mismas fuentes que McKinsey pero sin cobrar €50.000 por el "privilegio" de analizar datos públicos. La diferencia: eficiencia de IA + expertise humano real.
+          Las mismas fuentes y metodología que McKinsey, sin los €50.000 de "análisis de datos públicos". 
+          La diferencia: automatización inteligente + revisión humana experta.
         </p>
         
         <!-- Methodology steps -->
@@ -65,41 +75,19 @@ const trustBadges = [
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
               </svg>
             </div>
-            <h3 class="text-2xl font-black mb-2">22 puntos de control</h3>
-            <p class="text-white/50">Cada reporte pasa control de calidad antes de entregarse.</p>
+            <h3 class="text-2xl font-black mb-2">Checklist de calidad</h3>
+            <p class="text-white/50">Cada reporte pasa estos 6 controles antes de enviarse:</p>
           </div>
           
           <div class="space-y-3">
-            <div class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span class="text-white/70">Insight clave que el cliente no sabía</span>
-            </div>
-            <div class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span class="text-white/70">Zero datos sin interpretación</span>
-            </div>
-            <div class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span class="text-white/70">Acciones concretas (no "considere")</span>
-            </div>
-            <div class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span class="text-white/70">Fuentes citadas en cada claim</span>
-            </div>
-            <div class="flex items-center gap-3 text-sm">
-              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <span class="text-white/70">Datos frescos (&lt;30 días)</span>
-            </div>
+            {qualityChecks.map((check) => (
+              <div class="flex items-start gap-3 text-sm">
+                <svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                <span class="text-white/70">{check}</span>
+              </div>
+            ))}
           </div>
         </div>
         
@@ -115,11 +103,33 @@ const trustBadges = [
         
         <!-- Who's behind -->
         <div class="bg-accent/5 border border-accent/20 rounded-xl p-6">
-          <h4 class="font-semibold mb-2 text-white/90">¿Quién hay detrás?</h4>
+          <h4 class="font-semibold mb-3 text-white/90">¿Quién hay detrás?</h4>
+          <div class="flex items-start gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold flex-shrink-0">DM</div>
+            <div>
+              <p class="text-sm font-medium text-white/90">Daniel Medina · Fundador</p>
+              <p class="text-xs text-white/50">+15 años en estrategia e inteligencia competitiva · MBA IE Business School · Ex-consultoría estratégica</p>
+            </div>
+          </div>
           <p class="text-sm text-white/60 leading-relaxed">
-            Creado por consultores con +15 años de experiencia en inteligencia competitiva. 
-            Ex McKinsey, BCG y corporates del IBEX35. Ahora democratizando el acceso a inteligencia empresarial de calidad.
+            Red de analistas con experiencia en McKinsey, BCG y corporates IBEX35. 
+            La metodología que usábamos en proyectos de €50K, ahora accesible para cualquier empresa.
           </p>
+        </div>
+        
+        <!-- Data sources -->
+        <div class="bg-white/[0.02] border border-white/10 rounded-xl p-6">
+          <h4 class="font-semibold mb-3 text-white/90">Fuentes que usamos</h4>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">LinkedIn</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">Crunchbase</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">Glassdoor</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">Registro Mercantil</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">SABI</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">Google Ads Library</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">Patentes EUIPO</span>
+            <span class="px-3 py-1 rounded-full bg-white/5 text-xs text-white/60 border border-white/10">+35 más</span>
+          </div>
         </div>
       </div>
     </div>
