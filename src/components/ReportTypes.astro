@@ -1,0 +1,116 @@
+---
+const reports = [
+  {
+    name: "COMPETITOR INTEL",
+    question: "¿Estás perdiendo clientes sin saber por qué?",
+    price: "€35",
+    delivery: "Entrega 24h",
+    description: "Descubre exactamente qué está haciendo tu competidor: su estrategia de precios, sus movimientos recientes y sus puntos débiles que puedes explotar.",
+    features: [
+      "Qué está haciendo diferente (y funcionando)",
+      "Qué está pasando ahora mismo que afecta tu decisión",
+      "Puntos débiles que puedes explotar",
+      "Plan de ataque concreto para los próximos 30 días"
+    ],
+    icon: "🎯",
+    useCase: "Ideal si: pierdes clientes y no sabes por qué, o tu competidor crece más rápido"
+  },
+  {
+    name: "MARKET ENTRY BRIEF",
+    question: "¿Vale la pena entrar a ese mercado?",
+    price: "€49",
+    delivery: "Entrega 24h",
+    description: "Antes de entrar a un nuevo mercado, país o segmento: saber si vale la pena, quién ya está ahí y cómo posicionarte para ganar. Sin meses de análisis interno.",
+    features: [
+      "Tamaño real del mercado y tendencias",
+      "Quién ya está y qué hacen",
+      "Barreras de entrada y riesgos",
+      "Cuándo y cómo atacar — recomendación go/no-go"
+    ],
+    icon: "🌍",
+    useCase: "Ideal si: evalúas expansión geográfica o nuevo segmento de clientes"
+  },
+  {
+    name: "BUYER INTEL · M&A",
+    question: "¿Quién compraría tu empresa — y a qué precio?",
+    price: "€59",
+    delivery: "Entrega 24h",
+    description: "Para founders que preparan un exit, buscan inversión o quieren saber quién podría adquirirles. Analizamos compradores potenciales: capacidad financiera, historial de adquisiciones y cómo presentarte para maximizar tu valoración.",
+    features: [
+      "Perfil financiero del comprador o fondo inversor",
+      "Historial real de adquisiciones e inversiones",
+      "Qué criterios usan para decir sí (y qué les frena)",
+      "Cómo posicionarte para máxima valoración"
+    ],
+    icon: "💼",
+    useCase: "Ideal si: preparas un exit, buscas tu ronda de inversión o evalúas potenciales compradores"
+  },
+  {
+    name: "TALENT INTEL",
+    question: "¿El candidato es quien dice ser?",
+    price: "€19",
+    delivery: "Entrega 24h",
+    description: "Antes de contratar o colaborar con alguien clave: saber quién es realmente, qué dice internet de él, inconsistencias en su trayectoria y señales de riesgo.",
+    features: [
+      "Verificación de trayectoria profesional",
+      "Qué dice internet de esta persona",
+      "Inconsistencias o señales de riesgo",
+      "Evaluación de fit con tu empresa"
+    ],
+    icon: "👤",
+    useCase: "Ideal si: contratas un C-level, socio clave o evaluás un proveedor importante"
+  }
+];
+---
+
+<section id="reportes" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Cuatro reportes. <span class="text-accent">Cuatro decisiones críticas.</span>
+      </h2>
+      <p class="text-white/60 text-lg max-w-2xl mx-auto">
+        Cada reporte resuelve una pregunta estratégica diferente. Elige el que más impacto tenga en tu próxima decisión.
+      </p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 gap-6">
+      {reports.map((report) => (
+        <div class="group relative bg-white/[0.02] border border-white/10 rounded-2xl p-8 hover:border-accent/50 transition-all duration-300 hover:bg-white/[0.04]">
+          <div class="flex items-start justify-between mb-6">
+            <div class="text-4xl">{report.icon}</div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-accent">{report.price}</div>
+              <div class="text-xs text-white/50">{report.delivery}</div>
+            </div>
+          </div>
+          
+          <h3 class="text-xs font-semibold tracking-widest text-white/40 mb-2">{report.name}</h3>
+          <p class="text-xl font-semibold mb-3 text-white/90">{report.question}</p>
+          <p class="text-sm text-white/60 mb-6 leading-relaxed">{report.description}</p>
+          
+          <ul class="space-y-3 mb-6">
+            {report.features.map((feature) => (
+              <li class="flex items-start gap-3 text-sm text-white/70">
+                <svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+          
+          <p class="text-xs text-accent/70 mb-6 italic">{report.useCase}</p>
+          
+          <a 
+            href={`mailto:hello@getbriefintel.com?subject=Solicitud%20${encodeURIComponent(report.name)}%20${encodeURIComponent(report.price)}&body=Hola%2C%20quiero%20pedir%20un%20${encodeURIComponent(report.name)}.%0A%0AMi%20empresa%3A%20%0ASector%3A%20%0AQu%C3%A9%20necesito%20analizar%3A%20`}
+            class="inline-flex items-center gap-2 text-accent text-sm font-medium group-hover:gap-3 transition-all duration-200"
+          >
+            Solicitar este reporte →
+          </a>
+          <p class="text-xs text-white/30 mt-2">Respuesta en &lt;2h · {report.price} · 24h entrega</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

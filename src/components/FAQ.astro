@@ -1,0 +1,88 @@
+---
+const faqs = [
+  {
+    question: "¿Por qué cuesta tan poco si promete tanto?",
+    answer: "Dos razones: eficiencia y modelo de volumen. Nuestra IA procesa en minutos lo que un consultor junior tarda días. Los analistas senior solo intervienen para validar, interpretar y añadir contexto estratégico. No tenemos oficinas caras ni equipos de 20 personas por proyecto. El resultado: misma calidad, fracción del coste.",
+    highlight: true
+  },
+  {
+    question: "¿Quién hace los reportes realmente?",
+    answer: "Una combinación de IA propietaria + analistas humanos con +15 años de experiencia en consultoría estratégica (ex-McKinsey, BCG, KPMG). La IA recopila, procesa y estructura la información. Los humanos validan, interpretan y escriben las recomendaciones estratégicas. Cada reporte lleva revisión humana antes de enviarse.",
+    highlight: true
+  },
+  {
+    question: "¿Qué pasa si no me sirve?",
+    answer: "Garantía de devolución de 7 días. Si el reporte no te aporta valor, te devolvemos el dinero. Sin preguntas, sin complicaciones. Nunca ha pasado, pero la garantía existe porque confiamos en nuestro trabajo.",
+    highlight: true
+  },
+  {
+    question: "¿Qué incluye exactamente un reporte?",
+    answer: "Entre 12 y 25 páginas con: resumen ejecutivo (1 página), análisis en profundidad, insights priorizados por impacto, acciones concretas para los próximos 30 días, y anexos con fuentes. Formato PDF profesional, listo para compartir con tu equipo o board."
+  },
+  {
+    question: "¿Cómo de fiable es la información?",
+    answer: "Trabajamos solo con fuentes verificables: web corporativas, LinkedIn, prensa, registros oficiales, bases de datos premium, señales digitales. Cada insight tiene nivel de confianza: CONFIRMADO (2+ fuentes), INFERIDO (patrón claro), o SEÑAL TEMPRANA (dato emergente). Siempre sabes cuánto confiar."
+  },
+  {
+    question: "¿Qué pasa si no cumplen las 24h?",
+    answer: "Si hay algún retraso (cosa que no suele pasar), te avisamos con antelación y te damos un descuento en tu próximo reporte. Si el retraso es significativo, te devolvemos el dinero."
+  },
+  {
+    question: "¿Qué es exactamente Buyer Intel?",
+    answer: "Buyer Intel NO es para encontrar clientes. Es para analizar a compradores potenciales DE TU EMPRESA: fondos de inversión, corporates que podrían adquirirte, inversores para tu ronda. Analizamos su capacidad financiera, historial de adquisiciones/inversiones, qué buscan, y cómo presentarte para maximizar tu valoración."
+  },
+  {
+    question: "¿Facturáis?",
+    answer: "Sí. Stripe genera factura automáticamente al pagar. Válida para deducción fiscal en España y UE."
+  },
+  {
+    question: "¿Puedo pedir varios reportes del mismo competidor/mercado?",
+    answer: "Sí. Cada tipo de reporte responde preguntas diferentes. Puedes pedir un Competitor Intel hoy y un Market Entry Brief mañana sobre el mismo sector."
+  },
+  {
+    question: "¿Cómo recibo el reporte?",
+    answer: "Por email en PDF con enlace de descarga seguro. También guardamos una copia en tu área de cliente por si lo necesitas después."
+  }
+];
+---
+
+<section id="faq" class="py-24 px-6">
+  <div class="max-w-3xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Preguntas <span class="text-accent">frecuentes</span>
+      </h2>
+      <p class="text-white/60">
+        Las dudas más comunes antes de pedir un reporte
+      </p>
+    </div>
+    
+    <div class="space-y-4">
+      {faqs.map((faq) => (
+        <details class={`group bg-white/[0.02] border rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300 ${faq.highlight ? 'border-accent/30 bg-accent/5' : 'border-white/10'}`}>
+          <summary class="flex items-center justify-between p-6 cursor-pointer list-none">
+            <span class={`font-medium pr-4 ${faq.highlight ? 'text-white' : 'text-white/90'}`}>
+              {faq.highlight && <span class="text-accent mr-2">★</span>}
+              {faq.question}
+            </span>
+            <span class="text-accent transition-transform duration-200 group-open:rotate-45 flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+            </span>
+          </summary>
+          <div class="px-6 pb-6 text-white/60 text-sm leading-relaxed">
+            {faq.answer}
+          </div>
+        </details>
+      ))}
+    </div>
+    
+    <div class="mt-12 text-center">
+      <p class="text-white/50 text-sm mb-4">¿Tienes otra pregunta?</p>
+      <a href="mailto:hello@getbriefintel.com" class="text-accent hover:underline text-sm">
+        Escríbenos: hello@getbriefintel.com
+      </a>
+    </div>
+  </div>
+</section>

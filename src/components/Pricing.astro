@@ -1,0 +1,122 @@
+---
+const plans = [
+  {
+    name: "Talent Intel",
+    price: "€19",
+    description: "¿El candidato es quien dice ser?",
+    features: [
+      "Verificación de trayectoria profesional",
+      "Qué dice internet de esta persona",
+      "Inconsistencias y señales de riesgo",
+      "Evaluación de fit con tu empresa",
+      "Entrega en 24 horas"
+    ],
+    popular: false,
+    cta: "Pedir Talent Intel",
+    useCase: "C-level, socios, proveedores clave"
+  },
+  {
+    name: "Competitor Intel",
+    price: "€35",
+    description: "¿Estás perdiendo clientes sin saber por qué?",
+    features: [
+      "Qué hace diferente (y funcionando)",
+      "Movimientos y cambios recientes",
+      "Puntos débiles que explotar",
+      "Plan de ataque 30 días",
+      "Entrega en 24 horas"
+    ],
+    popular: true,
+    cta: "Pedir Competitor Intel",
+    useCase: "Competidor directo o emergente"
+  },
+  {
+    name: "Market Entry Brief",
+    price: "€49",
+    description: "¿Vale la pena entrar a ese mercado?",
+    features: [
+      "Tamaño real y tendencias",
+      "Quién ya está y qué hacen",
+      "Barreras de entrada y riesgos",
+      "Cuándo y cómo atacar (go/no-go)",
+      "Entrega en 24 horas"
+    ],
+    popular: false,
+    cta: "Pedir Market Entry Brief",
+    useCase: "Nuevo país, segmento o vertical"
+  },
+  {
+    name: "Buyer Intel",
+    price: "€59",
+    description: "¿Quieres vender tu empresa o captar inversión?",
+    features: [
+      "Perfil financiero del comprador/inversor",
+      "Historial de deals anteriores",
+      "Qué buscan y qué les haría decir sí",
+      "Cómo posicionar tu empresa",
+      "Entrega en 24 horas"
+    ],
+    popular: false,
+    cta: "Pedir Buyer Intel",
+    useCase: "Exit, ronda, o M&A"
+  }
+];
+---
+
+<section id="precios" class="py-24 px-6">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Precios <span class="text-accent">simples y transparentes</span>
+      </h2>
+      <p class="text-white/60 text-lg">
+        Pago único. Sin suscripción. Factura automática. Garantía 7 días.
+      </p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {plans.map((plan) => (
+        <div class={`relative bg-white/[0.02] border rounded-2xl p-6 flex flex-col ${plan.popular ? 'border-accent' : 'border-white/10'} hover:border-accent/50 transition-all duration-300`}>
+          {plan.popular && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-dark text-xs font-semibold px-3 py-1 rounded-full">
+              Más popular
+            </div>
+          )}
+          
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-1">{plan.name}</h3>
+            <p class="text-sm text-white/50 mb-4">{plan.description}</p>
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-bold text-accent">{plan.price}</span>
+              <span class="text-white/40 text-sm">único</span>
+            </div>
+          </div>
+          
+          <ul class="space-y-3 mb-6 flex-grow">
+            {plan.features.map((feature) => (
+              <li class="flex items-start gap-2 text-sm text-white/60">
+                <svg class="w-5 h-5 text-accent flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {feature}
+              </li>
+            ))}
+          </ul>
+          
+          <p class="text-xs text-white/40 mb-4 italic">Para: {plan.useCase}</p>
+          
+          <a 
+            href={`mailto:hello@getbriefintel.com?subject=Solicitud%20de%20reporte:%20${plan.name}`}
+            class={`w-full py-3 rounded-xl text-center font-semibold transition-all duration-200 ${plan.popular ? 'bg-accent text-dark hover:bg-accent/90' : 'bg-white/5 text-white hover:bg-white/10'}`}
+          >
+            {plan.cta}
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <p class="text-center text-white/40 text-sm mt-8">
+      ¿Necesitas el pack completo? <a href="#pack" class="text-accent hover:underline">Ahorra €44 con el Pack Estratégico</a>
+    </p>
+  </div>
+</section>

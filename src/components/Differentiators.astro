@@ -1,0 +1,76 @@
+---
+const comparisons = [
+  {
+    aspect: "Precio",
+    traditional: "€15.000–50.000",
+    briefintel: "€19–99"
+  },
+  {
+    aspect: "Tiempo de entrega",
+    traditional: "4–12 semanas",
+    briefintel: "24 horas"
+  },
+  {
+    aspect: "Accesibilidad",
+    traditional: "Solo grandes empresas",
+    briefintel: "Cualquier negocio"
+  },
+  {
+    aspect: "Metodología",
+    traditional: "Caja negra, opaca",
+    briefintel: "Transparente, fuentes citadas"
+  },
+  {
+    aspect: "Compromiso mínimo",
+    traditional: "Contrato anual",
+    briefintel: "Pago único, sin suscripción"
+  }
+];
+---
+
+<section class="py-24 px-6 bg-gradient-to-b from-transparent via-accent/[0.02] to-transparent">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-16">
+      <span class="inline-block text-accent text-xs font-bold uppercase tracking-wider mb-4">La comparación honesta</span>
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        Consultora tradicional vs <span class="text-accent">BriefIntel</span>
+      </h2>
+      <p class="text-white/60 text-lg">
+        Misma calidad de análisis. 100x más accesible.
+      </p>
+    </div>
+    
+    <div class="bg-white/[0.02] border border-white/10 rounded-2xl overflow-hidden">
+      <div class="grid grid-cols-3 text-center border-b border-white/10">
+        <div class="p-4 md:p-6"></div>
+        <div class="p-4 md:p-6 border-x border-white/10 bg-white/[0.02]">
+          <span class="text-sm text-white/50">McKinsey / KPMG</span>
+        </div>
+        <div class="p-4 md:p-6 bg-accent/5">
+          <span class="text-sm font-semibold text-accent">BriefIntel</span>
+        </div>
+      </div>
+      
+      {comparisons.map((row, index) => (
+        <div class={`grid grid-cols-3 text-center ${index < comparisons.length - 1 ? 'border-b border-white/10' : ''}`}>
+          <div class="p-4 md:p-6 text-left text-white/70 text-sm md:text-base font-medium">
+            {row.aspect}
+          </div>
+          <div class="p-4 md:p-6 border-x border-white/10 text-white/40 text-sm md:text-base">
+            {row.traditional}
+          </div>
+          <div class="p-4 md:p-6 bg-accent/5 text-white font-semibold text-sm md:text-base">
+            {row.briefintel}
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="mt-10 bg-white/[0.02] border border-white/10 rounded-xl p-6 md:p-8">
+      <p class="text-center text-white/70 leading-relaxed">
+        <strong class="text-white">¿Cómo es posible?</strong> Las consultoras cobran por su marca, sus oficinas, y ejércitos de consultores junior que tardan semanas en analizar información pública. 
+        Nosotros usamos IA para procesar datos en minutos y analistas senior para interpretar. <span class="text-accent">Sin intermediarios. Sin markup del 1000%.</span>
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,112 @@
+---
+const steps = [
+  {
+    number: "01",
+    title: "Elige tu reporte y paga",
+    description: "Checkout en 1 minuto con Stripe. Factura automática inmediata.",
+    icon: "💳"
+  },
+  {
+    number: "02",
+    title: "Completa el brief (5 min)",
+    description: "Cuéntanos qué necesitas saber y por qué. Unas pocas preguntas para enfocar la investigación.",
+    icon: "📝"
+  },
+  {
+    number: "03",
+    title: "Recibe tu reporte en 24h",
+    description: "PDF ejecutivo con insights priorizados, acciones concretas y un plan para los próximos 30 días.",
+    icon: "📊"
+  }
+];
+
+const methodology = [
+  {
+    icon: "🤖",
+    title: "IA entrenada en miles de casos",
+    description: "No es un chatbot genérico. Nuestra IA está entrenada específicamente en inteligencia competitiva y análisis de mercados."
+  },
+  {
+    icon: "👨‍💼",
+    title: "Analistas con +15 años de experiencia",
+    description: "Ex-consultores de McKinsey, BCG y KPMG revisan cada reporte antes de enviarlo."
+  },
+  {
+    icon: "📡",
+    title: "Fuentes verificadas en tiempo real",
+    description: "Registros oficiales, bases de datos premium, LinkedIn, señales digitales, y 40+ fuentes más."
+  },
+  {
+    icon: "✅",
+    title: "22 puntos de control de calidad",
+    description: "Metodología propietaria: cada dato triangulado, cada insight con nivel de confianza, cada acción concreta."
+  }
+];
+---
+
+<section id="como-funciona" class="py-24 px-6 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent">
+  <div class="max-w-6xl mx-auto">
+    <!-- Steps -->
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
+        De tu pregunta a <span class="text-accent">decisión informada</span>
+      </h2>
+      <p class="text-white/60 text-lg">
+        Tres pasos. 24 horas. Cero complicaciones.
+      </p>
+    </div>
+    
+    <div class="relative mb-24">
+      <!-- Connection line -->
+      <div class="hidden md:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent -translate-y-1/2"></div>
+      
+      <div class="grid md:grid-cols-3 gap-8 md:gap-12">
+        {steps.map((step, index) => (
+          <div class="relative text-center group">
+            <div class="relative z-10 bg-dark">
+              <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-4xl group-hover:border-accent/50 group-hover:bg-accent/5 transition-all duration-300">
+                {step.icon}
+              </div>
+              
+              <div class="text-accent text-sm font-mono mb-2">{step.number}</div>
+              <h3 class="text-xl font-semibold mb-3">{step.title}</h3>
+              <p class="text-white/50 text-sm leading-relaxed">{step.description}</p>
+            </div>
+            
+            {index < steps.length - 1 && (
+              <div class="hidden md:block absolute top-10 -right-6 text-accent/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    <!-- Methodology -->
+    <div class="border-t border-white/10 pt-20">
+      <div class="text-center mb-12">
+        <span class="inline-block text-accent text-xs font-bold uppercase tracking-wider mb-4">Por qué funciona</span>
+        <h3 class="text-2xl md:text-3xl font-bold mb-4">
+          No es un chatbot. No es Google.
+        </h3>
+        <p class="text-white/60 text-lg max-w-2xl mx-auto">
+          BriefIntel combina tecnología propietaria con experiencia humana real. <br />
+          <strong class="text-white/80">Resultado: inteligencia de nivel McKinsey. Precio de startup.</strong>
+        </p>
+      </div>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {methodology.map((item) => (
+          <div class="bg-white/[0.02] border border-white/10 rounded-xl p-6 hover:border-accent/30 transition-all duration-300">
+            <div class="text-3xl mb-4">{item.icon}</div>
+            <h4 class="font-semibold mb-2 text-white/90">{item.title}</h4>
+            <p class="text-sm text-white/50 leading-relaxed">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

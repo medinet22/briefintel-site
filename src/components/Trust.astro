@@ -1,0 +1,127 @@
+---
+const methodologySteps = [
+  {
+    title: 'Fuentes primarias verificadas',
+    description: 'LinkedIn, Glassdoor, G2, Crunchbase, registros mercantiles, Google Ads Transparency, y 40+ fuentes más.',
+  },
+  {
+    title: 'Señales en tiempo real',
+    description: 'Job postings, cambios de pricing, contrataciones, rotación de empleados — las pistas que predicen movimientos.',
+  },
+  {
+    title: 'Triangulación obligatoria',
+    description: 'Cada insight verificado con 2+ fuentes independientes. Si no podemos confirmarlo, lo etiquetamos claramente.',
+  },
+  {
+    title: 'Niveles de confianza explícitos',
+    description: 'CONFIRMADO, INFERIDO, o SEÑAL TEMPRANA. Siempre sabes cuánto confiar en cada dato.',
+  },
+];
+
+const trustBadges = [
+  { icon: "🔒", label: "Pago seguro con Stripe" },
+  { icon: "📄", label: "Factura automática" },
+  { icon: "↩️", label: "Garantía 7 días" },
+  { icon: "🕐", label: "Entrega en 24h" },
+];
+---
+
+<section class="py-24 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent relative">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <!-- Left: Content -->
+      <div>
+        <span class="inline-block text-accent text-xs font-bold uppercase tracking-wider mb-4">Metodología</span>
+        <h2 class="text-4xl md:text-5xl font-black tracking-tight mb-6">
+          No es magia.<br />
+          <span class="text-accent">Es proceso riguroso.</span>
+        </h2>
+        <p class="text-white/60 text-lg mb-8 leading-relaxed">
+          Usamos las mismas fuentes que McKinsey pero sin cobrar €50.000 por el "privilegio" de analizar datos públicos. La diferencia: eficiencia de IA + expertise humano real.
+        </p>
+        
+        <!-- Methodology steps -->
+        <div class="space-y-6">
+          {methodologySteps.map((step, index) => (
+            <div class="flex gap-4">
+              <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <span class="text-accent font-bold text-sm">{index + 1}</span>
+              </div>
+              <div>
+                <h4 class="font-bold mb-1 text-white/90">{step.title}</h4>
+                <p class="text-white/50 text-sm">{step.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      
+      <!-- Right: Quality badge + Trust signals -->
+      <div class="space-y-6">
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-8">
+          <div class="text-center mb-8">
+            <div class="w-20 h-20 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <svg class="w-10 h-10 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+              </svg>
+            </div>
+            <h3 class="text-2xl font-black mb-2">22 puntos de control</h3>
+            <p class="text-white/50">Cada reporte pasa control de calidad antes de entregarse.</p>
+          </div>
+          
+          <div class="space-y-3">
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-white/70">Insight clave que el cliente no sabía</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-white/70">Zero datos sin interpretación</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-white/70">Acciones concretas (no "considere")</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-white/70">Fuentes citadas en cada claim</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm">
+              <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-white/70">Datos frescos (&lt;30 días)</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Trust badges -->
+        <div class="grid grid-cols-2 gap-4">
+          {trustBadges.map((badge) => (
+            <div class="bg-white/[0.02] border border-white/10 rounded-xl p-4 flex items-center gap-3">
+              <span class="text-xl">{badge.icon}</span>
+              <span class="text-sm text-white/70">{badge.label}</span>
+            </div>
+          ))}
+        </div>
+        
+        <!-- Who's behind -->
+        <div class="bg-accent/5 border border-accent/20 rounded-xl p-6">
+          <h4 class="font-semibold mb-2 text-white/90">¿Quién hay detrás?</h4>
+          <p class="text-sm text-white/60 leading-relaxed">
+            Creado por consultores con +15 años de experiencia en inteligencia competitiva. 
+            Ex McKinsey, BCG y corporates del IBEX35. Ahora democratizando el acceso a inteligencia empresarial de calidad.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
