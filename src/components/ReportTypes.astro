@@ -1,14 +1,16 @@
 ---
 const reports = [
   {
+    id: "competitor-intel",
     name: "COMPETITOR INTEL",
     question: "¿Estás perdiendo clientes sin saber por qué?",
     price: "€35",
+    priceNum: 35,
     delivery: "Entrega 24h",
     description: "Descubre exactamente qué está haciendo tu competidor: su estrategia de precios, sus movimientos recientes y sus puntos débiles que puedes explotar.",
     features: [
       "Qué está haciendo diferente (y funcionando)",
-      "Qué está pasando ahora mismo que afecta tu decisión",
+      "Movimientos recientes que afectan tu decisión",
       "Puntos débiles que puedes explotar",
       "Plan de ataque concreto para los próximos 30 días"
     ],
@@ -17,9 +19,11 @@ const reports = [
     link: "https://buy.stripe.com/eVq4gA0rSg2pdjc8pDaEE05"
   },
   {
+    id: "market-entry",
     name: "MARKET ENTRY BRIEF",
     question: "¿Vale la pena entrar a ese mercado?",
     price: "€49",
+    priceNum: 49,
     delivery: "Entrega 24h",
     description: "Antes de entrar a un nuevo mercado, país o segmento: saber si vale la pena, quién ya está ahí y cómo posicionarte para ganar. Sin meses de análisis interno.",
     features: [
@@ -33,11 +37,13 @@ const reports = [
     link: "https://buy.stripe.com/aFabJ2b6w2bz6UO21faEE04"
   },
   {
+    id: "buyer-intel",
     name: "BUYER INTEL · M&A",
     question: "¿Quién compraría tu empresa — y a qué precio?",
     price: "€59",
+    priceNum: 59,
     delivery: "Entrega 24h",
-    description: "Para founders que preparan un exit, buscan inversión o quieren saber quién podría adquirirles. Analizamos compradores potenciales: capacidad financiera, historial de adquisiciones y cómo presentarte para maximizar tu valoración.",
+    description: "Para founders que preparan un exit, buscan inversión o quieren saber quién podría adquirirles. Analizamos compradores potenciales: capacidad financiera, historial y cómo maximizar tu valoración.",
     features: [
       "Perfil financiero del comprador o fondo inversor",
       "Historial real de adquisiciones e inversiones",
@@ -45,15 +51,17 @@ const reports = [
       "Cómo posicionarte para máxima valoración"
     ],
     icon: "💼",
-    useCase: "Ideal si: preparas un exit, buscas tu ronda de inversión o evalúas potenciales compradores",
+    useCase: "Ideal si: preparas un exit, buscas inversión o evalúas potenciales compradores",
     link: "https://buy.stripe.com/00w00keiIcQd5QKbBPaEE03"
   },
   {
+    id: "talent-market",
     name: "TALENT MARKET INTEL",
     question: "¿Cómo es el mercado de talento en tu sector?",
     price: "€19",
+    priceNum: 19,
     delivery: "Entrega 24h",
-    description: "Análisis del perfil de talento en tu sector o nicho: qué perfiles dominan el mercado, qué habilidades escasean, qué pagan los competidores y dónde están los mejores candidatos. Como el reporte de BollBox Media sobre coaches.",
+    description: "Análisis del mercado de talento en tu sector: qué perfiles dominan, qué habilidades escasean, qué pagan los competidores y dónde están los mejores candidatos.",
     features: [
       "Mapa de perfiles dominantes en tu sector",
       "Rangos salariales y condiciones del mercado",
@@ -61,7 +69,7 @@ const reports = [
       "Tendencias emergentes en el mercado de talento"
     ],
     icon: "📊",
-    useCase: "Ideal si: quieres entender el mercado de talento de tu sector antes de contratar o posicionarte como employer",
+    useCase: "Ideal si: quieres entender el mercado de talento antes de contratar o posicionarte como employer",
     link: "https://buy.stripe.com/14A4gAb6w03r7YScFTaEE06"
   }
 ];
@@ -71,16 +79,30 @@ const reports = [
   <div class="max-w-6xl mx-auto">
     <div class="text-center mb-16">
       <h2 class="text-3xl md:text-4xl font-bold mb-4">
-        Cuatro reportes. <span class="text-accent">Cuatro decisiones críticas.</span>
+        Elige tu reporte. <span class="text-accent">Decide mejor.</span>
       </h2>
       <p class="text-white/60 text-lg max-w-2xl mx-auto">
-        Cada reporte resuelve una pregunta estratégica diferente. Elige el que más impacto tenga en tu próxima decisión.
+        Cada reporte resuelve una pregunta estratégica diferente. Selecciona el que más impacto tenga en tu próxima decisión.
       </p>
     </div>
-    
-    <div class="grid md:grid-cols-2 gap-6">
+
+    <!-- Report Cards Grid -->
+    <div class="grid md:grid-cols-2 gap-6 mb-8" id="report-cards">
       {reports.map((report) => (
-        <div class="group relative bg-white/[0.02] border border-white/10 rounded-2xl p-8 hover:border-accent/50 transition-all duration-300 hover:bg-white/[0.04]">
+        <div
+          class="report-card group relative bg-white/[0.02] border border-white/10 rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:border-accent/40 hover:bg-white/[0.04]"
+          data-id={report.id}
+          data-price={report.price}
+          data-name={report.name}
+          data-link={report.link}
+        >
+          <!-- Selected checkmark (hidden by default) -->
+          <div class="selected-badge absolute top-4 right-4 w-7 h-7 bg-accent rounded-full items-center justify-center hidden">
+            <svg class="w-4 h-4 text-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+
           <div class="flex items-start justify-between mb-6">
             <div class="text-4xl">{report.icon}</div>
             <div class="text-right">
@@ -88,11 +110,11 @@ const reports = [
               <div class="text-xs text-white/50">{report.delivery}</div>
             </div>
           </div>
-          
+
           <h3 class="text-xs font-semibold tracking-widest text-white/40 mb-2">{report.name}</h3>
           <p class="text-xl font-semibold mb-3 text-white/90">{report.question}</p>
           <p class="text-sm text-white/60 mb-6 leading-relaxed">{report.description}</p>
-          
+
           <ul class="space-y-3 mb-6">
             {report.features.map((feature) => (
               <li class="flex items-start gap-3 text-sm text-white/70">
@@ -103,23 +125,144 @@ const reports = [
               </li>
             ))}
           </ul>
-          
-          <p class="text-xs text-accent/70 mb-6 italic">{report.useCase}</p>
-          
-          <a 
-            href={report.link}
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent/90 text-dark py-3 rounded-xl text-sm font-bold transition-all duration-200 hover:scale-[1.02]"
-          >
-            Pagar ahora · {report.price}
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </a>
-          <p class="text-xs text-white/30 mt-2 text-center">🔒 Checkout seguro Stripe · Factura automática</p>
+
+          <p class="text-xs text-accent/70 italic">{report.useCase}</p>
+
+          <!-- Select button (replaces direct Stripe link) -->
+          <div class="mt-6">
+            <div class="select-btn inline-flex items-center justify-center gap-2 w-full border border-accent/40 text-accent py-3 rounded-xl text-sm font-bold transition-all duration-200 hover:bg-accent/10">
+              Seleccionar este reporte
+            </div>
+            <div class="selected-btn hidden items-center justify-center gap-2 w-full bg-accent text-dark py-3 rounded-xl text-sm font-bold">
+              ✓ Reporte seleccionado
+            </div>
+          </div>
         </div>
       ))}
     </div>
+
+    <!-- Order Summary (hidden until a card is selected) -->
+    <div id="order-summary" class="hidden">
+      <div class="bg-accent/5 border-2 border-accent/30 rounded-2xl p-6 md:p-8 transition-all duration-300">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div class="flex-1">
+            <p class="text-xs text-accent font-bold uppercase tracking-wider mb-1">Reporte seleccionado</p>
+            <h3 id="summary-name" class="text-xl font-bold text-white mb-1"></h3>
+            <p class="text-sm text-white/60">Checkout seguro Stripe · Factura automática · Entrega en 24h</p>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="text-right">
+              <div id="summary-price" class="text-4xl font-black text-accent"></div>
+              <div class="text-xs text-white/40">pago único</div>
+            </div>
+            <a
+              id="summary-cta"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 bg-accent hover:bg-accent/90 text-dark px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/25 whitespace-nowrap"
+            >
+              Ir al pago →
+            </a>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-4 mt-4 pt-4 border-t border-accent/10 text-xs text-white/40">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            Sin suscripción
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            Garantía 7 días
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            🔒 Stripe seguro
+          </span>
+          <span class="flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+            Factura automática
+          </span>
+        </div>
+        <p class="text-xs text-white/30 mt-3 text-center">
+          ¿Prefieres los 4 reportes? <a href="#pack" class="text-accent hover:underline">Pack Estratégico — €119 (ahorra €43)</a>
+        </p>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  const cards = document.querySelectorAll('.report-card');
+  const summary = document.getElementById('order-summary');
+  const summaryName = document.getElementById('summary-name');
+  const summaryPrice = document.getElementById('summary-price');
+  const summaryCta = document.getElementById('summary-cta');
+
+  let selectedId: string | null = null;
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const id = card.getAttribute('data-id')!;
+      const name = card.getAttribute('data-name')!;
+      const price = card.getAttribute('data-price')!;
+      const link = card.getAttribute('data-link')!;
+
+      // Toggle: click same card = deselect
+      if (selectedId === id) {
+        deselectAll();
+        return;
+      }
+
+      selectedId = id;
+
+      // Reset all cards
+      cards.forEach(c => {
+        c.classList.remove('border-accent', 'bg-accent/[0.06]');
+        c.classList.add('border-white/10', 'bg-white/[0.02]');
+        const badge = c.querySelector('.selected-badge') as HTMLElement;
+        const selectBtn = c.querySelector('.select-btn') as HTMLElement;
+        const selectedBtn = c.querySelector('.selected-btn') as HTMLElement;
+        if (badge) badge.classList.add('hidden'), badge.classList.remove('flex');
+        if (selectBtn) selectBtn.classList.remove('hidden');
+        if (selectedBtn) selectedBtn.classList.add('hidden'), selectedBtn.classList.remove('flex');
+      });
+
+      // Activate clicked card
+      card.classList.add('border-accent', 'bg-accent/[0.06]');
+      card.classList.remove('border-white/10', 'bg-white/[0.02]');
+      const badge = card.querySelector('.selected-badge') as HTMLElement;
+      const selectBtn = card.querySelector('.select-btn') as HTMLElement;
+      const selectedBtn = card.querySelector('.selected-btn') as HTMLElement;
+      if (badge) badge.classList.remove('hidden'), badge.classList.add('flex');
+      if (selectBtn) selectBtn.classList.add('hidden');
+      if (selectedBtn) selectedBtn.classList.remove('hidden'), selectedBtn.classList.add('flex');
+
+      // Update and show summary
+      summaryName!.textContent = name.replace('·', '·').replace(' · ', ' · ');
+      summaryPrice!.textContent = price;
+      summaryCta!.setAttribute('href', link);
+      summary!.classList.remove('hidden');
+
+      // Smooth scroll to summary
+      setTimeout(() => {
+        summary!.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    });
+  });
+
+  function deselectAll() {
+    selectedId = null;
+    cards.forEach(c => {
+      c.classList.remove('border-accent', 'bg-accent/[0.06]');
+      c.classList.add('border-white/10', 'bg-white/[0.02]');
+      const badge = c.querySelector('.selected-badge') as HTMLElement;
+      const selectBtn = c.querySelector('.select-btn') as HTMLElement;
+      const selectedBtn = c.querySelector('.selected-btn') as HTMLElement;
+      if (badge) badge.classList.add('hidden'), badge.classList.remove('flex');
+      if (selectBtn) selectBtn.classList.remove('hidden');
+      if (selectedBtn) selectedBtn.classList.add('hidden'), selectedBtn.classList.remove('flex');
+    });
+    summary!.classList.add('hidden');
+  }
+</script>
