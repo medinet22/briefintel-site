@@ -49,7 +49,7 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
         </div>
 
         <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-3">
-          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">1) Enfoque principal del reporte</h3>
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">1) Enfoque principal del reporte (opcional)</h3>
           <p class="text-xs text-white/50">Empieza con una pregunta guía. Es opcional, pero nos ayuda a aterrizar el análisis en lo que más te importa.</p>
           <textarea id="pregunta_1" name="pregunta_1" rows="3" placeholder="Esta pregunta se adapta automáticamente al tipo de reporte" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
         </div>
@@ -60,16 +60,10 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
           <textarea name="decision" required rows="3" placeholder="Ejemplo: ¿deberíamos entrar al mercado X este trimestre o esperar 6 meses?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
         </div>
 
-        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-4">
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-3">
           <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">3) Información adicional (opcional)</h3>
           <p class="text-xs text-white/50">Estas preguntas son opcionales. Cuanto más contexto compartas aquí, más fino y útil será el reporte final.</p>
-
-          <textarea id="pregunta_2" rows="2" placeholder="Pregunta opcional 1" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-          <textarea id="pregunta_3" rows="2" placeholder="Pregunta opcional 2" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-          <textarea id="pregunta_4" rows="2" placeholder="Pregunta opcional 3" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-
-          <textarea id="pregunta_pack_extra" rows="2" placeholder="Pregunta opcional 4 (solo pack completo)" class="hidden w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-
+          <textarea id="pregunta_3" rows="4" placeholder="¿Hay algo más que debamos saber para afinar el reporte (prioridades, restricciones, contexto interno, timing o hipótesis)?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           <input type="hidden" name="preguntas_clave" id="preguntas_clave" />
         </div>
 
@@ -95,10 +89,7 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
     const preTipo = new URLSearchParams(location.search).get('tipo');
     const tipoSelect = document.getElementById('tipo_reporte');
     const pregunta1 = document.getElementById('pregunta_1');
-    const pregunta2 = document.getElementById('pregunta_2');
     const pregunta3 = document.getElementById('pregunta_3');
-    const pregunta4 = document.getElementById('pregunta_4');
-    const preguntaPackExtra = document.getElementById('pregunta_pack_extra');
     const preguntasClave = document.getElementById('preguntas_clave');
     const sujetoNombre = document.getElementById('sujeto_nombre');
 
@@ -110,33 +101,12 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
       'pack': '¿Cuál es la decisión más importante que quieres resolver con el pack completo?'
     };
 
-    const optionalPromptsByReport = {
-      'competitor-intel': [
-        '¿Qué competidores quieres priorizar y por qué?',
-        '¿Qué señales del mercado te generan más incertidumbre?',
-        '¿Qué resultado concreto esperas del reporte para actuar?'
-      ],
-      'market-entry': [
-        '¿Qué país/ciudad/segmento quieres evaluar primero?',
-        '¿Qué límites de inversión o tiempo tienes para entrar?',
-        '¿Qué riesgo te preocupa más: demanda, competencia o ejecución?'
-      ],
-      'buyer-intel': [
-        '¿Qué tipo de operación te interesa analizar (venta total, parcial, inversión)?',
-        '¿Qué rango de valoración consideras razonable hoy?',
-        '¿Qué perfil de buyer crees que tendría más fit contigo?'
-      ],
-      'talent-market': [
-        '¿Qué puestos quieres cubrir en los próximos 3-6 meses?',
-        '¿Qué modalidad te interesa más (remoto, híbrido, presencial)?',
-        '¿Qué problema quieres resolver primero: atracción, salario o retención?'
-      ],
-      'pack': [
-        '¿Qué frente quieres priorizar primero: competencia, mercado, buyer o talento?',
-        '¿Cuál es el mayor cuello de botella actual de tu negocio?',
-        '¿Qué decisión concreta quieres tomar justo después de recibir el pack?',
-        '¿Qué hipótesis quieres validar o descartar con este análisis?'
-      ]
+    const optionalPromptByReport = {
+      'competitor-intel': '¿Hay algún competidor, señal o mercado que quieras que prioricemos?',
+      'market-entry': '¿Qué contexto adicional deberíamos considerar (mercado objetivo, límites de inversión, timing, riesgos)?',
+      'buyer-intel': '¿Qué contexto de operación, valoración o tipo de comprador quieres que tengamos en cuenta?',
+      'talent-market': '¿Qué contexto interno debemos considerar (perfiles críticos, rango salarial, modalidad, urgencia)?',
+      'pack': '¿Qué contexto estratégico adicional debemos considerar para afinar los 4 reportes del pack?'
     };
 
     const setDynamicQuestionPlaceholder = () => {
@@ -144,16 +114,8 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
       const dynamic = dynamicPromptByReport[tipo] || 'Cuéntanos qué te gustaría aclarar con este reporte';
       if (pregunta1) pregunta1.placeholder = dynamic;
 
-      const prompts = optionalPromptsByReport[tipo] || [];
-      if (pregunta2) pregunta2.placeholder = prompts[0] || 'Pregunta opcional 1';
-      if (pregunta3) pregunta3.placeholder = prompts[1] || 'Pregunta opcional 2';
-      if (pregunta4) pregunta4.placeholder = prompts[2] || 'Pregunta opcional 3';
-
-      const isPack = tipo === 'pack';
-      if (preguntaPackExtra) {
-        preguntaPackExtra.classList.toggle('hidden', !isPack);
-        preguntaPackExtra.placeholder = prompts[3] || 'Pregunta opcional 4 (solo pack completo)';
-      }
+      const optional = optionalPromptByReport[tipo] || '¿Hay algo más que debamos saber para afinar el reporte?';
+      if (pregunta3) pregunta3.placeholder = optional;
     };
 
     if (preTipo) tipoSelect.value = preTipo;
@@ -173,17 +135,11 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
 
       const tipo = tipoSelect?.value || '';
       const p1 = (pregunta1?.value || '').trim();
-      const p2 = (pregunta2?.value || '').trim();
       const p3 = (pregunta3?.value || '').trim();
-      const p4 = (pregunta4?.value || '').trim();
-      const pPack = (preguntaPackExtra?.value || '').trim();
 
       const mergedParts = [
         p1 ? `Enfoque principal (opcional): ${p1}` : '',
-        p2 ? `Pregunta opcional 1: ${p2}` : '',
-        p3 ? `Pregunta opcional 2: ${p3}` : '',
-        p4 ? `Pregunta opcional 3: ${p4}` : '',
-        (tipo === 'pack' && pPack) ? `Pregunta opcional 4: ${pPack}` : '',
+        p3 ? `Información adicional (opcional): ${p3}` : '',
       ].filter(Boolean);
 
       if (preguntasClave) preguntasClave.value = mergedParts.join('\n');
