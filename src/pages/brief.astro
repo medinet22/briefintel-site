@@ -48,33 +48,29 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
           </div>
         </div>
 
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-3">
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Decisión principal (requerido)</h3>
+          <p class="text-xs text-white/50">Define la decisión concreta que quieres resolver con este reporte.</p>
+          <textarea name="decision" required rows="3" placeholder="Ejemplo: ¿deberíamos lanzar este trimestre o esperar 6 meses?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+        </div>
+
         <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-4">
-          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Preguntas opcionales para afinar el reporte</h3>
-          <p class="text-xs text-white/50">Estas preguntas son opcionales (excepto la decisión principal). Cuanto más contexto compartas aquí, más fino y útil será el reporte final.</p>
-
-          <div class="space-y-2">
-            <label class="block text-xs text-white/60">Enfoque principal del reporte (opcional)</label>
-            <textarea id="pregunta_1" name="pregunta_1" rows="3" placeholder="Esta pregunta se adapta automáticamente al tipo de reporte" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-xs text-white/60">Decisión que necesitas tomar (requerido)</label>
-            <textarea name="decision" required rows="3" placeholder="Ejemplo: ¿deberíamos lanzar este trimestre o esperar 6 meses?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-          </div>
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Preguntas para afinar el reporte (opcionales)</h3>
+          <p class="text-xs text-white/50">Todas las preguntas de este bloque son opcionales. Cuanto más contexto compartas, más personalizado y útil será el reporte final.</p>
 
           <div class="space-y-2">
             <label class="block text-xs text-white/60">Pregunta opcional 1</label>
-            <textarea id="pregunta_2" rows="2" placeholder="¿Qué preguntas quieres responder con este reporte?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <textarea id="pregunta_1" name="pregunta_1" rows="3" placeholder="¿Qué preguntas quieres responder con este reporte?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           </div>
 
           <div class="space-y-2">
             <label class="block text-xs text-white/60">Pregunta opcional 2</label>
-            <textarea id="pregunta_3" rows="2" placeholder="¿Qué contexto adicional deberíamos considerar para afinar el análisis?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <textarea id="pregunta_2" rows="3" placeholder="¿Qué contexto adicional deberíamos considerar para afinar el análisis?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           </div>
 
           <div class="space-y-2">
             <label class="block text-xs text-white/60">Pregunta opcional 3</label>
-            <textarea id="pregunta_4" rows="2" placeholder="¿Hay alguna hipótesis o riesgo clave que quieras validar?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <textarea id="pregunta_3" rows="3" placeholder="¿Hay alguna hipótesis o riesgo clave que quieras validar?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           </div>
 
           <input type="hidden" name="preguntas_clave" id="preguntas_clave" />
@@ -118,7 +114,6 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
     const pregunta1 = document.getElementById('pregunta_1');
     const pregunta2 = document.getElementById('pregunta_2');
     const pregunta3 = document.getElementById('pregunta_3');
-    const pregunta4 = document.getElementById('pregunta_4');
     const dropzone = document.getElementById('dropzone');
     const adjuntos = document.getElementById('adjuntos');
     const adjuntosNombres = document.getElementById('adjuntos_nombres');
@@ -126,22 +121,10 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
     const preguntasClave = document.getElementById('preguntas_clave');
     const sujetoNombre = document.getElementById('sujeto_nombre');
 
-    const dynamicPromptByReport = {
-      'competitor-intel': '¿Qué rival o movimiento competitivo te preocupa más ahora mismo?',
-      'market-entry': '¿Qué mercado o segmento estás evaluando y qué duda te bloquea?',
-      'buyer-intel': '¿Qué tipo de comprador o inversor quieres entender mejor?',
-      'talent-market': '¿Qué perfil de talento es más crítico para tu siguiente etapa?',
-      'pack': '¿Cuál es la decisión más importante que quieres resolver con el pack completo?'
-    };
-
     const setDynamicQuestionPlaceholder = () => {
-      const tipo = tipoSelect?.value || '';
-      const dynamic = dynamicPromptByReport[tipo] || 'Cuéntanos qué te gustaría aclarar con este reporte';
-      if (pregunta1) pregunta1.placeholder = dynamic;
-
-      if (pregunta2) pregunta2.placeholder = '¿Qué preguntas quieres responder con este reporte?';
-      if (pregunta3) pregunta3.placeholder = '¿Qué contexto adicional deberíamos considerar para afinar el análisis?';
-      if (pregunta4) pregunta4.placeholder = '¿Hay alguna hipótesis o riesgo clave que quieras validar?';
+      if (pregunta1) pregunta1.placeholder = '¿Qué preguntas quieres responder con este reporte?';
+      if (pregunta2) pregunta2.placeholder = '¿Qué contexto adicional deberíamos considerar para afinar el análisis?';
+      if (pregunta3) pregunta3.placeholder = '¿Hay alguna hipótesis o riesgo clave que quieras validar?';
     };
 
     if (preTipo) tipoSelect.value = preTipo;
@@ -191,14 +174,12 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
       const p1 = (pregunta1?.value || '').trim();
       const p2 = (pregunta2?.value || '').trim();
       const p3 = (pregunta3?.value || '').trim();
-      const p4 = (pregunta4?.value || '').trim();
       const adj = (adjuntosNombres?.value || '').trim();
 
       const mergedParts = [
-        p1 ? `Enfoque principal (opcional): ${p1}` : '',
-        p2 ? `Pregunta opcional 1: ${p2}` : '',
-        p3 ? `Pregunta opcional 2: ${p3}` : '',
-        p4 ? `Pregunta opcional 3: ${p4}` : '',
+        p1 ? `Pregunta opcional 1: ${p1}` : '',
+        p2 ? `Pregunta opcional 2: ${p2}` : '',
+        p3 ? `Pregunta opcional 3: ${p3}` : '',
         adj ? `Archivos de apoyo: ${adj}` : ''
       ].filter(Boolean);
 
