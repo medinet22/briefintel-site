@@ -54,10 +54,33 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
           <input type="text" name="sujeto_web" placeholder="Web/LinkedIn (opcional)" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm" />
         </div>
 
-        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-4">
-          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Decisión y preguntas</h3>
-          <textarea name="decision" required rows="3" placeholder="¿Qué decisión necesitas tomar?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-          <textarea name="preguntas_clave" required rows="4" placeholder="Tus 3 preguntas clave" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-5">
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Decisión y enfoque del análisis</h3>
+          <textarea name="decision" required rows="3" placeholder="¿Qué decisión necesitas tomar con este reporte?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+
+          <div class="space-y-2">
+            <label id="pregunta_principal_label" for="pregunta_1" class="block text-xs font-semibold text-white/70 uppercase tracking-wider">
+              Pregunta principal del reporte
+            </label>
+            <textarea id="pregunta_1" name="pregunta_1" rows="3" placeholder="Esta pregunta cambia según el tipo de reporte" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+          </div>
+
+          <div id="pack_questions" class="hidden space-y-3">
+            <p class="text-xs font-semibold text-white/70 uppercase tracking-wider">Preguntas clave del pack completo</p>
+            <textarea id="pack_q_competitor" rows="2" placeholder="Competitor Intel: ¿qué competidores (uno o varios) quieres analizar?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <textarea id="pack_q_market" rows="2" placeholder="Market Entry: ¿a qué mercado(s) quieres entrar y con qué producto/servicio?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <textarea id="pack_q_buyer" rows="2" placeholder="Buyer Intel: ¿qué buyer(s) o tipo de comprador potencial quieres evaluar?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <textarea id="pack_q_talent" rows="2" placeholder="Talent Intel: ¿qué perfiles clave estás buscando en la organización?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+          </div>
+
+          <div class="space-y-2">
+            <label for="contexto_opcional" class="block text-xs font-semibold text-white/70 uppercase tracking-wider">
+              Contexto adicional (opcional)
+            </label>
+            <textarea id="contexto_opcional" rows="4" placeholder="Añade aquí cualquier detalle que nos ayude a afinar más el reporte: contexto interno, hipótesis, restricciones, países prioritarios, timing, etc." class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+          </div>
+
+          <input type="hidden" name="preguntas_clave" id="preguntas_clave" />
         </div>
 
         <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
@@ -77,7 +100,41 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
   <script is:inline>
     const preTipo = new URLSearchParams(location.search).get('tipo');
     const tipoSelect = document.getElementById('tipo_reporte');
+    const pregunta1 = document.getElementById('pregunta_1');
+    const preguntaPrincipalLabel = document.getElementById('pregunta_principal_label');
+    const packQuestions = document.getElementById('pack_questions');
+    const packQCompetitor = document.getElementById('pack_q_competitor');
+    const packQMarket = document.getElementById('pack_q_market');
+    const packQBuyer = document.getElementById('pack_q_buyer');
+    const packQTalent = document.getElementById('pack_q_talent');
+    const contextoOpcional = document.getElementById('contexto_opcional');
+    const preguntasClave = document.getElementById('preguntas_clave');
+
+    const firstQuestionByReport = {
+      'competitor-intel': 'Competitor Intel: ¿qué competidor(es) quieres analizar y por qué te preocupa cada uno?',
+      'market-entry': 'Market Entry: ¿en qué mercado(s) quieres entrar y con qué producto/servicio?',
+      'buyer-intel': 'Buyer Intel: ¿qué buyer(s) o tipo de comprador potencial quieres evaluar?',
+      'talent-market': 'Talent Intel: ¿qué perfiles más críticos estás buscando en la organización?',
+      'pack': 'Pack completo: resume la decisión principal que quieres resolver con los 4 reportes.'
+    };
+
+    const setDynamicQuestionPlaceholder = () => {
+      const tipo = tipoSelect?.value || '';
+      const dynamic = firstQuestionByReport[tipo] || 'Esta pregunta cambia según el tipo de reporte';
+      if (pregunta1) pregunta1.placeholder = dynamic;
+
+      const isPack = tipo === 'pack';
+      if (packQuestions) packQuestions.classList.toggle('hidden', !isPack);
+      if (preguntaPrincipalLabel) {
+        preguntaPrincipalLabel.textContent = isPack
+          ? 'Pregunta de contexto general del pack'
+          : 'Pregunta principal del reporte';
+      }
+    };
+
     if (preTipo) tipoSelect.value = preTipo;
+    setDynamicQuestionPlaceholder();
+    tipoSelect?.addEventListener('change', setDynamicQuestionPlaceholder);
 
     const form = document.getElementById('briefForm');
     const btn = document.getElementById('submitBtn');
@@ -89,6 +146,30 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
       const old = btn.textContent;
       btn.disabled = true;
       btn.textContent = 'Guardando brief...';
+
+      const tipo = tipoSelect?.value || '';
+      const p1 = (pregunta1?.value || '').trim();
+      const extra = (contextoOpcional?.value || '').trim();
+
+      const mergedParts = [];
+      if (p1) mergedParts.push(`Contexto principal: ${p1}`);
+
+      if (tipo === 'pack') {
+        const packBlocks = [
+          ['Competitor Intel', (packQCompetitor?.value || '').trim()],
+          ['Market Entry', (packQMarket?.value || '').trim()],
+          ['Buyer Intel', (packQBuyer?.value || '').trim()],
+          ['Talent Intel', (packQTalent?.value || '').trim()],
+        ].filter(([, v]) => v);
+
+        packBlocks.forEach(([label, value], i) => {
+          mergedParts.push(`${i + 1}. ${label}: ${value}`);
+        });
+      }
+
+      if (extra) mergedParts.push(`Contexto adicional (opcional): ${extra}`);
+
+      if (preguntasClave) preguntasClave.value = mergedParts.join('\n');
 
       const data = Object.fromEntries(new FormData(form).entries());
       try {
