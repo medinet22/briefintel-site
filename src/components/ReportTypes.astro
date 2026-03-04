@@ -87,14 +87,13 @@ const reports = [
     </div>
 
     <!-- Report Cards Grid -->
-    <div class="grid md:grid-cols-2 gap-6 mb-8" id="report-cards">
+    <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-6" id="report-cards">
       {reports.map((report) => (
         <div
-          class="report-card group relative bg-white/[0.02] border border-white/10 rounded-2xl p-8 cursor-pointer transition-all duration-300 hover:border-accent/40 hover:bg-white/[0.04]"
+          class="report-card group relative bg-white/[0.02] border border-white/10 rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:border-accent/40 hover:bg-white/[0.04]"
           data-id={report.id}
           data-price={report.price}
           data-name={report.name}
-          data-link={report.link}
         >
           <!-- Selected checkmark (hidden by default) -->
           <div class="selected-badge absolute top-4 right-4 w-7 h-7 bg-accent rounded-full items-center justify-center hidden">
@@ -113,11 +112,11 @@ const reports = [
 
           <h3 class="text-xs font-semibold tracking-widest text-white/40 mb-2">{report.name}</h3>
           <p class="text-xl font-semibold mb-3 text-white/90">{report.question}</p>
-          <p class="text-sm text-white/60 mb-6 leading-relaxed">{report.description}</p>
+          <p class="text-xs text-white/60 mb-4 leading-relaxed">{report.description}</p>
 
-          <ul class="space-y-3 mb-6">
-            {report.features.map((feature) => (
-              <li class="flex items-start gap-3 text-sm text-white/70">
+          <ul class="space-y-2 mb-4">
+            {report.features.slice(0,3).map((feature) => (
+              <li class="flex items-start gap-2 text-xs text-white/70">
                 <svg class="w-5 h-5 text-accent flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
@@ -158,8 +157,7 @@ const reports = [
             <a
               id="summary-cta"
               href="#"
-              target="_blank"
-              rel="noopener"
+
               class="inline-flex items-center gap-2 bg-accent hover:bg-accent/90 text-dark px-8 py-4 rounded-xl font-bold text-base transition-all duration-200 hover:scale-[1.03] hover:shadow-lg hover:shadow-accent/25 whitespace-nowrap"
             >
               Ir al pago →
@@ -206,7 +204,7 @@ const reports = [
       const id = card.getAttribute('data-id')!;
       const name = card.getAttribute('data-name')!;
       const price = card.getAttribute('data-price')!;
-      const link = card.getAttribute('data-link')!;
+      const link = `/brief?tipo=${encodeURIComponent(id)}`;
 
       // Toggle: click same card = deselect
       if (selectedId === id) {
