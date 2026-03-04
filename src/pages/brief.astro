@@ -61,10 +61,20 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
         </div>
 
         <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-3">
-          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">3) Información adicional (opcional)</h3>
-          <p class="text-xs text-white/50">Estas preguntas son opcionales. Cuanto más contexto compartas aquí, más fino y útil será el reporte final.</p>
-          <textarea id="pregunta_3" rows="4" placeholder="¿Hay algo más que debamos saber para afinar el reporte (prioridades, restricciones, contexto interno, timing o hipótesis)?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">3) Preguntas opcionales para afinar el reporte</h3>
+          <p class="text-xs text-white/50">Estas tres preguntas son opcionales. Cuanto más contexto compartas aquí, más fino y útil será el reporte final.</p>
+          <textarea id="pregunta_2" rows="2" placeholder="¿Qué preguntas quieres responder con este reporte?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+          <textarea id="pregunta_3" rows="2" placeholder="¿Qué contexto adicional deberíamos tener en cuenta (prioridades, restricciones o timing)?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+          <textarea id="pregunta_4" rows="2" placeholder="¿Hay alguna hipótesis o riesgo que quieras validar específicamente?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           <input type="hidden" name="preguntas_clave" id="preguntas_clave" />
+        </div>
+
+        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-3">
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">4) Archivos de apoyo (opcional)</h3>
+          <p class="text-xs text-white/50">Puedes adjuntar documentos de contexto (PDF, Excel, PPT, DOC). Máximo 3 archivos.</p>
+          <input id="adjuntos" type="file" multiple accept=".pdf,.xlsx,.xls,.csv,.ppt,.pptx,.doc,.docx" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm file:mr-3 file:rounded-md file:border-0 file:bg-accent/20 file:px-3 file:py-1 file:text-xs file:font-semibold file:text-accent" />
+          <p id="adjuntosInfo" class="text-[11px] text-white/40">Los archivos se registran para contexto del análisis.</p>
+          <input type="hidden" name="adjuntos_nombres" id="adjuntos_nombres" />
         </div>
 
         <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
@@ -89,7 +99,12 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
     const preTipo = new URLSearchParams(location.search).get('tipo');
     const tipoSelect = document.getElementById('tipo_reporte');
     const pregunta1 = document.getElementById('pregunta_1');
+    const pregunta2 = document.getElementById('pregunta_2');
     const pregunta3 = document.getElementById('pregunta_3');
+    const pregunta4 = document.getElementById('pregunta_4');
+    const adjuntos = document.getElementById('adjuntos');
+    const adjuntosNombres = document.getElementById('adjuntos_nombres');
+    const adjuntosInfo = document.getElementById('adjuntosInfo');
     const preguntasClave = document.getElementById('preguntas_clave');
     const sujetoNombre = document.getElementById('sujeto_nombre');
 
@@ -101,12 +116,32 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
       'pack': '¿Cuál es la decisión más importante que quieres resolver con el pack completo?'
     };
 
-    const optionalPromptByReport = {
-      'competitor-intel': '¿Hay algún competidor, señal o mercado que quieras que prioricemos?',
-      'market-entry': '¿Qué contexto adicional deberíamos considerar (mercado objetivo, límites de inversión, timing, riesgos)?',
-      'buyer-intel': '¿Qué contexto de operación, valoración o tipo de comprador quieres que tengamos en cuenta?',
-      'talent-market': '¿Qué contexto interno debemos considerar (perfiles críticos, rango salarial, modalidad, urgencia)?',
-      'pack': '¿Qué contexto estratégico adicional debemos considerar para afinar los 4 reportes del pack?'
+    const optionalPromptsByReport = {
+      'competitor-intel': [
+        '¿Qué preguntas quieres responder con este reporte?',
+        '¿Qué competidor o movimiento quieres que prioricemos?',
+        '¿Qué riesgo competitivo te preocupa más ahora mismo?'
+      ],
+      'market-entry': [
+        '¿Qué preguntas quieres responder con este reporte?',
+        '¿Qué mercado/segmento deberíamos priorizar primero?',
+        '¿Qué límites (inversión, timing, riesgo) debemos respetar?'
+      ],
+      'buyer-intel': [
+        '¿Qué preguntas quieres responder con este reporte?',
+        '¿Qué perfil de comprador o inversor quieres priorizar?',
+        '¿Qué condición de negociación quieres validar?'
+      ],
+      'talent-market': [
+        '¿Qué preguntas quieres responder con este reporte?',
+        '¿Qué perfiles críticos quieres priorizar?',
+        '¿Qué restricción clave debemos considerar (salario, ubicación, urgencia)?'
+      ],
+      'pack': [
+        '¿Qué preguntas quieres responder con este reporte?',
+        '¿Qué frente del pack te urge más (competencia, mercado, buyer o talento)?',
+        '¿Qué decisión quieres tomar al recibir el pack completo?'
+      ]
     };
 
     const setDynamicQuestionPlaceholder = () => {
@@ -114,13 +149,30 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
       const dynamic = dynamicPromptByReport[tipo] || 'Cuéntanos qué te gustaría aclarar con este reporte';
       if (pregunta1) pregunta1.placeholder = dynamic;
 
-      const optional = optionalPromptByReport[tipo] || '¿Hay algo más que debamos saber para afinar el reporte?';
-      if (pregunta3) pregunta3.placeholder = optional;
+      const prompts = optionalPromptsByReport[tipo] || [
+        '¿Qué preguntas quieres responder con este reporte?',
+        '¿Qué contexto adicional debemos considerar?',
+        '¿Qué riesgo o hipótesis quieres validar?'
+      ];
+      if (pregunta2) pregunta2.placeholder = prompts[0];
+      if (pregunta3) pregunta3.placeholder = prompts[1];
+      if (pregunta4) pregunta4.placeholder = prompts[2];
     };
 
     if (preTipo) tipoSelect.value = preTipo;
     setDynamicQuestionPlaceholder();
     tipoSelect?.addEventListener('change', setDynamicQuestionPlaceholder);
+
+    adjuntos?.addEventListener('change', () => {
+      const files = Array.from(adjuntos.files || []).slice(0, 3);
+      const names = files.map(f => f.name);
+      if (adjuntosNombres) adjuntosNombres.value = names.join(' | ');
+      if (adjuntosInfo) {
+        adjuntosInfo.textContent = names.length
+          ? `Archivos seleccionados: ${names.join(', ')}`
+          : 'Los archivos se registran para contexto del análisis.';
+      }
+    });
 
     const form = document.getElementById('briefForm');
     const btn = document.getElementById('submitBtn');
@@ -135,11 +187,17 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
 
       const tipo = tipoSelect?.value || '';
       const p1 = (pregunta1?.value || '').trim();
+      const p2 = (pregunta2?.value || '').trim();
       const p3 = (pregunta3?.value || '').trim();
+      const p4 = (pregunta4?.value || '').trim();
+      const adj = (adjuntosNombres?.value || '').trim();
 
       const mergedParts = [
         p1 ? `Enfoque principal (opcional): ${p1}` : '',
-        p3 ? `Información adicional (opcional): ${p3}` : '',
+        p2 ? `Pregunta opcional 1: ${p2}` : '',
+        p3 ? `Pregunta opcional 2: ${p3}` : '',
+        p4 ? `Pregunta opcional 3: ${p4}` : '',
+        adj ? `Archivos de apoyo: ${adj}` : ''
       ].filter(Boolean);
 
       if (preguntasClave) preguntasClave.value = mergedParts.join('\n');
