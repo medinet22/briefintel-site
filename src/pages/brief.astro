@@ -48,31 +48,26 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
           </div>
         </div>
 
-        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-3">
-          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Decisión principal (requerido)</h3>
-          <p class="text-xs text-white/50">Define la decisión concreta que quieres resolver con este reporte.</p>
-          <textarea name="decision" required rows="3" placeholder="Ejemplo: ¿deberíamos lanzar este trimestre o esperar 6 meses?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
-        </div>
-
         <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-4">
-          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Preguntas para afinar el reporte (opcionales)</h3>
-          <p class="text-xs text-white/50">Todas las preguntas de este bloque son opcionales. Cuanto más contexto compartas, más personalizado y útil será el reporte final.</p>
+          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Preguntas para afinar el reporte</h3>
+          <p class="text-xs text-white/50">Todas las preguntas de este bloque son opcionales. Si respondes alguna, el informe sale mucho más preciso y accionable.</p>
 
           <div class="space-y-2">
-            <label class="block text-xs text-white/60">Pregunta opcional 1</label>
-            <textarea id="pregunta_1" name="pregunta_1" rows="3" placeholder="¿Qué preguntas quieres responder con este reporte?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <label class="block text-xs text-white/60">Foco principal (opcional)</label>
+            <textarea id="pregunta_1" name="pregunta_1" rows="3" placeholder="Ejemplo: ¿Qué preguntas quieres responder con este reporte?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           </div>
 
           <div class="space-y-2">
-            <label class="block text-xs text-white/60">Pregunta opcional 2</label>
-            <textarea id="pregunta_2" rows="3" placeholder="¿Qué contexto adicional deberíamos considerar para afinar el análisis?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <label class="block text-xs text-white/60">Decisión(es) a tomar (opcional)</label>
+            <textarea id="pregunta_2" rows="3" placeholder="Ejemplo: ¿Qué decisión quieres tomar con este informe?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           </div>
 
           <div class="space-y-2">
-            <label class="block text-xs text-white/60">Pregunta opcional 3</label>
-            <textarea id="pregunta_3" rows="3" placeholder="¿Hay alguna hipótesis o riesgo clave que quieras validar?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
+            <label class="block text-xs text-white/60">Preguntas que quieres responder (opcional)</label>
+            <textarea id="pregunta_3" rows="3" placeholder="Ejemplo: ¿Qué preguntas quieres responder con este informe?" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm"></textarea>
           </div>
 
+          <input type="hidden" name="decision" id="decision_hidden" />
           <input type="hidden" name="preguntas_clave" id="preguntas_clave" />
         </div>
 
@@ -118,13 +113,44 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
     const adjuntos = document.getElementById('adjuntos');
     const adjuntosNombres = document.getElementById('adjuntos_nombres');
     const adjuntosInfo = document.getElementById('adjuntosInfo');
+    const decisionHidden = document.getElementById('decision_hidden');
     const preguntasClave = document.getElementById('preguntas_clave');
     const sujetoNombre = document.getElementById('sujeto_nombre');
 
+    const placeholderByType = {
+      'competitor-intel': {
+        q1: 'Ejemplo: ¿Qué competidor te preocupa más y por qué? ',
+        q2: 'Ejemplo: ¿Quieres decidir cómo defender cuota o cómo atacar un segmento específico?',
+        q3: 'Ejemplo: ¿Qué preguntas quieres responder: precios, canales, mensaje, retención?'
+      },
+      'market-entry': {
+        q1: 'Ejemplo: ¿Qué mercado/segmento te interesa priorizar primero?',
+        q2: 'Ejemplo: ¿Quieres decidir si entrar ahora, cómo entrar o con qué oferta?',
+        q3: 'Ejemplo: ¿Qué preguntas quieres responder: tamaño real, barreras, demanda, timing?'
+      },
+      'buyer-intel': {
+        q1: 'Ejemplo: ¿Qué tipo de comprador quieres analizar (estratégico, fondo, operador)?',
+        q2: 'Ejemplo: ¿Quieres decidir a quién acercarte primero y en qué condiciones?',
+        q3: 'Ejemplo: ¿Qué preguntas quieres responder: encaje, valoración, probabilidad de cierre?'
+      },
+      'talent-market': {
+        q1: 'Ejemplo: ¿Qué perfiles son más críticos para tu siguiente etapa?',
+        q2: 'Ejemplo: ¿Quieres decidir orden de contratación, seniority o mix España/LATAM?',
+        q3: 'Ejemplo: ¿Qué preguntas quieres responder: salarios, canales, tiempos de cierre, riesgos?'
+      },
+      'pack': {
+        q1: 'Ejemplo: ¿Qué frente estratégico te urge más: competencia, mercado, buyer o talento?',
+        q2: 'Ejemplo: ¿Qué decisiones quieres tomar al recibir el pack completo?',
+        q3: 'Ejemplo: ¿Qué preguntas clave quieres responder en cada uno de los 4 reportes?'
+      }
+    };
+
     const setDynamicQuestionPlaceholder = () => {
-      if (pregunta1) pregunta1.placeholder = '¿Qué preguntas quieres responder con este reporte?';
-      if (pregunta2) pregunta2.placeholder = '¿Qué contexto adicional deberíamos considerar para afinar el análisis?';
-      if (pregunta3) pregunta3.placeholder = '¿Hay alguna hipótesis o riesgo clave que quieras validar?';
+      const tipo = tipoSelect?.value || '';
+      const p = placeholderByType[tipo] || placeholderByType['pack'];
+      if (pregunta1) pregunta1.placeholder = p.q1;
+      if (pregunta2) pregunta2.placeholder = p.q2;
+      if (pregunta3) pregunta3.placeholder = p.q3;
     };
 
     if (preTipo) tipoSelect.value = preTipo;
@@ -177,13 +203,16 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
       const adj = (adjuntosNombres?.value || '').trim();
 
       const mergedParts = [
-        p1 ? `Pregunta opcional 1: ${p1}` : '',
-        p2 ? `Pregunta opcional 2: ${p2}` : '',
-        p3 ? `Pregunta opcional 3: ${p3}` : '',
+        p1 ? `Foco principal (opcional): ${p1}` : '',
+        p2 ? `Decisión(es) a tomar (opcional): ${p2}` : '',
+        p3 ? `Preguntas a responder (opcional): ${p3}` : '',
         adj ? `Archivos de apoyo: ${adj}` : ''
       ].filter(Boolean);
 
       if (preguntasClave) preguntasClave.value = mergedParts.join('\n');
+      if (decisionHidden) {
+        decisionHidden.value = p2 || p1 || `Definir plan de acción para ${tipo || 'el informe solicitado'}`;
+      }
 
       const sujetoByTipo = {
         'competitor-intel': 'Análisis competitivo',
