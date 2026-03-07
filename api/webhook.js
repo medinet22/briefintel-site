@@ -10,6 +10,31 @@ const REPORT_NAMES = {
   'pack': 'Pack Estratégico Completo',
 };
 
+async function notifyTelegram(job) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const topicId = process.env.TELEGRAM_TOPIC_ID;
+  if (!token || !chatId) return;
+
+  const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte;
+  const amount = job.amount_total ? `€${(job.amount_total / 100).toFixed(0)}` : '—';
+  const text = `💰 *Nueva compra en BriefIntel*\n\n` +
+    `🏢 *Empresa:* ${job.empresa_nombre || '—'}\n` +
+    `📊 *Reporte:* ${reportName}\n` +
+    `💶 *Importe:* ${amount}\n` +
+    `📧 *Email:* ${job.customer_email || '—'}\n` +
+    `🌐 *Web:* ${job.empresa_web || '—'}`;
+
+  const body = { chat_id: chatId, text, parse_mode: 'Markdown' };
+  if (topicId) body.message_thread_id = parseInt(topicId);
+
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+}
+
 async function sendConfirmationEmail(job) {
   if (!process.env.RESEND_API_KEY || !job.customer_email) return;
   const resend = new Resend(process.env.RESEND_API_KEY);
@@ -100,6 +125,7 @@ export default async function handler(req, res) {
 
     // Email de confirmación al cliente
     await sendConfirmationEmail(job).catch(e => console.error('Email cliente failed:', e.message));
+    await notifyTelegram(job).catch(e => console.error('Telegram notify failed:', e.message));
 
     // Notificación a Dani
     if (process.env.RESEND_API_KEY) {
