@@ -41,7 +41,7 @@ async function sendConfirmationEmail(job) {
   const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte || 'Reporte BriefIntel';
   const companyName = job.empresa_nombre || job.empresa_web || 'tu empresa';
   await resend.emails.send({
-    from: 'BriefIntel <d@negoia.com>',
+    from: 'BriefIntel <hola@getbriefintel.com>',
     to: job.customer_email,
     subject: `✅ Pedido confirmado — ${reportName} para ${companyName}`,
     html: `
@@ -138,7 +138,7 @@ export default async function handler(req, res) {
     if (process.env.RESEND_API_KEY) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       await resend.emails.send({
-        from: 'BriefIntel <d@negoia.com>',
+        from: 'BriefIntel <hola@getbriefintel.com>',
         to: 'd@negoia.com',
         subject: `🛒 Nuevo pedido — ${REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte} · ${job.empresa_nombre}`,
         html: `<pre style="font-family:monospace">${JSON.stringify(job, null, 2)}</pre>`,
