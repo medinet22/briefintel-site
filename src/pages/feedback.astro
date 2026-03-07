@@ -61,7 +61,7 @@
     </div>
   </div>
   <script>
-    const token = window.location.pathname.split('/').filter(Boolean).pop();
+    const token = new URLSearchParams(window.location.search).get('t') || window.location.pathname.split('/').filter(Boolean).pop();
     let rating = 0, utility = '';
     document.querySelectorAll('.star').forEach(s => {
       s.addEventListener('click', () => {
