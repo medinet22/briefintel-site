@@ -32,6 +32,8 @@ async function notifyDani({ token, rating, utility, comment }) {
   });
 }
 
+export const config = { api: { bodyParser: false } };
+
 async function parseBody(req) {
   return new Promise((resolve) => {
     let data = '';
