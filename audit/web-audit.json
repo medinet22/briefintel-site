@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "generatedAt": "2026-03-04T17:43:45.454Z",
+  "metrics": {
+    "briefs_total": 4,
+    "briefs_24h": 4,
+    "paid_jobs_total": 0,
+    "paid_jobs_24h": 0,
+    "queued_jobs_total": 0,
+    "stale_queued_jobs": 0,
+    "brief_to_paid_rate": 0,
+    "ops_events_24h": 2
+  },
+  "breakdown": {
+    "paid_jobs_by_type": {}
+  },
+  "alerts": [
+    {
+      "level": "warning",
+      "code": "LOW_BRIEF_TO_PAID_RATE",
+      "message": "Conversión brief→pago baja (0.0%)."
+    }
+  ]
+}

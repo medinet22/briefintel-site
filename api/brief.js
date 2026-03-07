@@ -23,7 +23,7 @@ const REPORT_CONFIG = {
   'pack': { name: 'Pack Estratégico Completo (4 reportes)', price: 11900 },
 };
 
-const REQUIRED_FIELDS = ['tipo_reporte', 'empresa_nombre', 'empresa_web', 'sector', 'sujeto_nombre', 'decision', 'preguntas_clave', 'email'];
+const REQUIRED_FIELDS = ['tipo_reporte', 'empresa_nombre', 'empresa_web', 'sector', 'decision', 'email'];
 
 function json(res, status, payload) {
   res.status(status).setHeader('Content-Type', 'application/json');
@@ -117,13 +117,6 @@ export default async function handler(req, res) {
       return json(res, 400, { ok: false, error: 'El email no tiene un formato válido.' });
     }
 
-    if (payload.decision.length < 20 || payload.preguntas_clave.length < 20) {
-      return json(res, 400, {
-        ok: false,
-        error: 'Necesitamos más detalle en la decisión y preguntas (mínimo 20 caracteres cada una).',
-      });
-    }
-
     const now = new Date().toISOString();
     const briefId = randomUUID();
     const emailHash = createHash('sha256').update(payload.email).digest('hex').slice(0, 16);
@@ -183,7 +176,7 @@ export default async function handler(req, res) {
             preguntas: (record.preguntas_clave || '').slice(0, 500),
           },
           invoice_creation: { enabled: true },
-          success_url: `https://getbriefintel.com/confirmacion?session_id={CHECKOUT_SESSION_ID}&tipo=${encodeURIComponent(record.tipo_reporte)}`,
+          success_url: `https://getbriefintel.com/gracias?session_id={CHECKOUT_SESSION_ID}&tipo=${encodeURIComponent(record.tipo_reporte)}`,
           cancel_url: `https://getbriefintel.com/brief?tipo=${encodeURIComponent(record.tipo_reporte)}`,
           locale: 'es',
         });
