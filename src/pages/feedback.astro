@@ -1,5 +1,5 @@
 ---
-// Feedback estático — el token se lee del path client-side
+// Feedback page — token leído de ?t= query param
 ---
 <!DOCTYPE html>
 <html lang="es">
@@ -7,91 +7,149 @@
   <meta charset="UTF-8" />
   <meta name="robots" content="noindex, nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>¿Qué te pareció tu reporte? — BriefIntel</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>¿Qué te pareció? — BriefIntel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f1f5f9; font-family: system-ui, -apple-system, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .card { background: #1e293b; border-radius: 16px; padding: 36px; max-width: 480px; width: 100%; }
+    .logo { color: #f59e0b; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .logo span { color: #f1f5f9; }
+    .sub { color: #475569; font-size: 12px; margin-bottom: 28px; }
+    h2 { font-size: 20px; margin-bottom: 6px; }
+    .hint { color: rgba(255,255,255,0.4); font-size: 13px; margin-bottom: 32px; }
+    .q { font-weight: 600; margin-bottom: 14px; }
+    .section { margin-bottom: 28px; }
+
+    /* Stars */
+    .stars { display: flex; gap: 8px; margin-bottom: 8px; }
+    .star { font-size: 36px; cursor: pointer; opacity: 0.35; transition: opacity 0.15s, transform 0.1s; user-select: none; }
+    .star:hover { opacity: 0.7; transform: scale(1.1); }
+    .star.on { opacity: 1; transform: scale(1.05); }
+    #star-label { color: rgba(255,255,255,0.35); font-size: 13px; min-height: 18px; }
+
+    /* Utility buttons */
+    .opts { display: flex; flex-wrap: wrap; gap: 10px; }
+    .opt { background: transparent; border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.6); padding: 9px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+    .opt:hover { border-color: rgba(245,158,11,0.5); color: rgba(245,158,11,0.8); }
+    .opt.on { border-color: #f59e0b; color: #f59e0b; background: rgba(245,158,11,0.08); }
+
+    /* Textarea */
+    textarea { width: 100%; background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 14px; color: rgba(255,255,255,0.8); font-size: 14px; resize: none; outline: none; transition: border-color 0.15s; font-family: inherit; }
+    textarea:focus { border-color: rgba(245,158,11,0.4); }
+
+    /* Button */
+    #sbtn { width: 100%; background: #f59e0b; color: #0f172a; font-weight: 700; font-size: 16px; padding: 14px; border: none; border-radius: 10px; cursor: pointer; margin-top: 8px; transition: background 0.15s; }
+    #sbtn:hover { background: #fbbf24; }
+    #sbtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Done state */
+    #done { display: none; text-align: center; }
+    #done .emoji { font-size: 52px; margin-bottom: 16px; }
+    #done h2 { margin-bottom: 8px; }
+    #done p { color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 24px; }
+    #done a { color: #f59e0b; font-size: 14px; text-decoration: none; }
+    #done a:hover { text-decoration: underline; }
+
+    hr { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 28px 0; }
+  </style>
 </head>
-<body class="min-h-screen flex items-center justify-center px-6 py-12" style="background:#0f172a;color:#f1f5f9;font-family:system-ui,sans-serif">
-  <div class="max-w-lg w-full mx-auto">
-    <div class="text-center mb-10">
-      <h1 class="text-2xl font-bold mb-1"><span style="color:#fff">Brief</span><span style="color:#f59e0b">Intel</span></h1>
-      <p style="color:rgba(255,255,255,0.4)" class="text-sm">Valoración de tu reporte</p>
-    </div>
-    <div id="form-container" class="rounded-2xl p-8" style="background:#1e293b">
-      <h2 class="text-xl font-semibold mb-2">¿Qué te pareció? 📊</h2>
-      <p style="color:rgba(255,255,255,0.4)" class="text-sm mb-8">1 minuto · 3 preguntas</p>
+<body>
+  <div class="card">
+    <!-- Formulario -->
+    <div id="form">
+      <div class="logo"><span>Brief</span>Intel</div>
+      <div class="sub">Intelligence Reports</div>
+      <h2>¿Qué te pareció tu reporte? 📊</h2>
+      <p class="hint">3 preguntas · 1 minuto · Nos ayuda a mejorar</p>
 
-      <div class="mb-8">
-        <p class="font-medium mb-4">1. ¿Cómo valorarías el reporte?</p>
-        <div class="flex gap-2" id="stars">
-          <span class="star" data-v="1" style="cursor:pointer;font-size:2rem">⭐</span>
-          <span class="star" data-v="2" style="cursor:pointer;font-size:2rem">⭐</span>
-          <span class="star" data-v="3" style="cursor:pointer;font-size:2rem">⭐</span>
-          <span class="star" data-v="4" style="cursor:pointer;font-size:2rem">⭐</span>
-          <span class="star" data-v="5" style="cursor:pointer;font-size:2rem">⭐</span>
+      <!-- Estrellas -->
+      <div class="section">
+        <div class="q">1. ¿Cómo valorarías el reporte?</div>
+        <div class="stars">
+          <span class="star" data-v="1">⭐</span>
+          <span class="star" data-v="2">⭐</span>
+          <span class="star" data-v="3">⭐</span>
+          <span class="star" data-v="4">⭐</span>
+          <span class="star" data-v="5">⭐</span>
         </div>
-        <p style="color:rgba(255,255,255,0.3)" class="text-xs mt-2" id="star-label">Selecciona una valoración</p>
+        <div id="star-label">Selecciona una valoración</div>
       </div>
 
-      <div class="mb-8">
-        <p class="font-medium mb-3">2. ¿Encontraste información accionable?</p>
-        <div class="flex gap-3 flex-wrap">
-          <button onclick="selectU('Sí, muy útil')" class="ubtn px-4 py-2 rounded-lg text-sm" style="border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6)">Sí, muy útil</button>
-          <button onclick="selectU('Bastante útil')" class="ubtn px-4 py-2 rounded-lg text-sm" style="border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6)">Bastante útil</button>
-          <button onclick="selectU('Algo útil')" class="ubtn px-4 py-2 rounded-lg text-sm" style="border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6)">Algo útil</button>
-          <button onclick="selectU('Poco útil')" class="ubtn px-4 py-2 rounded-lg text-sm" style="border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6)">Poco útil</button>
+      <!-- Utilidad -->
+      <div class="section">
+        <div class="q">2. ¿Encontraste información accionable?</div>
+        <div class="opts">
+          <button class="opt" data-u="Sí, muy útil">Sí, muy útil</button>
+          <button class="opt" data-u="Bastante útil">Bastante útil</button>
+          <button class="opt" data-u="Algo útil">Algo útil</button>
+          <button class="opt" data-u="Poco útil">Poco útil</button>
         </div>
       </div>
 
-      <div class="mb-8">
-        <p class="font-medium mb-3">3. ¿Qué mejorarías? <span style="color:rgba(255,255,255,0.3);font-weight:400">(opcional)</span></p>
-        <textarea id="comment" rows="3" placeholder="Tu opinión nos ayuda a mejorar..."
-          class="w-full rounded-lg px-4 py-3 text-sm resize-none focus:outline-none"
-          style="background:#0f172a;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.8)"></textarea>
+      <!-- Comentario -->
+      <div class="section">
+        <div class="q">3. ¿Qué mejorarías? <span style="font-weight:400;color:rgba(255,255,255,0.3)">(opcional)</span></div>
+        <textarea id="comment" rows="3" placeholder="Tu opinión nos ayuda a mejorar cada reporte..."></textarea>
       </div>
 
-      <button onclick="submit()" id="sbtn" class="w-full font-bold py-3 rounded-xl text-base"
-        style="background:#f59e0b;color:#0f172a">Enviar valoración</button>
+      <button id="sbtn">Enviar valoración</button>
     </div>
 
-    <div id="done" class="hidden text-center rounded-2xl p-8" style="background:#1e293b">
-      <p class="text-4xl mb-4">🙌</p>
-      <h2 class="text-xl font-semibold mb-2">¡Gracias!</h2>
-      <p style="color:rgba(255,255,255,0.5)" class="text-sm">Tu opinión mejora cada reporte.</p>
-      <a href="https://getbriefintel.com" style="color:#f59e0b" class="inline-block mt-6 text-sm hover:underline">← Volver a BriefIntel</a>
+    <!-- Gracias -->
+    <div id="done">
+      <div class="emoji">🙌</div>
+      <h2>¡Gracias por tu feedback!</h2>
+      <p>Tu opinión mejora cada reporte que hacemos.</p>
+      <a href="https://getbriefintel.com">← Volver a BriefIntel</a>
     </div>
   </div>
-  <script>
-    const token = new URLSearchParams(window.location.search).get('t') || window.location.pathname.split('/').filter(Boolean).pop();
-    let rating = 0, utility = '';
-    document.querySelectorAll('.star').forEach(s => {
-      s.addEventListener('click', () => {
-        rating = +s.dataset.v;
-        document.querySelectorAll('.star').forEach((x,i) => x.style.opacity = i < rating ? '1' : '0.4');
-        document.getElementById('star-label').textContent = ['','Muy malo','Malo','Normal','Bueno','Excelente'][rating];
+
+  <script is:inline>
+    var rating = 0;
+    var utility = '';
+    var token = new URLSearchParams(window.location.search).get('t') || '';
+
+    var starLabels = ['','Muy malo 😕','Malo','Normal','Bueno 👍','Excelente ⭐'];
+
+    // Stars
+    document.querySelectorAll('.star').forEach(function(s) {
+      s.addEventListener('click', function() {
+        rating = parseInt(s.getAttribute('data-v'));
+        document.querySelectorAll('.star').forEach(function(x, i) {
+          x.classList.toggle('on', i < rating);
+        });
+        document.getElementById('star-label').textContent = starLabels[rating];
       });
     });
-    function selectU(v) {
-      utility = v;
-      document.querySelectorAll('.ubtn').forEach(b => {
-        const on = b.textContent === v;
-        b.style.borderColor = on ? '#f59e0b' : 'rgba(255,255,255,0.2)';
-        b.style.color = on ? '#f59e0b' : 'rgba(255,255,255,0.6)';
-      });
-    }
-    async function submit() {
-      if (!rating) { alert('Selecciona una valoración'); return; }
-      document.getElementById('sbtn').textContent = 'Enviando...';
-      document.getElementById('sbtn').disabled = true;
-      const comment = document.getElementById('comment').value;
-      try {
-        await fetch('/api/feedback', {
-          method: 'POST', headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({ token, rating, utility, comment })
+
+    // Utility buttons
+    document.querySelectorAll('.opt').forEach(function(b) {
+      b.addEventListener('click', function() {
+        utility = b.getAttribute('data-u');
+        document.querySelectorAll('.opt').forEach(function(x) {
+          x.classList.toggle('on', x === b);
         });
-      } catch(e) {}
-      document.getElementById('form-container').classList.add('hidden');
-      document.getElementById('done').classList.remove('hidden');
-    }
+      });
+    });
+
+    // Submit
+    document.getElementById('sbtn').addEventListener('click', function() {
+      if (!rating) { alert('Por favor selecciona una valoración (estrellas)'); return; }
+      var btn = document.getElementById('sbtn');
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      var comment = document.getElementById('comment').value;
+
+      fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, rating: rating, utility: utility, comment: comment })
+      }).catch(function(){}).finally(function() {
+        document.getElementById('form').style.display = 'none';
+        document.getElementById('done').style.display = 'block';
+      });
+    });
   </script>
 </body>
 </html>
