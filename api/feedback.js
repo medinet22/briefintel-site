@@ -32,10 +32,20 @@ async function notifyDani({ token, rating, utility, comment }) {
   });
 }
 
+async function parseBody(req) {
+  return new Promise((resolve) => {
+    let data = '';
+    req.on('data', chunk => data += chunk);
+    req.on('end', () => {
+      try { resolve(JSON.parse(data)); } catch { resolve({}); }
+    });
+  });
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { token, rating, utility, comment } = req.body || {};
+  const { token, rating, utility, comment } = await parseBody(req);
 
   await appendOpsEvent({
     type: 'feedback_received',
