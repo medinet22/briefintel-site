@@ -38,17 +38,18 @@ async function notifyTelegram(job) {
 async function sendConfirmationEmail(job) {
   if (!process.env.RESEND_API_KEY || !job.customer_email) return;
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte;
+  const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte || 'Reporte BriefIntel';
+  const companyName = job.empresa_nombre || job.empresa_web || 'tu empresa';
   await resend.emails.send({
     from: 'BriefIntel <d@negoia.com>',
     to: job.customer_email,
-    subject: `✅ Pedido confirmado — ${reportName} para ${job.empresa_nombre}`,
+    subject: `✅ Pedido confirmado — ${reportName} para ${companyName}`,
     html: `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#0f172a;color:#f1f5f9;border-radius:12px;">
         <h1 style="color:#f59e0b;font-size:24px;margin-bottom:8px;">BriefIntel</h1>
         <h2 style="font-size:20px;margin-bottom:16px;">Pedido recibido ✅</h2>
         <p style="color:#94a3b8;margin-bottom:24px;">
-          Hemos recibido tu pedido de <strong style="color:#f1f5f9;">${reportName}</strong> para <strong style="color:#f1f5f9;">${job.empresa_nombre}</strong>.
+          Hemos recibido tu pedido de <strong style="color:#f1f5f9;">${reportName}</strong> para <strong style="color:#f1f5f9;">${companyName}</strong>.
         </p>
         <div style="background:#1e293b;border-radius:8px;padding:20px;margin-bottom:24px;">
           <p style="margin:0 0 8px;color:#94a3b8;font-size:14px;">📋 Nº de pedido: <strong style="color:#f1f5f9;">${job.id?.slice(0,16) || 'N/A'}</strong></p>
@@ -106,11 +107,11 @@ export default async function handler(req, res) {
     const job = {
       id: session.id,
       createdAt: new Date().toISOString(),
-      status: 'queued',
+      status: 'paid',
       brief_id: meta.brief_id || null,
-      tipo_reporte: meta.tipo || null,
-      empresa_nombre: meta.empresa || null,
-      empresa_web: meta.web || null,
+      tipo_reporte: meta.tipo || meta.tipo_reporte || null,
+      empresa_nombre: meta.empresa || meta.empresa_nombre || null,
+      empresa_web: meta.web || meta.empresa_web || null,
       decision: meta.decision || null,
       preguntas: meta.preguntas || null,
       customer_email: session.customer_email || null,
