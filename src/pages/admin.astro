@@ -1,8 +1,6 @@
 ---
-// Dashboard privado — acceso por query string: /admin?k=SECRET
-// noindex — Google no lo indexa
+// Dashboard admin — acceso por ?k=SECRET
 ---
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,131 +8,150 @@
   <meta name="robots" content="noindex, nofollow" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BriefIntel · Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { background: #0f172a; color: #f1f5f9; font-family: system-ui, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f172a; color: #f1f5f9; font-family: system-ui, sans-serif; min-height: 100vh; padding: 32px 24px; }
+    .hidden { display: none !important; }
+    #auth-error { display: none; align-items: center; justify-content: center; min-height: 80vh; text-align: center; color: rgba(255,255,255,0.4); }
+    #app { max-width: 960px; margin: 0 auto; }
+
+    /* Header */
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 32px; }
+    .logo { font-size: 22px; font-weight: 700; }
+    .logo span { color: #f59e0b; }
+    .logo em { color: rgba(255,255,255,0.4); font-style: normal; font-size: 15px; font-weight: 400; margin-left: 8px; }
+    #last-updated { color: rgba(255,255,255,0.3); font-size: 13px; }
+
+    /* KPIs */
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+    @media(max-width:640px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+    .kpi { background: #1e293b; border-radius: 12px; padding: 20px; }
+    .kpi-label { color: rgba(255,255,255,0.4); font-size: 12px; margin-bottom: 8px; }
+    .kpi-value { font-size: 28px; font-weight: 700; }
+    .yellow { color: #f59e0b; }
+    .green { color: #4ade80; }
+    .orange { color: #fb923c; }
+
+    /* Table */
+    .card { background: #1e293b; border-radius: 12px; overflow: hidden; }
+    .card-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; }
+    .card-header h2 { font-size: 15px; font-weight: 600; }
+    .refresh-btn { background: none; border: none; color: #f59e0b; cursor: pointer; font-size: 13px; }
+    .refresh-btn:hover { text-decoration: underline; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { padding: 10px 20px; text-align: left; color: rgba(255,255,255,0.35); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    td { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .empty-row td { text-align: center; color: rgba(255,255,255,0.25); padding: 48px; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-pending { background: rgba(251,146,60,0.15); color: #fb923c; }
+    .badge-done { background: rgba(74,222,128,0.15); color: #4ade80; }
   </style>
 </head>
-<body class="min-h-screen p-8">
-  <div id="auth-error" class="hidden fixed inset-0 flex items-center justify-center">
-    <div class="text-center">
-      <p class="text-4xl mb-4">🔒</p>
-      <p class="text-white/40">Acceso no autorizado</p>
+<body>
+  <div id="auth-error">
+    <div>
+      <div style="font-size:3rem;margin-bottom:12px">🔒</div>
+      <p>Acceso no autorizado</p>
     </div>
   </div>
 
-  <div id="app" class="hidden max-w-5xl mx-auto">
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <h1 class="text-2xl font-bold"><span class="text-white">Brief</span><span class="text-yellow-400">Intel</span> <span class="text-white/40 text-lg font-normal">· Admin</span></h1>
-        <p class="text-white/30 text-sm mt-1">Dashboard privado · No compartir esta URL</p>
-      </div>
-      <div id="stats" class="text-right text-sm text-white/40"></div>
+  <div id="app" style="display:none">
+    <div class="header">
+      <div class="logo"><span>Brief</span>Intel <em>· Admin</em></div>
+      <div id="last-updated"></div>
     </div>
 
-    <!-- KPIs -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <div class="bg-slate-800 rounded-xl p-4">
-        <p class="text-white/40 text-xs mb-1">Pedidos totales</p>
-        <p class="text-2xl font-bold text-white" id="kpi-total">—</p>
-      </div>
-      <div class="bg-slate-800 rounded-xl p-4">
-        <p class="text-white/40 text-xs mb-1">Revenue total</p>
-        <p class="text-2xl font-bold text-yellow-400" id="kpi-revenue">—</p>
-      </div>
-      <div class="bg-slate-800 rounded-xl p-4">
-        <p class="text-white/40 text-xs mb-1">Esta semana</p>
-        <p class="text-2xl font-bold text-green-400" id="kpi-week">—</p>
-      </div>
-      <div class="bg-slate-800 rounded-xl p-4">
-        <p class="text-white/40 text-xs mb-1">Pendientes</p>
-        <p class="text-2xl font-bold text-orange-400" id="kpi-pending">—</p>
-      </div>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-label">Pedidos totales</div><div class="kpi-value" id="kpi-total">—</div></div>
+      <div class="kpi"><div class="kpi-label">Revenue total</div><div class="kpi-value yellow" id="kpi-revenue">—</div></div>
+      <div class="kpi"><div class="kpi-label">Esta semana</div><div class="kpi-value green" id="kpi-week">—</div></div>
+      <div class="kpi"><div class="kpi-label">Pendientes</div><div class="kpi-value orange" id="kpi-pending">—</div></div>
     </div>
 
-    <!-- Tabla de pedidos -->
-    <div class="bg-slate-800 rounded-xl overflow-hidden">
-      <div class="px-6 py-4 border-b border-white/10 flex items-center justify-between">
-        <h2 class="font-semibold text-white">Pedidos recientes</h2>
-        <button onclick="loadJobs()" class="text-xs text-yellow-400 hover:underline">↻ Actualizar</button>
+    <div class="card">
+      <div class="card-header">
+        <h2>Pedidos recientes</h2>
+        <button class="refresh-btn" onclick="loadJobs()">↻ Actualizar</button>
       </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+      <div style="overflow-x:auto">
+        <table>
           <thead>
-            <tr class="text-white/40 text-xs border-b border-white/10">
-              <th class="px-6 py-3 text-left">Empresa</th>
-              <th class="px-6 py-3 text-left">Reporte</th>
-              <th class="px-6 py-3 text-left">Importe</th>
-              <th class="px-6 py-3 text-left">Email</th>
-              <th class="px-6 py-3 text-left">Fecha</th>
-              <th class="px-6 py-3 text-left">Estado</th>
+            <tr>
+              <th>Empresa</th>
+              <th>Reporte</th>
+              <th>Importe</th>
+              <th>Email</th>
+              <th>Fecha</th>
+              <th>Estado</th>
             </tr>
           </thead>
           <tbody id="jobs-body">
-            <tr><td colspan="6" class="px-6 py-8 text-center text-white/30">Cargando...</td></tr>
+            <tr class="empty-row"><td colspan="6">Cargando...</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <script>
-    const REPORT_LABELS = {
+  <script is:inline>
+    var REPORT_LABELS = {
       'competitor-intel': 'Competitor Intel',
       'market-entry': 'Market Entry',
       'buyer-intel': 'Buyer Intel · M&A',
       'talent-market': 'Talent Market',
-      'pack': 'Pack Completo',
+      'pack': 'Pack Completo'
     };
 
-    const params = new URLSearchParams(window.location.search);
-    const secret = params.get('k');
+    var secret = new URLSearchParams(window.location.search).get('k');
 
     if (!secret) {
-      document.getElementById('auth-error').classList.remove('hidden');
+      document.getElementById('auth-error').style.display = 'flex';
     } else {
-      document.getElementById('app').classList.remove('hidden');
+      document.getElementById('app').style.display = 'block';
       loadJobs();
       setInterval(loadJobs, 60000);
     }
 
-    async function loadJobs() {
-      try {
-        const res = await fetch(`/api/admin-jobs?secret=${encodeURIComponent(secret)}`);
-        if (!res.ok) {
-          document.getElementById('jobs-body').innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-red-400">Acceso denegado</td></tr>';
-          return;
-        }
-        const { jobs } = await res.json();
+    function loadJobs() {
+      fetch('/api/admin-jobs?secret=' + encodeURIComponent(secret))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var jobs = data.jobs || [];
+          var now = Date.now();
+          var weekAgo = now - 7 * 86400000;
 
-        document.getElementById('kpi-total').textContent = jobs.length;
-        document.getElementById('kpi-revenue').textContent = '€' + (jobs.reduce((s, j) => s + (j.amount_total || 0), 0) / 100).toFixed(0);
-        document.getElementById('kpi-week').textContent = jobs.filter(j => new Date(j.paid_at || j.created_at) > new Date(Date.now() - 7 * 86400000)).length;
-        document.getElementById('kpi-pending').textContent = jobs.filter(j => j.status === 'paid').length;
-        document.getElementById('stats').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-ES');
+          document.getElementById('kpi-total').textContent = jobs.length;
+          document.getElementById('kpi-revenue').textContent = '€' + (jobs.reduce(function(s,j){ return s + (j.amount_total||0); }, 0) / 100).toFixed(0);
+          document.getElementById('kpi-week').textContent = jobs.filter(function(j){ return new Date(j.paid_at||j.createdAt) > weekAgo; }).length;
+          document.getElementById('kpi-pending').textContent = jobs.filter(function(j){ return j.status === 'paid'; }).length;
+          document.getElementById('last-updated').textContent = 'Actualizado ' + new Date().toLocaleTimeString('es-ES');
 
-        if (!jobs.length) {
-          document.getElementById('jobs-body').innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-white/30">Sin pedidos aún</td></tr>';
-          return;
-        }
+          if (!jobs.length) {
+            document.getElementById('jobs-body').innerHTML = '<tr class="empty-row"><td colspan="6">Sin pedidos aún</td></tr>';
+            return;
+          }
 
-        document.getElementById('jobs-body').innerHTML = jobs.map(j => {
-          const date = new Date(j.paid_at || j.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
-          const statusColor = j.status === 'paid' ? 'text-orange-400' : j.status === 'completed' ? 'text-green-400' : 'text-white/40';
-          const statusLabel = j.status === 'paid' ? 'Pendiente' : j.status === 'completed' ? 'Entregado' : j.status || '—';
-          const amount = j.amount_total ? '€' + (j.amount_total / 100).toFixed(0) : '—';
-          return `<tr class="border-b border-white/5 hover:bg-slate-700/30">
-            <td class="px-6 py-4 font-medium text-white">${j.empresa_nombre || '—'}</td>
-            <td class="px-6 py-4 text-white/70">${REPORT_LABELS[j.tipo_reporte] || j.tipo_reporte || '—'}</td>
-            <td class="px-6 py-4 text-yellow-400 font-semibold">${amount}</td>
-            <td class="px-6 py-4 text-white/50 text-xs">${j.customer_email || '—'}</td>
-            <td class="px-6 py-4 text-white/40 text-xs">${date}</td>
-            <td class="px-6 py-4 font-medium ${statusColor}">${statusLabel}</td>
-          </tr>`;
-        }).join('');
-      } catch(e) {
-        document.getElementById('jobs-body').innerHTML = `<tr><td colspan="6" class="px-6 py-8 text-center text-red-400">Error: ${e.message}</td></tr>`;
-      }
+          jobs.sort(function(a,b){ return new Date(b.paid_at||b.createdAt) - new Date(a.paid_at||a.createdAt); });
+
+          document.getElementById('jobs-body').innerHTML = jobs.map(function(j) {
+            var date = new Date(j.paid_at || j.createdAt).toLocaleDateString('es-ES', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
+            var badge = j.status === 'paid' ? '<span class="badge badge-pending">Pendiente</span>' : '<span class="badge badge-done">Entregado</span>';
+            var amount = j.amount_total ? '€' + (j.amount_total/100).toFixed(0) : '—';
+            return '<tr>' +
+              '<td style="font-weight:600">' + (j.empresa_nombre||'—') + '</td>' +
+              '<td style="color:rgba(255,255,255,0.6)">' + (REPORT_LABELS[j.tipo_reporte]||j.tipo_reporte||'—') + '</td>' +
+              '<td style="color:#f59e0b;font-weight:700">' + amount + '</td>' +
+              '<td style="color:rgba(255,255,255,0.4);font-size:12px">' + (j.customer_email||'—') + '</td>' +
+              '<td style="color:rgba(255,255,255,0.35);font-size:12px">' + date + '</td>' +
+              '<td>' + badge + '</td>' +
+              '</tr>';
+          }).join('');
+        })
+        .catch(function() {
+          document.getElementById('jobs-body').innerHTML = '<tr class="empty-row"><td colspan="6" style="color:#f87171">Error al cargar datos</td></tr>';
+        });
     }
   </script>
 </body>
