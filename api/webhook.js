@@ -57,6 +57,7 @@ async function sendConfirmationEmail(job) {
           <p style="margin:0;color:#94a3b8;font-size:14px;">⏱️ Entrega estimada: <strong style="color:#f59e0b;">menos de 24 horas</strong></p>
         </div>
         <p style="color:#94a3b8;font-size:14px;">Recibirás el reporte en este email cuando esté listo. Si tienes alguna duda, responde a este email.</p>
+        <p style="color:#fbbf24;font-size:13px;margin-top:12px;">⚠️ Si no ves nuestros correos, revisa también <strong>Spam / Promociones</strong> y marca este remitente como seguro.</p>
         <p style="color:#475569;font-size:12px;margin-top:32px;">BriefIntel · getbriefintel.com · Garantía de devolución 7 días</p>
       </div>
     `,
