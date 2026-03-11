@@ -86,12 +86,17 @@ async function triggerPostPaymentPipeline(job, source) {
   });
 }
 
+// Vercel Fluid/Serverless: disable body parser so we get raw stream for Stripe signature verification
 export const config = { api: { bodyParser: false } };
 
 async function getRawBody(req) {
+  // Handle both stream-based (Node) and pre-parsed (Vercel) request objects
+  if (req.body && typeof req.body === 'string') return Buffer.from(req.body);
+  if (req.body instanceof Buffer) return req.body;
+  if (req.body && typeof req.body === 'object') return Buffer.from(JSON.stringify(req.body));
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', (chunk) => chunks.push(chunk));
+    req.on('data', (chunk) => chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)));
     req.on('end', () => resolve(Buffer.concat(chunks)));
     req.on('error', reject);
   });
@@ -111,12 +116,8 @@ export default async function handler(req, res) {
   let event;
   try {
     const rawBody = await getRawBody(req);
-    if (process.env.TEST_MODE === 'true') {
-      event = JSON.parse(rawBody.toString('utf8'));
-    } else {
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
-      event = stripe.webhooks.constructEvent(rawBody, sig, secret);
-    }
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
+    event = stripe.webhooks.constructEvent(rawBody, sig, secret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err.message);
     return res.status(400).end(`Webhook Error: ${err.message}`);
