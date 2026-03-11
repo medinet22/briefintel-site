@@ -179,7 +179,9 @@
             var piShort = pi === '—' ? '—' : pi.slice(0,16) + '…';
             var genDate = r.generated_at ? new Date(r.generated_at).toLocaleString('es-ES') : '—';
             var ev = (r.generation_events || []).slice(-3).map(function(e){ return (e.event || '?') + ' · ' + new Date(e.at).toLocaleTimeString('es-ES'); }).join('<br/>');
-            var report = r.report_url ? ('<a href="' + r.report_url + '" target="_blank" style="color:#f59e0b">abrir</a>') : '—';
+            var reportToken = r.report_token || '';
+            var previewUrl = reportToken ? ('/api/admin-preview?secret=' + encodeURIComponent(secret) + '&token=' + encodeURIComponent(reportToken)) : '';
+            var report = previewUrl ? ('<a href="' + previewUrl + '" target="_blank" style="color:#f59e0b">👁 preview</a>') : '—';
             var state = r.pipeline_state || '—';
             var stateColor = state === 'waiting_generation' ? '#fb923c' : (state === 'waiting_12h' ? '#f59e0b' : (state === 'sent' ? '#60a5fa' : (state === 'downloaded' ? '#4ade80' : (state === 'feedback' ? '#a78bfa' : 'rgba(255,255,255,0.5)'))));
             return '<tr>'
