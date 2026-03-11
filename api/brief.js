@@ -24,7 +24,7 @@ const REPORT_CONFIG = {
   'pack': { name: 'Pack Estratégico Completo (4 reportes)', price: 11900 },
 };
 
-const REQUIRED_FIELDS = ['tipo_reporte', 'empresa_nombre', 'empresa_web', 'sector', 'tamano', 'email'];
+const REQUIRED_FIELDS = ['tipo_reporte', 'empresa_nombre', 'empresa_web', 'sector', 'email'];
 
 function json(res, status, payload) {
   res.status(status).setHeader('Content-Type', 'application/json');
@@ -146,7 +146,7 @@ export default async function handler(req, res) {
       empresa_nombre: cleanText(body.empresa_nombre, 120),
       empresa_web: normalizeUrl(body.empresa_web),
       sector: cleanText(body.sector, 80),
-      tamano: cleanText(body.tamano, 40),
+      tamano: cleanText(body.tamano, 40) || '11-50',
       sujeto_nombre: cleanText(body.sujeto_nombre, 160),
       sujeto_web: normalizeUrl(body.sujeto_web),
       decision: cleanTextarea(body.decision),
@@ -159,11 +159,18 @@ export default async function handler(req, res) {
       attachment_count,
     };
 
+    // empresa_web: if normalizeUrl returned empty, keep raw value as fallback (don't block the user)
+    if (!payload.empresa_web && body.empresa_web) {
+      payload.empresa_web = cleanText(body.empresa_web, 500);
+    }
+
     const missing = REQUIRED_FIELDS.filter((field) => !payload[field]);
     if (missing.length) {
+      const fieldLabels = { tipo_reporte: 'tipo de reporte', empresa_nombre: 'nombre de empresa', empresa_web: 'web', sector: 'sector', email: 'email' };
+      const friendlyFields = missing.map(f => fieldLabels[f] || f).join(', ');
       return json(res, 400, {
         ok: false,
-        error: 'Faltan campos obligatorios para procesar el brief.',
+        error: `Por favor completa estos campos: ${friendlyFields}.`,
         fields: missing,
       });
     }
