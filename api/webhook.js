@@ -40,25 +40,44 @@ async function sendConfirmationEmail(job) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte || 'Reporte BriefIntel';
   const companyName = job.empresa_nombre || job.empresa_web || 'tu empresa';
+  const orderId = (job.payment_intent || job.id || '').replace('pi_', '').slice(0, 20).toUpperCase();
+  const empresaWeb = job.empresa_web ? `<p style="margin:0 0 8px;color:#94a3b8;font-size:14px;">🌐 Web analizada: <strong style="color:#f1f5f9;">${job.empresa_web}</strong></p>` : '';
+  const preguntas = job.preguntas ? `<div style="background:#0f172a;border:1px solid #334155;border-radius:6px;padding:14px;margin-top:8px;"><p style="margin:0 0 4px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Preguntas adicionales</p><p style="margin:0;color:#cbd5e1;font-size:13px;">${job.preguntas}</p></div>` : '';
   await resend.emails.send({
     from: 'BriefIntel <hola@getbriefintel.com>',
     to: job.customer_email,
     subject: `✅ Pedido confirmado — ${reportName} para ${companyName}`,
     html: `
       <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#0f172a;color:#f1f5f9;border-radius:12px;">
-        <h1 style="color:#f59e0b;font-size:24px;margin-bottom:8px;">BriefIntel</h1>
-        <h2 style="font-size:20px;margin-bottom:16px;">Pedido recibido ✅</h2>
-        <p style="color:#94a3b8;margin-bottom:24px;">
-          Hemos recibido tu pedido de <strong style="color:#f1f5f9;">${reportName}</strong> para <strong style="color:#f1f5f9;">${companyName}</strong>.
-        </p>
-        <div style="background:#1e293b;border-radius:8px;padding:20px;margin-bottom:24px;">
-          <p style="margin:0 0 8px;color:#94a3b8;font-size:14px;">📋 Nº de pedido: <strong style="color:#f1f5f9;">${job.id?.slice(0, 16) || 'N/A'}</strong></p>
-          <p style="margin:0 0 8px;color:#94a3b8;font-size:14px;">📊 Reporte: <strong style="color:#f1f5f9;">${reportName}</strong></p>
-          <p style="margin:0;color:#94a3b8;font-size:14px;">⏱️ Entrega estimada: <strong style="color:#f59e0b;">menos de 24 horas</strong></p>
+        <div style="display:flex;align-items:center;margin-bottom:24px;">
+          <h1 style="color:#f59e0b;font-size:22px;margin:0;">BriefIntel</h1>
         </div>
-        <p style="color:#94a3b8;font-size:14px;">Recibirás el reporte en este email cuando esté listo. Si tienes alguna duda, responde a este email.</p>
-        <p style="color:#fbbf24;font-size:13px;margin-top:12px;">⚠️ Si no ves nuestros correos, revisa también <strong>Spam / Promociones</strong> y marca este remitente como seguro.</p>
-        <p style="color:#475569;font-size:12px;margin-top:32px;">BriefIntel · getbriefintel.com · Garantía de devolución 7 días</p>
+        <h2 style="font-size:20px;margin:0 0 8px;">Pedido recibido ✅</h2>
+        <p style="color:#94a3b8;margin:0 0 24px;font-size:15px;">
+          Estamos preparando tu <strong style="color:#f1f5f9;">${reportName}</strong> para <strong style="color:#f1f5f9;">${companyName}</strong>.
+        </p>
+
+        <div style="background:#1e293b;border-radius:10px;padding:20px;margin-bottom:20px;">
+          <p style="margin:0 0 6px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Detalle del pedido</p>
+          <p style="margin:0 0 10px;color:#94a3b8;font-size:14px;">📋 ID del pedido: <code style="color:#f1f5f9;background:#0f172a;padding:2px 8px;border-radius:4px;font-size:13px;">${orderId}</code></p>
+          <p style="margin:0 0 10px;color:#94a3b8;font-size:14px;">📊 Tipo de reporte: <strong style="color:#f1f5f9;">${reportName}</strong></p>
+          <p style="margin:0 0 10px;color:#94a3b8;font-size:14px;">🏢 Empresa: <strong style="color:#f1f5f9;">${companyName}</strong></p>
+          ${empresaWeb}
+          <p style="margin:0;color:#94a3b8;font-size:14px;">⏱️ Entrega estimada: <strong style="color:#f59e0b;">menos de 24 horas</strong></p>
+          ${preguntas}
+        </div>
+
+        <div style="background:#172033;border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:20px;">
+          <p style="margin:0;color:#cbd5e1;font-size:14px;">Recibirás el reporte directamente en este email con un enlace de descarga personal.</p>
+        </div>
+
+        <p style="color:#fbbf24;font-size:13px;margin-bottom:24px;">⚠️ Si no ves nuestros emails, revisa <strong>Spam / Promociones</strong> y márcanos como remitente seguro.</p>
+
+        <div style="border-top:1px solid #1e293b;padding-top:16px;">
+          <p style="color:#475569;font-size:12px;margin:0 0 4px;">¿Tienes algún problema? Escríbenos indicando tu ID de pedido:</p>
+          <p style="margin:0;"><a href="mailto:hola@getbriefintel.com?subject=Pedido ${orderId}" style="color:#3b82f6;font-size:12px;">hola@getbriefintel.com</a></p>
+          <p style="color:#334155;font-size:11px;margin:12px 0 0;">BriefIntel · getbriefintel.com · Garantía de devolución 7 días</p>
+        </div>
       </div>
     `,
   });
