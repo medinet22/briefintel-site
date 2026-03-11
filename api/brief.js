@@ -197,21 +197,25 @@ export default async function handler(req, res) {
       ua: cleanText(req.headers['user-agent'] || '', 240),
     };
 
-    await saveBrief(record);
+    // Save brief to file (best-effort — non-blocking; Vercel serverless may not have local fs)
+    try { await saveBrief(record); } catch (saveErr) { console.warn('brief save skipped (non-fatal):', saveErr?.message); }
 
-    await appendOpsEvent({
-      type: 'brief_received',
-      severity: 'info',
-      summary: buildBriefSummary(record),
-      payload: {
-        brief_id: record.id,
-        tipo_reporte: record.tipo_reporte,
-        empresa_nombre: record.empresa_nombre,
-        sujeto_nombre: record.sujeto_nombre,
-        attachment_count: record.attachment_count,
-        email_hash: record.email_hash,
-      },
-    });
+    // Log ops event (best-effort)
+    try {
+      await appendOpsEvent({
+        type: 'brief_received',
+        severity: 'info',
+        summary: buildBriefSummary(record),
+        payload: {
+          brief_id: record.id,
+          tipo_reporte: record.tipo_reporte,
+          empresa_nombre: record.empresa_nombre,
+          sujeto_nombre: record.sujeto_nombre,
+          attachment_count: record.attachment_count,
+          email_hash: record.email_hash,
+        },
+      });
+    } catch (opsErr) { console.warn('ops event skipped (non-fatal):', opsErr?.message); }
 
     // Redirect to custom payment page — include key fields in URL (serverless /tmp not shared)
     const config = REPORT_CONFIG[record.tipo_reporte];
