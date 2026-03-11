@@ -33,7 +33,7 @@
     .orange { color: #fb923c; }
 
     /* Table */
-    .card { background: #1e293b; border-radius: 12px; overflow: hidden; }
+    .card { background: #1e293b; border-radius: 12px; overflow: hidden; margin-bottom: 18px; }
     .card-header { padding: 16px 24px; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; align-items: center; }
     .card-header h2 { font-size: 15px; font-weight: 600; }
     .refresh-btn { background: none; border: none; color: #f59e0b; cursor: pointer; font-size: 13px; }
@@ -50,10 +50,8 @@
     .badge-downloaded { background: rgba(74,222,128,0.15); color: #4ade80; }
     .badge-feedback { background: rgba(167,139,250,0.15); color: #a78bfa; }
     /* Pipeline stages */
-    .stages { display: flex; align-items: center; gap: 4px; font-size: 11px; }
-    .stage { width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; }
-    .stage-done { background: rgba(74,222,128,0.2); }
-    .stage-pending { background: rgba(255,255,255,0.06); opacity: 0.4; }
+    .pipeline-wrap { min-width: 260px; }
+    .pipeline-current { font-size: 12px; color: #f59e0b; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -100,6 +98,32 @@
         </table>
       </div>
     </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Llamadas a generación (audit log)</h2>
+        <button class="refresh-btn" onclick="loadGenerationLog()">↻ Actualizar</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>PI</th>
+              <th>Empresa</th>
+              <th>Web</th>
+              <th>Email</th>
+              <th>Estado</th>
+              <th>Generado</th>
+              <th>Reporte</th>
+              <th>Eventos</th>
+            </tr>
+          </thead>
+          <tbody id="gen-body">
+            <tr class="empty-row"><td colspan="8">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
   <script is:inline>
@@ -118,7 +142,61 @@
     } else {
       document.getElementById('app').style.display = 'block';
       loadJobs();
-      setInterval(loadJobs, 60000);
+      loadGenerationLog();
+      setInterval(function(){ loadJobs(); loadGenerationLog(); }, 60000);
+    }
+
+    async function deliverTest(paymentIntent) {
+      if (!paymentIntent) return;
+      if (!confirm('Enviar reporte ahora en modo TEST para este pago?')) return;
+      try {
+        const r = await fetch('/api/admin-deliver-test', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ secret: secret, payment_intent: paymentIntent })
+        });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Error enviando test');
+        alert('✅ Envío TEST ejecutado');
+        loadJobs();
+        loadGenerationLog();
+      } catch (e) {
+        alert('❌ ' + (e.message || 'Error enviando test'));
+      }
+    }
+
+    function loadGenerationLog() {
+      fetch('/api/admin-generation-log?secret=' + encodeURIComponent(secret))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var rows = data.rows || [];
+          if (!rows.length) {
+            document.getElementById('gen-body').innerHTML = '<tr class="empty-row"><td colspan="8">Sin llamadas de generación aún</td></tr>';
+            return;
+          }
+          document.getElementById('gen-body').innerHTML = rows.map(function(r){
+            var pi = (r.payment_intent || '—');
+            var piShort = pi === '—' ? '—' : pi.slice(0,16) + '…';
+            var genDate = r.generated_at ? new Date(r.generated_at).toLocaleString('es-ES') : '—';
+            var ev = (r.generation_events || []).slice(-3).map(function(e){ return (e.event || '?') + ' · ' + new Date(e.at).toLocaleTimeString('es-ES'); }).join('<br/>');
+            var report = r.report_url ? ('<a href="' + r.report_url + '" target="_blank" style="color:#f59e0b">abrir</a>') : '—';
+            var state = r.pipeline_state || '—';
+            var stateColor = state === 'waiting_generation' ? '#fb923c' : (state === 'waiting_12h' ? '#f59e0b' : (state === 'sent' ? '#60a5fa' : (state === 'downloaded' ? '#4ade80' : (state === 'feedback' ? '#a78bfa' : 'rgba(255,255,255,0.5)'))));
+            return '<tr>'
+              + '<td title="' + pi + '" style="font-family:monospace;color:rgba(255,255,255,0.6)">' + piShort + '</td>'
+              + '<td style="font-weight:600">' + (r.empresa_nombre||'—') + '</td>'
+              + '<td style="color:rgba(255,255,255,0.55)">' + (r.empresa_web||'—') + '</td>'
+              + '<td style="color:rgba(255,255,255,0.45)">' + (r.customer_email||'—') + '</td>'
+              + '<td style="color:' + stateColor + ';font-weight:700">' + state + '</td>'
+              + '<td style="color:rgba(255,255,255,0.5)">' + genDate + '</td>'
+              + '<td>' + report + '</td>'
+              + '<td style="color:rgba(255,255,255,0.45);font-size:11px;line-height:1.35">' + (ev || '—') + '</td>'
+              + '</tr>';
+          }).join('');
+        })
+        .catch(function(){
+          document.getElementById('gen-body').innerHTML = '<tr class="empty-row"><td colspan="8" style="color:#f87171">Error al cargar audit log</td></tr>';
+        });
     }
 
     function loadJobs() {
@@ -146,18 +224,25 @@
             var date = new Date(j.paid_at || j.createdAt).toLocaleDateString('es-ES', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'});
             var amount = j.amount_total ? '€' + (j.amount_total/100).toFixed(0) : '—';
             
-            // Pipeline stages: Pagado → Generando → Entregado → Descargado → Feedback
-            var stages = [
-              { label: '💳', title: 'Pagado', done: !!j.paid_at || j.status === 'paid' || j.status === 'completed' },
-              { label: '⚙️', title: 'Generando', done: j.status === 'generating' || j.status === 'delivered' || j.status === 'completed' },
-              { label: '📧', title: 'Entregado', done: j.status === 'delivered' || j.status === 'completed' || !!j.delivered_at },
-              { label: '📥', title: 'Descargado', done: !!j.downloaded_at },
-              { label: '⭐', title: 'Feedback', done: !!j.feedback_at },
-            ];
-            
-            var stagesHtml = '<div class="stages">' + stages.map(function(s) {
-              return '<span class="stage ' + (s.done ? 'stage-done' : 'stage-pending') + '" title="' + s.title + '">' + s.label + '</span>';
-            }).join('<span style="color:rgba(255,255,255,0.1)">›</span>') + '</div>';
+            var stageByPipeline = {
+              waiting_generation: { idx: 1, title: 'Pagado · esperando generación' },
+              waiting_12h: { idx: 2, title: 'Informe generado · esperando 12h' },
+              sent: { idx: 2, title: 'Informe enviado' },
+              downloaded: { idx: 3, title: 'Informe descargado' },
+              feedback: { idx: 4, title: 'Encuesta respondida' },
+              paid: { idx: 1, title: 'Pagado' }
+            };
+            var st = stageByPipeline[j.pipeline_state || 'paid'] || stageByPipeline.paid;
+
+            var btnHtml = '';
+            if (j.can_send_test_now) {
+              btnHtml = '<div style="margin-top:6px"><button onclick="deliverTest(\'' + (j.payment_intent || '') + '\')" style="background:#f59e0b;color:#111827;border:0;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">ENVIAR TEST</button></div>';
+            }
+
+            var stagesHtml = '<div class="pipeline-wrap">'
+              + '<div class="pipeline-current">Etapa actual ' + st.idx + '/4: ' + st.title + '</div>'
+              + btnHtml
+              + '</div>';
 
             return '<tr>' +
               '<td style="font-weight:600">' + (j.empresa_nombre||'—') + '</td>' +

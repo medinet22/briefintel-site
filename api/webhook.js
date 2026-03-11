@@ -1,6 +1,6 @@
 import Stripe from 'stripe';
 import { Resend } from 'resend';
-import { appendOpsEvent, appendJob } from './_lib.js';
+import { appendOpsEvent, upsertJob } from './_lib.js';
 
 const REPORT_NAMES = {
   'competitor-intel': 'Competitor Intelligence',
@@ -61,6 +61,28 @@ async function sendConfirmationEmail(job) {
         <p style="color:#475569;font-size:12px;margin-top:32px;">BriefIntel · getbriefintel.com · Garantía de devolución 7 días</p>
       </div>
     `,
+  });
+}
+
+async function triggerPostPaymentPipeline(job, source) {
+  const url = process.env.BRIEFINTEL_REPORTS_PIPELINE_URL || 'http://localhost:4242/pipeline/payment-succeeded';
+  const adminKey = process.env.BRIEFINTEL_REPORTS_ADMIN_KEY || process.env.BRIEFINTEL_ADMIN_KEY || process.env.BRIEFINTEL_ADMIN_SECRET;
+  if (!adminKey) return;
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-admin-key': adminKey },
+    body: JSON.stringify({
+      payment_intent: job.payment_intent || job.id,
+      source,
+      paid_at: new Date().toISOString(),
+      brief_id: job.brief_id || null,
+      tipo_reporte: job.tipo_reporte || null,
+      empresa_nombre: job.empresa_nombre || null,
+      empresa_web: job.empresa_web || null,
+      customer_email: job.customer_email || null,
+      amount_total: job.amount_total || null,
+      currency: job.currency || null,
+    }),
   });
 }
 
@@ -126,7 +148,8 @@ export default async function handler(req, res) {
       payment_intent: pi.id,
     };
 
-    await appendJob(job);
+    await upsertJob(job);
+    await triggerPostPaymentPipeline(job, source).catch(() => {});
 
     await appendOpsEvent({
       type: 'payment_confirmed',
@@ -190,6 +213,11 @@ export default async function handler(req, res) {
       return res.status(200).json({ received: true, ignored: 'non-briefintel-session' });
     }
 
+    if (session.payment_status !== 'paid') {
+      console.log('Ignoring non-paid checkout session:', session.id, session.payment_status);
+      return res.status(200).json({ received: true, ignored: 'checkout-not-paid' });
+    }
+
     const job = {
       id: session.id,
       createdAt: new Date().toISOString(),
@@ -206,7 +234,8 @@ export default async function handler(req, res) {
       payment_intent: session.payment_intent,
     };
 
-    await appendJob(job);
+    await upsertJob(job);
+    await triggerPostPaymentPipeline(job, source).catch(() => {});
 
     await appendOpsEvent({
       type: 'payment_confirmed',

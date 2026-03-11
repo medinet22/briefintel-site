@@ -1,25 +1,15 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-// ─── Paths ────────────────────────────────────────────────────────────────────
-// En Vercel /tmp persiste dentro de la misma ejecución pero no entre invocaciones.
-// Para persistencia real hay que usar una DB; por ahora /tmp es suficiente para MVP.
-const DATA_DIR     = '/tmp/briefintel';
-const BRIEFS_FILE  = path.join(DATA_DIR, 'briefs.json');
-const JOBS_FILE    = path.join(DATA_DIR, 'jobs.json');
-const OPS_FILE     = path.join(DATA_DIR, 'ops_events.json');
+const DATA_DIR = process.env.BRIEFINTEL_DATA_DIR || '/home/openclaw/.openclaw/workspace-d-business/briefintel-site-data';
+const BRIEFS_FILE = path.join(DATA_DIR, 'briefs.json');
+const JOBS_FILE = path.join(DATA_DIR, 'jobs.json');
+const OPS_FILE = path.join(DATA_DIR, 'ops_events.json');
 
-async function ensureDir() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-}
+async function ensureDir() { await fs.mkdir(DATA_DIR, { recursive: true }); }
 
 async function readJsonFile(file) {
-  try {
-    const raw = await fs.readFile(file, 'utf8');
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
+  try { return JSON.parse(await fs.readFile(file, 'utf8')); } catch { return []; }
 }
 
 async function writeJsonFile(file, data) {
@@ -29,33 +19,26 @@ async function writeJsonFile(file, data) {
   await fs.rename(tmp, file);
 }
 
-// ─── Exports ──────────────────────────────────────────────────────────────────
-
 export function json(res, status, payload) {
   res.status(status).setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify(payload));
 }
 
-export async function readBriefs() {
-  return readJsonFile(BRIEFS_FILE);
-}
-
-export async function readJobs() {
-  return readJsonFile(JOBS_FILE);
-}
-
-export async function readOpsEvents() {
-  return readJsonFile(OPS_FILE);
-}
+export async function readBriefs() { return readJsonFile(BRIEFS_FILE); }
+export async function readJobs() { return readJsonFile(JOBS_FILE); }
+export async function readOpsEvents() { return readJsonFile(OPS_FILE); }
 
 export async function appendOpsEvent(event) {
   const events = await readOpsEvents();
-  const next = [{ ...event, ts: new Date().toISOString() }, ...events].slice(0, 1000);
+  const next = [{ ...event, at: new Date().toISOString() }, ...events].slice(0, 1000);
   await writeJsonFile(OPS_FILE, next);
 }
 
-export async function appendJob(job) {
+export async function upsertJob(job) {
   const jobs = await readJobs();
-  const next = [job, ...jobs].slice(0, 500);
-  await writeJsonFile(JOBS_FILE, next);
+  const key = job.payment_intent || job.id;
+  const idx = jobs.findIndex((j) => (j.payment_intent || j.id) === key);
+  if (idx >= 0) jobs[idx] = { ...jobs[idx], ...job };
+  else jobs.unshift(job);
+  await writeJsonFile(JOBS_FILE, jobs.slice(0, 1000));
 }

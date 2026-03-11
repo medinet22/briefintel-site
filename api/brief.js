@@ -1,11 +1,12 @@
 import fs from 'fs/promises';
+import path from 'path';
 import { randomUUID, createHash } from 'crypto';
-import Stripe from 'stripe';
 import { appendOpsEvent, readBriefs } from './_lib.js';
 
-const BRIEFS_FILE = '/tmp/briefs.json';
+const BRIEFS_FILE = path.join(process.env.BRIEFINTEL_DATA_DIR || '/home/openclaw/.openclaw/workspace-d-business/briefintel-site-data', 'briefs.json');
 const MAX_BRIEFS = 500;
 const MAX_TEXT = 2000;
+const MAX_ATTACHMENTS = 10;
 
 const REPORT_TYPES = new Set([
   'competitor-intel',
@@ -23,7 +24,7 @@ const REPORT_CONFIG = {
   'pack': { name: 'Pack Estratégico Completo (4 reportes)', price: 11900 },
 };
 
-const REQUIRED_FIELDS = ['tipo_reporte', 'empresa_nombre', 'empresa_web', 'sector', 'decision', 'email'];
+const REQUIRED_FIELDS = ['tipo_reporte', 'empresa_nombre', 'empresa_web', 'sector', 'tamano', 'email'];
 
 function json(res, status, payload) {
   res.status(status).setHeader('Content-Type', 'application/json');
@@ -51,14 +52,40 @@ function normalizeUrl(raw) {
   }
 }
 
+function cleanStringArray(value, { maxItems = MAX_ATTACHMENTS, maxLen = 500, normalize = false } = {}) {
+  if (!Array.isArray(value)) return [];
+  const out = [];
+  for (const item of value) {
+    const next = normalize ? normalizeUrl(item) : cleanText(item, maxLen);
+    if (next) out.push(next);
+    if (out.length >= maxItems) break;
+  }
+  return out;
+}
+
+function safeInt(value, fallback = 0) {
+  const n = Number.parseInt(value, 10);
+  return Number.isFinite(n) && n >= 0 ? n : fallback;
+}
+
 function isEmail(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim().toLowerCase());
+}
+
+function toStringArray(value, maxItems = 3, maxLen = 140) {
+  if (!value) return [];
+  const arr = Array.isArray(value) ? value : [value];
+  return arr
+    .map((v) => cleanText(v, maxLen))
+    .filter(Boolean)
+    .slice(0, maxItems);
 }
 
 async function saveBrief(brief) {
   const current = await readBriefs();
   const next = [brief, ...current].slice(0, MAX_BRIEFS);
   const tmpFile = `${BRIEFS_FILE}.tmp`;
+  await fs.mkdir(path.dirname(BRIEFS_FILE), { recursive: true });
   await fs.writeFile(tmpFile, JSON.stringify(next, null, 2), 'utf8');
   await fs.rename(tmpFile, BRIEFS_FILE);
 }
@@ -69,6 +96,7 @@ function buildBriefSummary(record) {
     `tipo=${record.tipo_reporte}`,
     `empresa=${record.empresa_nombre}`,
     `sujeto=${record.sujeto_nombre}`,
+    `adjuntos=${record.attachment_count || 0}`,
     `decision=${record.decision.slice(0, 120)}`,
     `email_hash=${record.email_hash}`,
   ].join(' | ');
@@ -85,6 +113,34 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
 
+    const attachment_urls = cleanStringArray(
+      Array.isArray(body.attachment_urls)
+        ? body.attachment_urls
+        : (typeof body.attachment_urls === 'string' && body.attachment_urls ? [body.attachment_urls] : []),
+      { normalize: true, maxLen: 500 },
+    );
+
+    const namesFromArray = cleanStringArray(
+      Array.isArray(body.attachment_names)
+        ? body.attachment_names
+        : (typeof body.attachment_names === 'string' && body.attachment_names ? [body.attachment_names] : []),
+      { normalize: false, maxLen: 120, maxItems: 3 },
+    );
+
+    const namesFromAdjuntos = String(body.adjuntos_nombres || '')
+      .split('|')
+      .map((v) => cleanText(v, 120))
+      .filter(Boolean)
+      .slice(0, 3);
+
+    const attachment_names = namesFromArray.length ? namesFromArray : namesFromAdjuntos;
+
+    const attachment_count = Math.max(
+      safeInt(body.attachment_count, 0),
+      attachment_urls.length,
+      attachment_names.length,
+    );
+
     const payload = {
       tipo_reporte: cleanText(body.tipo_reporte, 80),
       empresa_nombre: cleanText(body.empresa_nombre, 120),
@@ -98,6 +154,9 @@ export default async function handler(req, res) {
       email: cleanText(body.email || body._replyto, 160).toLowerCase(),
       session_id: cleanText(body.session_id, 120),
       consent: Boolean(body.consent),
+      attachment_urls,
+      attachment_names,
+      attachment_count,
     };
 
     const missing = REQUIRED_FIELDS.filter((field) => !payload[field]);
@@ -142,63 +201,28 @@ export default async function handler(req, res) {
         tipo_reporte: record.tipo_reporte,
         empresa_nombre: record.empresa_nombre,
         sujeto_nombre: record.sujeto_nombre,
+        attachment_count: record.attachment_count,
         email_hash: record.email_hash,
       },
     });
 
-    let checkoutUrl = null;
-    if (process.env.STRIPE_SECRET_KEY) {
-      try {
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
-        const config = REPORT_CONFIG[record.tipo_reporte];
-        const session = await stripe.checkout.sessions.create({
-          payment_method_types: ['card'],
-          mode: 'payment',
-          line_items: [{
-            price_data: {
-              currency: 'eur',
-              product_data: {
-                name: `BriefIntel — ${config.name}`,
-                description: `Brief #${record.id.slice(0, 8)} · ${record.empresa_nombre}`,
-              },
-              unit_amount: config.price,
-            },
-            quantity: 1,
-          }],
-          customer_email: record.email,
-          metadata: {
-            brief_id: record.id,
-            tipo: record.tipo_reporte,
-            empresa: record.empresa_nombre,
-            web: record.empresa_web || '',
-            sujeto: record.sujeto_nombre,
-            decision: (record.decision || '').slice(0, 500),
-            preguntas: (record.preguntas_clave || '').slice(0, 500),
-          },
-          invoice_creation: { enabled: true },
-          success_url: `https://getbriefintel.com/gracias?session_id={CHECKOUT_SESSION_ID}&tipo=${encodeURIComponent(record.tipo_reporte)}`,
-          cancel_url: `https://getbriefintel.com/brief?tipo=${encodeURIComponent(record.tipo_reporte)}`,
-          locale: 'es',
-        });
-        checkoutUrl = session.url;
-      } catch (stripeErr) {
-        await appendOpsEvent({
-          type: 'checkout_create_failed',
-          severity: 'warn',
-          summary: `brief_id=${record.id} | ${String(stripeErr?.message || stripeErr).slice(0, 180)}`,
-          payload: { brief_id: record.id, tipo: record.tipo_reporte },
-        });
-      }
-    }
+    // Redirect to custom payment page — include key fields in URL (serverless /tmp not shared)
+    const config = REPORT_CONFIG[record.tipo_reporte];
+    const pagoUrl = `/pago?brief_id=${encodeURIComponent(briefId)}`
+      + `&tipo=${encodeURIComponent(record.tipo_reporte)}`
+      + `&empresa=${encodeURIComponent(record.empresa_nombre)}`
+      + `&web=${encodeURIComponent(record.empresa_web || '')}`
+      + `&email=${encodeURIComponent(record.email)}`
+      + `&sujeto=${encodeURIComponent(record.sujeto_nombre || '')}`
+      + `&decision=${encodeURIComponent((record.decision || '').slice(0, 300))}`
+      + `&preguntas=${encodeURIComponent((record.preguntas_clave || '').slice(0, 300))}`;
 
     return json(res, 200, {
       ok: true,
       brief_id: briefId,
-      message: checkoutUrl
-        ? 'Brief recibido. Redirigiendo a pago seguro.'
-        : 'Brief recibido correctamente. Te contactamos para completar el pago.',
-      checkout_url: checkoutUrl,
-      next: '/gracias',
+      message: 'Brief recibido. Redirigiendo a pago seguro.',
+      checkout_url: pagoUrl,
+      next: pagoUrl,
     });
   } catch (error) {
     console.error('brief api error:', error?.message || error);
