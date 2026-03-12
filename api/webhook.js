@@ -41,45 +41,131 @@ async function sendConfirmationEmail(job) {
   const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte || 'Reporte BriefIntel';
   const companyName = job.empresa_nombre || job.empresa_web || 'tu empresa';
   const orderId = (job.payment_intent || job.id || '').replace('pi_', '').slice(0, 20).toUpperCase();
-  const empresaWeb = job.empresa_web ? `<p style="margin:0 0 8px;color:#94a3b8;font-size:14px;">🌐 Web analizada: <strong style="color:#f1f5f9;">${job.empresa_web}</strong></p>` : '';
-  const preguntas = job.preguntas ? `<div style="background:#0f172a;border:1px solid #334155;border-radius:6px;padding:14px;margin-top:8px;"><p style="margin:0 0 4px;color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:1px;">Preguntas adicionales</p><p style="margin:0;color:#cbd5e1;font-size:13px;">${job.preguntas}</p></div>` : '';
+  const webRow = job.empresa_web ? `
+          <tr>
+            <td style="padding:10px 0;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;width:40%;">🌐 Web analizada</td>
+            <td style="padding:10px 0;border-bottom:1px solid #e2e8f0;font-size:14px;color:#1e293b;">${job.empresa_web}</td>
+          </tr>` : '';
+  const preguntasRow = job.preguntas ? `
+          <tr>
+            <td style="padding:10px 0;color:#64748b;font-size:14px;vertical-align:top;">💬 Preguntas</td>
+            <td style="padding:10px 0;font-size:14px;color:#1e293b;">${job.preguntas}</td>
+          </tr>` : '';
+
   await resend.emails.send({
     from: 'BriefIntel <hola@getbriefintel.com>',
     to: job.customer_email,
     subject: `✅ Pedido confirmado — ${reportName} para ${companyName}`,
-    html: `
-      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:32px;background:#0f172a;color:#f1f5f9;border-radius:12px;">
-        <div style="display:flex;align-items:center;margin-bottom:24px;">
-          <h1 style="color:#f59e0b;font-size:22px;margin:0;">BriefIntel</h1>
-        </div>
-        <h2 style="font-size:20px;margin:0 0 8px;">Pedido recibido ✅</h2>
-        <p style="color:#94a3b8;margin:0 0 24px;font-size:15px;">
-          Estamos preparando tu <strong style="color:#f1f5f9;">${reportName}</strong> para <strong style="color:#f1f5f9;">${companyName}</strong>.
-        </p>
+    text: `BriefIntel — Pedido recibido ✅\n\nEstamos preparando tu ${reportName} para ${companyName}.\n\nDETALLE DEL PEDIDO\n📋 ID del pedido: ${orderId}\n📊 Tipo de reporte: ${reportName}\n🏢 Empresa: ${companyName}\n${job.empresa_web ? '🌐 Web analizada: ' + job.empresa_web + '\n' : ''}⏱️ Entrega estimada: menos de 24 horas\n\nRecibirás el reporte directamente en este email con un enlace de descarga personal.\n\n⚠️ Si no ves nuestros emails, revisa Spam / Promociones y márcanos como remitente seguro.\n\n¿Tienes algún problema? Escríbenos indicando tu ID de pedido: hola@getbriefintel.com\n\nBriefIntel · getbriefintel.com · Garantía de devolución 7 días`,
+    html: `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#f8fafc;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;padding:40px 20px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
 
-        <div style="background:#1e293b;border-radius:10px;padding:20px;margin-bottom:20px;">
-          <p style="margin:0 0 6px;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Detalle del pedido</p>
-          <p style="margin:0 0 10px;color:#94a3b8;font-size:14px;">📋 ID del pedido: <code style="color:#f1f5f9;background:#0f172a;padding:2px 8px;border-radius:4px;font-size:13px;">${orderId}</code></p>
-          <p style="margin:0 0 10px;color:#94a3b8;font-size:14px;">📊 Tipo de reporte: <strong style="color:#f1f5f9;">${reportName}</strong></p>
-          <p style="margin:0 0 10px;color:#94a3b8;font-size:14px;">🏢 Empresa: <strong style="color:#f1f5f9;">${companyName}</strong></p>
-          ${empresaWeb}
-          <p style="margin:0;color:#94a3b8;font-size:14px;">⏱️ Entrega estimada: <strong style="color:#f59e0b;">menos de 24 horas</strong></p>
-          ${preguntas}
-        </div>
+        <!-- Header -->
+        <tr>
+          <td style="background:#0f172a;padding:28px 32px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td><span style="color:#f59e0b;font-size:22px;font-weight:700;letter-spacing:-0.5px;">BriefIntel</span></td>
+                <td align="right"><span style="background:#22c55e;color:#ffffff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;">PEDIDO CONFIRMADO</span></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
 
-        <div style="background:#172033;border-left:3px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin-bottom:20px;">
-          <p style="margin:0;color:#cbd5e1;font-size:14px;">Recibirás el reporte directamente en este email con un enlace de descarga personal.</p>
-        </div>
+        <!-- Hero -->
+        <tr>
+          <td style="padding:32px 32px 24px;">
+            <h1 style="margin:0 0 8px;font-size:24px;color:#0f172a;font-weight:700;">Pedido recibido ✅</h1>
+            <p style="margin:0;font-size:16px;color:#475569;line-height:1.6;">
+              Estamos preparando tu <strong style="color:#0f172a;">${reportName}</strong> para <strong style="color:#0f172a;">${companyName}</strong>.
+            </p>
+          </td>
+        </tr>
 
-        <p style="color:#fbbf24;font-size:13px;margin-bottom:24px;">⚠️ Si no ves nuestros emails, revisa <strong>Spam / Promociones</strong> y márcanos como remitente seguro.</p>
+        <!-- Order details -->
+        <tr>
+          <td style="padding:0 32px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <tr>
+                <td colspan="2" style="padding:14px 20px;background:#f1f5f9;border-bottom:1px solid #e2e8f0;">
+                  <span style="font-size:11px;font-weight:700;letter-spacing:1px;color:#64748b;text-transform:uppercase;">📋 Detalle del pedido</span>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;width:40%;">ID del pedido</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:700;color:#0f172a;font-family:monospace;">${orderId}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">📊 Tipo de reporte</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:700;color:#f59e0b;">${reportName}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">🏢 Empresa</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:600;color:#0f172a;">${companyName}</td>
+              </tr>
+              ${webRow}
+              <tr>
+                <td style="padding:12px 20px;color:#64748b;font-size:14px;">⏱️ Entrega estimada</td>
+                <td style="padding:12px 20px;font-size:14px;font-weight:700;color:#22c55e;">menos de 24 horas</td>
+              </tr>
+              ${preguntasRow}
+            </table>
+          </td>
+        </tr>
 
-        <div style="border-top:1px solid #1e293b;padding-top:16px;">
-          <p style="color:#475569;font-size:12px;margin:0 0 4px;">¿Tienes algún problema? Escríbenos indicando tu ID de pedido:</p>
-          <p style="margin:0;"><a href="mailto:hola@getbriefintel.com?subject=Pedido ${orderId}" style="color:#3b82f6;font-size:12px;">hola@getbriefintel.com</a></p>
-          <p style="color:#334155;font-size:11px;margin:12px 0 0;">BriefIntel · getbriefintel.com · Garantía de devolución 7 días</p>
-        </div>
-      </div>
-    `,
+        <!-- Info box -->
+        <tr>
+          <td style="padding:0 32px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;">
+              <tr>
+                <td style="padding:16px 20px;">
+                  <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">
+                    📩 Recibirás el reporte directamente en este email con un <strong>enlace de descarga personal</strong>.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Spam warning -->
+        <tr>
+          <td style="padding:0 32px 32px;">
+            <p style="margin:0 0 16px;font-size:13px;color:#ef4444;">
+              ⚠️ Si no ves nuestros emails, revisa <strong>Spam / Promociones</strong> y márcanos como remitente seguro.
+            </p>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td>
+                  <p style="margin:0 0 4px;font-size:12px;color:#94a3b8;">¿Tienes algún problema? Escríbenos indicando tu ID de pedido:</p>
+                  <a href="mailto:hola@getbriefintel.com?subject=Pedido%20${orderId}" style="color:#3b82f6;font-size:13px;font-weight:600;">hola@getbriefintel.com</a>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top:16px;">
+                  <p style="margin:0;font-size:11px;color:#cbd5e1;">BriefIntel · <a href="https://getbriefintel.com" style="color:#94a3b8;">getbriefintel.com</a> · Garantía de devolución 7 días</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
   });
 }
 
@@ -99,6 +185,8 @@ async function triggerPostPaymentPipeline(job, source) {
       empresa_nombre: job.empresa_nombre || null,
       empresa_web: job.empresa_web || null,
       customer_email: job.customer_email || null,
+      preguntas: job.preguntas || null,
+      decision: job.decision || null,
       amount_total: job.amount_total || null,
       currency: job.currency || null,
     }),
@@ -167,15 +255,15 @@ export default async function handler(req, res) {
       payment_intent: pi.id,
     };
 
-    await upsertJob(job);
-    await triggerPostPaymentPipeline(job, source).catch(() => {});
+    await upsertJob(job).catch(e => console.error('upsertJob failed (non-critical):', e.message));
+    await triggerPostPaymentPipeline(job, source).catch(e => console.error('Pipeline trigger failed:', e.message));
 
     await appendOpsEvent({
       type: 'payment_confirmed',
       severity: 'info',
       summary: `brief_id=${job.brief_id} | empresa=${job.empresa_nombre} | tipo=${job.tipo_reporte} | €${(job.amount_total / 100).toFixed(2)}`,
       payload: job,
-    });
+    }).catch(() => {});
 
     await appendOpsEvent({
       type: 'delivery_pending',
@@ -188,7 +276,7 @@ export default async function handler(req, res) {
         empresa_nombre: job.empresa_nombre,
         customer_email: job.customer_email,
       },
-    });
+    }).catch(() => {});
 
     await sendConfirmationEmail(job).catch(e => console.error('Email cliente failed:', e.message));
     await notifyTelegram(job).catch(e => console.error('Telegram notify failed:', e.message));
@@ -197,25 +285,95 @@ export default async function handler(req, res) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte;
       const amount = job.amount_total ? `€${(job.amount_total / 100).toFixed(0)}` : '—';
+      const dateStr = new Date().toLocaleString('es-ES', {timeZone:'Europe/Madrid'});
       await resend.emails.send({
         from: 'BriefIntel <hola@getbriefintel.com>',
         to: 'dani.medi.rod8@gmail.com',
         subject: `💰 Nueva compra — ${reportName} · ${job.empresa_nombre} · ${amount}`,
-        html: `
-          <div style="font-family:Arial,sans-serif;max-width:600px;padding:32px;background:#0f172a;color:#f1f5f9;border-radius:12px;">
-            <h1 style="color:#f59e0b;font-size:22px;margin-bottom:4px;">BriefIntel · Nueva compra</h1>
-            <p style="color:#64748b;font-size:13px;margin-bottom:24px;">${new Date().toLocaleString('es-ES', {timeZone:'Europe/Madrid'})}</p>
-            <table style="width:100%;border-collapse:collapse;">
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;width:40%;">Empresa</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;font-weight:bold;">${job.empresa_nombre || '—'}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Web</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;">${job.empresa_web || '—'}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Reporte</td><td style="padding:8px 0;color:#f59e0b;font-size:14px;font-weight:bold;">${reportName}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Importe</td><td style="padding:8px 0;color:#22c55e;font-size:16px;font-weight:bold;">${amount}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Email cliente</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;">${job.customer_email || '—'}</td></tr>
+        text: `BriefIntel · Nueva compra\n\n${dateStr}\n\nEmpresa: ${job.empresa_nombre || '—'}\nWeb: ${job.empresa_web || '—'}\nReporte: ${reportName}\nImporte: ${amount}\nEmail cliente: ${job.customer_email || '—'}\n${job.preguntas ? '\nPreguntas del cliente:\n' + job.preguntas + '\n' : ''}\nPI: ${job.id} · Brief: ${job.brief_id || '—'}`,
+        html: `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#f8fafc;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;padding:40px 20px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:#0f172a;padding:28px 32px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td><span style="color:#f59e0b;font-size:22px;font-weight:700;letter-spacing:-0.5px;">BriefIntel</span></td>
+                <td align="right"><span style="background:#22c55e;color:#ffffff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;">💰 NUEVA COMPRA</span></td>
+              </tr>
             </table>
-            ${job.preguntas ? `<div style="margin-top:20px;padding:16px;background:#1e293b;border-radius:8px;"><p style="color:#94a3b8;font-size:12px;margin:0 0 8px;">Preguntas del cliente:</p><p style="color:#f1f5f9;font-size:13px;margin:0;">${job.preguntas}</p></div>` : ''}
-            <p style="color:#334155;font-size:11px;margin-top:24px;">PI: ${job.id} · Brief: ${job.brief_id || '—'}</p>
-          </div>
-        `,
+          </td>
+        </tr>
+
+        <!-- Hero -->
+        <tr>
+          <td style="padding:32px 32px 16px;">
+            <p style="margin:0;font-size:14px;color:#64748b;">${dateStr}</p>
+          </td>
+        </tr>
+
+        <!-- Order details -->
+        <tr>
+          <td style="padding:0 32px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;width:40%;">🏢 Empresa</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:700;color:#0f172a;">${job.empresa_nombre || '—'}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">🌐 Web</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;color:#0f172a;">${job.empresa_web || '—'}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">📊 Reporte</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:700;color:#f59e0b;">${reportName}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">💶 Importe</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:16px;font-weight:700;color:#22c55e;">${amount}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;color:#64748b;font-size:14px;">📧 Email cliente</td>
+                <td style="padding:12px 20px;font-size:14px;color:#0f172a;">${job.customer_email || '—'}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        ${job.preguntas ? `
+        <!-- Preguntas del cliente -->
+        <tr>
+          <td style="padding:0 32px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;">
+              <tr>
+                <td style="padding:16px 20px;">
+                  <p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#92400e;text-transform:uppercase;">💬 Preguntas del cliente</p>
+                  <p style="margin:0;font-size:14px;color:#78350f;line-height:1.5;">${job.preguntas}</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        ` : ''}
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;">
+            <p style="margin:0;font-size:11px;color:#94a3b8;">PI: ${job.id} · Brief: ${job.brief_id || '—'}</p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
       }).catch(e => console.error('Email Dani failed:', e.message));
     }
 
@@ -283,27 +441,95 @@ export default async function handler(req, res) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const reportName = REPORT_NAMES[job.tipo_reporte] || job.tipo_reporte;
       const amount = job.amount_total ? `€${(job.amount_total / 100).toFixed(0)}` : '—';
+      const dateStr = new Date().toLocaleString('es-ES', {timeZone:'Europe/Madrid'});
       await resend.emails.send({
         from: 'BriefIntel <hola@getbriefintel.com>',
         to: 'dani.medi.rod8@gmail.com',
         subject: `💰 Nueva compra — ${reportName} · ${job.empresa_nombre} · ${amount}`,
-        html: `
-          <div style="font-family:Arial,sans-serif;max-width:600px;padding:32px;background:#0f172a;color:#f1f5f9;border-radius:12px;">
-            <h1 style="color:#f59e0b;font-size:22px;margin-bottom:4px;">BriefIntel · Nueva compra</h1>
-            <p style="color:#64748b;font-size:13px;margin-bottom:24px;">${new Date().toLocaleString('es-ES', {timeZone:'Europe/Madrid'})}</p>
-            <table style="width:100%;border-collapse:collapse;">
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;width:40%;">Empresa</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;font-weight:bold;">${job.empresa_nombre || '—'}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Web</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;">${job.empresa_web || '—'}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Reporte</td><td style="padding:8px 0;color:#f59e0b;font-size:14px;font-weight:bold;">${reportName}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Importe</td><td style="padding:8px 0;color:#22c55e;font-size:16px;font-weight:bold;">${amount}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Email cliente</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;">${job.customer_email || '—'}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Sector</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;">${job.sector || '—'}</td></tr>
-              <tr><td style="padding:8px 0;color:#94a3b8;font-size:14px;">Tamaño</td><td style="padding:8px 0;color:#f1f5f9;font-size:14px;">${job.tamano || '—'}</td></tr>
+        text: `BriefIntel · Nueva compra\n\n${dateStr}\n\nEmpresa: ${job.empresa_nombre || '—'}\nWeb: ${job.empresa_web || '—'}\nReporte: ${reportName}\nImporte: ${amount}\nEmail cliente: ${job.customer_email || '—'}\n${job.preguntas ? '\nPreguntas del cliente:\n' + job.preguntas + '\n' : ''}\nJob ID: ${job.id || '—'} · Brief ID: ${job.brief_id || '—'}`,
+        html: `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
+<body style="margin:0;padding:0;background-color:#f8fafc;font-family:Arial,Helvetica,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f8fafc;padding:40px 20px;">
+    <tr><td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+        <!-- Header -->
+        <tr>
+          <td style="background:#0f172a;padding:28px 32px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td><span style="color:#f59e0b;font-size:22px;font-weight:700;letter-spacing:-0.5px;">BriefIntel</span></td>
+                <td align="right"><span style="background:#22c55e;color:#ffffff;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;">💰 NUEVA COMPRA</span></td>
+              </tr>
             </table>
-            ${job.preguntas ? `<div style="margin-top:20px;padding:16px;background:#1e293b;border-radius:8px;"><p style="color:#94a3b8;font-size:12px;margin:0 0 8px;">Preguntas del cliente:</p><p style="color:#f1f5f9;font-size:13px;margin:0;">${job.preguntas}</p></div>` : ''}
-            <p style="color:#334155;font-size:11px;margin-top:24px;">Job ID: ${job.id || '—'} · Brief ID: ${job.brief_id || '—'}</p>
-          </div>
-        `,
+          </td>
+        </tr>
+
+        <!-- Hero -->
+        <tr>
+          <td style="padding:32px 32px 16px;">
+            <p style="margin:0;font-size:14px;color:#64748b;">${dateStr}</p>
+          </td>
+        </tr>
+
+        <!-- Order details -->
+        <tr>
+          <td style="padding:0 32px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:10px;overflow:hidden;">
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;width:40%;">🏢 Empresa</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:700;color:#0f172a;">${job.empresa_nombre || '—'}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">🌐 Web</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;color:#0f172a;">${job.empresa_web || '—'}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">📊 Reporte</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:14px;font-weight:700;color:#f59e0b;">${reportName}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;color:#64748b;font-size:14px;">💶 Importe</td>
+                <td style="padding:12px 20px;border-bottom:1px solid #e2e8f0;font-size:16px;font-weight:700;color:#22c55e;">${amount}</td>
+              </tr>
+              <tr>
+                <td style="padding:12px 20px;color:#64748b;font-size:14px;">📧 Email cliente</td>
+                <td style="padding:12px 20px;font-size:14px;color:#0f172a;">${job.customer_email || '—'}</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        ${job.preguntas ? `
+        <!-- Preguntas del cliente -->
+        <tr>
+          <td style="padding:0 32px 24px;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#fffbeb;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;">
+              <tr>
+                <td style="padding:16px 20px;">
+                  <p style="margin:0 0 8px;font-size:12px;font-weight:700;color:#92400e;text-transform:uppercase;">💬 Preguntas del cliente</p>
+                  <p style="margin:0;font-size:14px;color:#78350f;line-height:1.5;">${job.preguntas}</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        ` : ''}
+
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f8fafc;padding:20px 32px;border-top:1px solid #e2e8f0;">
+            <p style="margin:0;font-size:11px;color:#94a3b8;">Job ID: ${job.id || '—'} · Brief ID: ${job.brief_id || '—'}</p>
+          </td>
+        </tr>
+
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`,
       }).catch(e => console.error('Email Dani failed:', e.message));
     }
 

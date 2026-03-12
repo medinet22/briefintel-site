@@ -3,6 +3,7 @@ import { readJobs } from './_lib.js';
 
 const REPORTS_API_URL = process.env.BRIEFINTEL_REPORTS_API_URL || 'https://reports.getbriefintel.com/reports';
 const REPORTS_ORDERS_URL = process.env.BRIEFINTEL_REPORTS_ORDERS_URL || 'https://reports.getbriefintel.com/pipeline/orders';
+const REPORTS_IGNORED_URL = process.env.BRIEFINTEL_REPORTS_IGNORED_URL || 'https://reports.getbriefintel.com/pipeline/ignored';
 
 async function fetchJson(url, adminKey) {
   try {
@@ -62,8 +63,18 @@ export default async function handler(req, res) {
     const reportsAdminKey = process.env.BRIEFINTEL_REPORTS_ADMIN_KEY || process.env.BRIEFINTEL_ADMIN_KEY || ADMIN_SECRET;
     const reportsPayload = await fetchJson(REPORTS_API_URL, reportsAdminKey);
     const ordersPayload = await fetchJson(REPORTS_ORDERS_URL, reportsAdminKey);
+    const ignoredPayload = await fetchJson(REPORTS_IGNORED_URL, reportsAdminKey);
     const reports = Array.isArray(reportsPayload?.reports) ? reportsPayload.reports : [];
     const orders = Array.isArray(ordersPayload?.orders) ? ordersPayload.orders : [];
+    const ignoredPIs = Array.isArray(ignoredPayload?.ignoredPIs) ? ignoredPayload.ignoredPIs : [];
+    const ignoreBeforeDate = ignoredPayload?.ignoreBeforeDate ? new Date(ignoredPayload.ignoreBeforeDate).getTime() : null;
+
+    // Filter out ignored PIs (by list or by date)
+    stripeJobs = stripeJobs.filter((j) => {
+      if (ignoredPIs.includes(j.payment_intent)) return false;
+      if (ignoreBeforeDate && new Date(j.paid_at || j.createdAt || 0).getTime() < ignoreBeforeDate) return false;
+      return true;
+    });
 
     const map = new Map();
     for (const j of localJobs || []) map.set(j.payment_intent || j.id, j);

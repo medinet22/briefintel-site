@@ -13,7 +13,8 @@ export default async function handler(req) {
   }
   if (!token) return new Response('Missing token', { status: 400 });
 
-  const reportsUrl = `${process.env.BRIEFINTEL_REPORTS_API_URL}/admin-preview/${encodeURIComponent(token)}`;
+  const reportsBase = (process.env.BRIEFINTEL_REPORTS_API_URL || 'https://reports.getbriefintel.com/reports').replace(/\/reports\/?$/, '');
+  const reportsUrl = `${reportsBase}/admin-preview/${encodeURIComponent(token)}`;
   const upstream = await fetch(reportsUrl, {
     headers: { 'x-admin-key': process.env.BRIEFINTEL_REPORTS_ADMIN_KEY },
   });
