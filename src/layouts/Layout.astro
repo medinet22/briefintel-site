@@ -68,18 +68,7 @@ const ogImage = `${siteUrl}/og-image.png`;
       window.posthog.init("phc_bZhqMaBL4KBVzbNmdBbVcoWmOo4Dh9mysScZYPRirqT", { api_host: "https://us.posthog.com" });
     </script>
 
-    <!-- Sentry hook (activate by setting window.__SENTRY_DSN__) -->
-    <script is:inline>
-      (function(){
-        var dsn = window.__SENTRY_DSN__ || "";
-        if (!dsn) return;
-        var s = document.createElement('script');
-        s.src = 'https://browser.sentry-cdn.com/8.38.0/bundle.tracing.min.js';
-        s.crossOrigin = 'anonymous';
-        s.onload = function(){ if (window.Sentry) window.Sentry.init({ dsn: dsn, tracesSampleRate: 0.1 }); };
-        document.head.appendChild(s);
-      })();
-    </script>
+
   </head>
   <body class="bg-dark text-white font-sans antialiased">
     <slot />
