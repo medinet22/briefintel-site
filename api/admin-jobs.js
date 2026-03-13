@@ -97,8 +97,10 @@ export default async function handler(req, res) {
         delivered_at: o?.sent_at || r?.deliveredAt || null,
         downloaded_at: o?.downloaded_at || r?.firstDownloadAt || null,
         feedback_at: o?.feedback_at || r?.feedbackAt || null,
+        feedback: r?.feedback || null,
         pipeline_state,
         can_send_test_now: Boolean(o?.generated_at && !o?.sent_at),
+        pack_tokens: o?.pack_tokens || null,
       };
     });
 
