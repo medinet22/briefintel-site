@@ -31,6 +31,7 @@ export default async function handler(req, res) {
       report_token: o.report_token || null,
       report_url: o.report_token ? `https://reports.getbriefintel.com/r/${encodeURIComponent(o.report_token)}` : null,
       generation_events: Array.isArray(o.generation_events) ? o.generation_events : [],
+      pack_tokens: o.pack_tokens || null,
     })).sort((a,b)=> new Date(b.queued_at||0) - new Date(a.queued_at||0));
 
     return res.status(200).json({ ok: true, rows });
