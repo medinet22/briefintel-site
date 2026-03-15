@@ -15,8 +15,9 @@ export default async function handler(req) {
 
   const reportsBase = (process.env.BRIEFINTEL_REPORTS_API_URL || 'https://reports.getbriefintel.com/reports').replace(/\/reports\/?$/, '');
   const reportsUrl = `${reportsBase}/admin-preview/${encodeURIComponent(token)}`;
+  const reportsAdminKey = process.env.BRIEFINTEL_REPORTS_ADMIN_KEY || process.env.BRIEFINTEL_ADMIN_KEY || secret;
   const upstream = await fetch(reportsUrl, {
-    headers: { 'x-admin-key': process.env.BRIEFINTEL_REPORTS_ADMIN_KEY },
+    headers: { 'x-admin-key': reportsAdminKey },
   });
 
   if (!upstream.ok) return new Response('Report not found', { status: 404 });
