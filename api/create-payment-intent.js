@@ -45,9 +45,9 @@ export default async function handler(req, res) {
 
     // Fallback: reconstruct minimal brief from query params
     if (!brief) {
-      const { tipo, empresa, web, email, sujeto, decision, preguntas } = req.query || {};
+      const { tipo, empresa, web, email, sujeto, decision, preguntas, sector } = req.query || {};
       if (!tipo || !empresa) return json(res, 404, { ok: false, error: 'Brief no encontrado' });
-      brief = { id: brief_id, tipo_reporte: tipo, empresa_nombre: empresa, empresa_web: web || '', email: email || '', sujeto_nombre: sujeto || '', decision: decision || '', preguntas_clave: preguntas || '' };
+      brief = { id: brief_id, tipo_reporte: tipo, empresa_nombre: empresa, empresa_web: web || '', email: email || '', sujeto_nombre: sujeto || '', decision: decision || '', preguntas_clave: preguntas || '', sector: sector || '' };
     }
 
     const config = REPORT_CONFIG[brief.tipo_reporte];
@@ -71,6 +71,7 @@ export default async function handler(req, res) {
         empresa: brief.empresa_nombre,
         web: (brief.empresa_web || '').slice(0, 500),
         sujeto: (brief.sujeto_nombre || '').slice(0, 500),
+        sector: (brief.sector || '').slice(0, 200),
         email: brief.email,
         decision: (brief.decision || '').slice(0, 500),
         preguntas: (brief.preguntas_clave || '').slice(0, 500),

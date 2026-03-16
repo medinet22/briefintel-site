@@ -247,6 +247,7 @@ export default async function handler(req, res) {
       tipo_reporte: meta.tipo || null,
       empresa_nombre: meta.empresa || null,
       empresa_web: meta.web || null,
+      sector: meta.sector || null,
       decision: meta.decision || null,
       preguntas: meta.preguntas || null,
       customer_email: meta.email || pi.receipt_email || null,
