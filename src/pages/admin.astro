@@ -188,11 +188,17 @@
               var packLinks = [];
               var packLabels = {
                 competitor: '👁 Competitor',
+                market: '👁 Market Entry',
                 market_entry: '👁 Market Entry',
                 talent: '👁 Talent',
                 buyer: '👁 Buyer'
               };
-              ['competitor', 'market_entry', 'talent', 'buyer'].forEach(function(subtype) {
+              // 'market' is canonical key (PACK_SUBTYPES); 'market_entry' kept for legacy orders
+              ['competitor', 'market', 'talent', 'buyer'].forEach(function(subtype) {
+                // fallback: try market_entry if market not found (legacy orders)
+                if (subtype === 'market' && !packTokens[subtype] && packTokens['market_entry']) {
+                  subtype = 'market_entry';
+                }
                 if (packTokens[subtype]) {
                   var url = '/api/admin-preview?secret=' + encodeURIComponent(secret) + '&token=' + encodeURIComponent(packTokens[subtype]);
                   packLinks.push('<a href="' + url + '" target="_blank" style="color:#f59e0b;white-space:nowrap">' + packLabels[subtype] + '</a>');
