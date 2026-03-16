@@ -42,3 +42,12 @@ export async function upsertJob(job) {
   else jobs.unshift(job);
   await writeJsonFile(JOBS_FILE, jobs.slice(0, 1000));
 }
+
+export async function updateBrief(id, patch) {
+  const briefs = await readBriefs();
+  const idx = briefs.findIndex((b) => b.id === id);
+  if (idx < 0) return null;
+  briefs[idx] = { ...briefs[idx], ...patch };
+  await writeJsonFile(BRIEFS_FILE, briefs);
+  return briefs[idx];
+}

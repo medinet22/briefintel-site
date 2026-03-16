@@ -25,6 +25,7 @@
     /* KPIs */
     .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
     @media(max-width:640px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+    @media(min-width:641px) { .kpis { grid-template-columns: repeat(5, 1fr); } }
     .kpi { background: #1e293b; border-radius: 12px; padding: 20px; }
     .kpi-label { color: rgba(255,255,255,0.4); font-size: 12px; margin-bottom: 8px; }
     .kpi-value { font-size: 28px; font-weight: 700; }
@@ -52,6 +53,12 @@
     /* Pipeline stages */
     .pipeline-wrap { min-width: 260px; }
     .pipeline-current { font-size: 12px; color: #f59e0b; font-weight: 600; }
+    /* Abandoned badges */
+    .badge-sent { background: rgba(74,222,128,0.15); color: #4ade80; }
+    .badge-pending { background: rgba(251,146,60,0.15); color: #fb923c; }
+    .recovery-btn { background: #f59e0b; color: #111827; border: 0; border-radius: 6px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; }
+    .recovery-btn:hover { background: #fbbf24; }
+    .recovery-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   </style>
 </head>
 <body>
@@ -73,6 +80,7 @@
       <div class="kpi"><div class="kpi-label">Revenue total</div><div class="kpi-value yellow" id="kpi-revenue">—</div></div>
       <div class="kpi"><div class="kpi-label">Esta semana</div><div class="kpi-value green" id="kpi-week">—</div></div>
       <div class="kpi"><div class="kpi-label">Pendientes</div><div class="kpi-value orange" id="kpi-pending">—</div></div>
+      <div class="kpi"><div class="kpi-label">Carritos abandonados</div><div class="kpi-value" style="color:#f472b6" id="kpi-abandoned">—</div></div>
     </div>
 
     <div class="card">
@@ -94,6 +102,31 @@
           </thead>
           <tbody id="jobs-body">
             <tr class="empty-row"><td colspan="6">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>🛒 Intención sin conversión</h2>
+        <button class="refresh-btn" onclick="loadAbandoned()">↻ Actualizar</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Reporte</th>
+              <th>Precio</th>
+              <th>Email</th>
+              <th>Hace cuánto</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="abandoned-body">
+            <tr class="empty-row"><td colspan="7">Cargando...</td></tr>
           </tbody>
         </table>
       </div>
@@ -143,7 +176,65 @@
       document.getElementById('app').style.display = 'block';
       loadJobs();
       loadGenerationLog();
-      setInterval(function(){ loadJobs(); loadGenerationLog(); }, 60000);
+      loadAbandoned();
+      setInterval(function(){ loadJobs(); loadGenerationLog(); loadAbandoned(); }, 60000);
+    }
+
+    async function sendRecoveryEmail(briefId, btn) {
+      if (!briefId) return;
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      try {
+        const r = await fetch('/api/abandoned-recovery?secret=' + encodeURIComponent(secret), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ brief_id: briefId })
+        });
+        const d = await r.json();
+        if (!r.ok || !d.ok) throw new Error(d.error || 'Error enviando');
+        btn.textContent = '✓ Enviado';
+        btn.style.background = '#4ade80';
+        loadAbandoned();
+      } catch (e) {
+        btn.disabled = false;
+        btn.textContent = 'Reintentar';
+        btn.style.background = '#f87171';
+        alert('❌ ' + (e.message || 'Error'));
+      }
+    }
+
+    function loadAbandoned() {
+      fetch('/api/abandoned-recovery?secret=' + encodeURIComponent(secret))
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          var abandoned = data.abandoned || [];
+          document.getElementById('kpi-abandoned').textContent = data.total || 0;
+
+          if (!abandoned.length) {
+            document.getElementById('abandoned-body').innerHTML = '<tr class="empty-row"><td colspan="7">Sin carritos abandonados (>2h, <48h)</td></tr>';
+            return;
+          }
+
+          document.getElementById('abandoned-body').innerHTML = abandoned.map(function(b){
+            var badgeClass = b.recovery_sent ? 'badge-sent' : 'badge-pending';
+            var badgeText = b.recovery_sent ? '📧 Enviado' : '⏳ Pendiente';
+            var btnHtml = b.recovery_sent
+              ? '<span style="color:rgba(255,255,255,0.4);font-size:11px">Ya enviado</span>'
+              : '<button class="recovery-btn" onclick="sendRecoveryEmail(\'' + b.id + '\', this)">Enviar recovery</button>';
+            return '<tr>'
+              + '<td style="font-weight:600">' + (b.empresa_nombre||'—') + '</td>'
+              + '<td style="color:rgba(255,255,255,0.6)">' + (b.report_name||b.tipo_reporte||'—') + '</td>'
+              + '<td style="color:#f59e0b;font-weight:700">' + (b.price||'—') + '€</td>'
+              + '<td style="color:rgba(255,255,255,0.4);font-size:12px">' + (b.email||'—') + '</td>'
+              + '<td style="color:rgba(255,255,255,0.35);font-size:12px">' + (b.age_display||'—') + '</td>'
+              + '<td><span class="badge ' + badgeClass + '">' + badgeText + '</span></td>'
+              + '<td>' + btnHtml + '</td>'
+              + '</tr>';
+          }).join('');
+        })
+        .catch(function(){
+          document.getElementById('abandoned-body').innerHTML = '<tr class="empty-row"><td colspan="7" style="color:#f87171">Error al cargar abandonados</td></tr>';
+        });
     }
 
     async function deliverTest(paymentIntent) {
