@@ -53,7 +53,36 @@
             var piShort = pi === '—' ? '—' : pi.slice(0,16) + '…';
             var genDate = r.generated_at ? new Date(r.generated_at).toLocaleString('es-ES') : '—';
             var ev = (r.generation_events || []).slice(-3).map(function(e){ return (e.event || '?') + ' · ' + new Date(e.at).toLocaleTimeString('es-ES'); }).join('<br/>');
-            var report = r.report_url ? ('<a href="' + r.report_url + '" target="_blank" style="color:#f59e0b">abrir</a>') : '—';
+            var reportToken = r.report_token || '';
+            var packTokens = r.pack_tokens || null;
+            var report = '—';
+            
+            if (packTokens && packTokens.competitor) {
+              // Pack: show 4 preview links
+              var packLinks = [];
+              var packLabels = {
+                competitor: '👁 Competitor',
+                market: '👁 Market Entry',
+                market_entry: '👁 Market Entry',
+                talent: '👁 Talent',
+                buyer: '👁 Buyer'
+              };
+              // 'market' is canonical key (PACK_SUBTYPES); 'market_entry' kept for legacy orders
+              ['competitor', 'market', 'talent', 'buyer'].forEach(function(subtype) {
+                // fallback: try market_entry if market not found (legacy orders)
+                if (subtype === 'market' && !packTokens[subtype] && packTokens['market_entry']) {
+                  subtype = 'market_entry';
+                }
+                if (packTokens[subtype]) {
+                  var url = '/api/admin-preview?secret=' + encodeURIComponent(secret) + '&token=' + encodeURIComponent(packTokens[subtype]);
+                  packLinks.push('<a href="' + url + '" target="_blank" style="color:#f59e0b;white-space:nowrap">' + packLabels[subtype] + '</a>');
+                }
+              });
+              report = packLinks.length ? packLinks.join('<br/>') : '—';
+            } else if (reportToken) {
+              var previewUrl = '/api/admin-preview?secret=' + encodeURIComponent(secret) + '&token=' + encodeURIComponent(reportToken);
+              report = '<a href="' + previewUrl + '" target="_blank" style="color:#f59e0b">👁 preview</a>';
+            }
             var state = r.pipeline_state || '—';
             var stateColor = state === 'waiting_generation' ? '#fb923c' : (state === 'waiting_12h' ? '#f59e0b' : (state === 'sent' ? '#60a5fa' : (state === 'downloaded' ? '#4ade80' : (state === 'feedback' ? '#a78bfa' : 'rgba(255,255,255,0.5)'))));
             return '<tr>'
@@ -113,9 +142,22 @@
               btnHtml = '<div style="margin-top:6px"><button onclick="deliverTest(\'' + (j.payment_intent || '') + '\')" style="background:#f59e0b;color:#111827;border:0;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;cursor:pointer;">ENVIAR TEST</button></div>';
             }
 
+            var feedbackHtml = '';
+            if (j.feedback && j.pipeline_state === 'feedback') {
+              var stars = j.feedback.rating ? '⭐'.repeat(Math.min(5, Math.max(1, j.feedback.rating))) + ' (' + j.feedback.rating + '/5)' : '';
+              var fComment = j.feedback.comment ? '<em style="color:rgba(255,255,255,0.55)">"' + String(j.feedback.comment).replace(/</g,'&lt;') + '"</em>' : '';
+              var fUtility = j.feedback.utility ? '<span style="color:#a78bfa">Útil: ' + String(j.feedback.utility).replace(/</g,'&lt;') + '</span>' : '';
+              feedbackHtml = '<div style="margin-top:5px;font-size:11px;line-height:1.5">'
+                + (stars ? '<div style="color:#f59e0b">' + stars + '</div>' : '')
+                + (fUtility ? '<div>' + fUtility + '</div>' : '')
+                + (fComment ? '<div>' + fComment + '</div>' : '')
+                + '</div>';
+            }
+
             var stagesHtml = '<div class="pipeline-wrap">'
               + '<div class="pipeline-current">Etapa actual ' + st.idx + '/4: ' + st.title + '</div>'
               + btnHtml
+              + feedbackHtml
               + '</div>';
 
             return '<tr>' +

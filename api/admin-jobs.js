@@ -82,7 +82,14 @@ export default async function handler(req, res) {
 
     let jobs = Array.from(map.values()).map((j) => {
       const key = j.payment_intent || j.id;
-      const r = reports.find((x) => (x.payment_intent && x.payment_intent === key) || (x.brief_id && j.brief_id && x.brief_id === j.brief_id));
+      // Fix Pack Completo: buscar TODOS los sub-reportes y agregar feedback/download de cualquiera
+      const rAll = reports.filter((x) => (x.payment_intent && x.payment_intent === key) || (x.brief_id && j.brief_id && x.brief_id === j.brief_id));
+      const r = {
+        feedbackAt: rAll.find(x => x.feedbackAt)?.feedbackAt || null,
+        feedback: rAll.find(x => x.feedback)?.feedback || null,
+        firstDownloadAt: rAll.find(x => x.firstDownloadAt)?.firstDownloadAt || null,
+        deliveredAt: rAll.find(x => x.deliveredAt)?.deliveredAt || null,
+      };
       const o = orders.find((x) => x.payment_intent === key);
 
       const pipeline_state = o?.pipeline_state
