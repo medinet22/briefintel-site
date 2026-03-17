@@ -76,6 +76,32 @@ const ogImage = `${siteUrl}/og-image.png`;
   </head>
   <body class="bg-dark text-white font-sans antialiased">
     <slot />
+    
+    <!-- Sticky CTA móvil (solo móvil, aparece al scrollear) -->
+    <div id="sticky-cta" class="fixed bottom-0 left-0 right-0 z-50 md:hidden translate-y-full transition-transform duration-300 ease-in-out">
+      <div class="bg-dark border-t border-white/10 px-4 py-3 flex items-center gap-3">
+        <div class="flex-1">
+          <p class="text-sm font-bold text-white">BriefIntel — Desde €19</p>
+          <p class="text-xs text-white/50">Entrega en 24h · Garantía 7 días</p>
+        </div>
+        <a href="#reportes" class="bg-accent text-dark px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap hover:bg-accent/90 transition-colors">
+          Elegir reporte →
+        </a>
+      </div>
+    </div>
+    <script is:inline>
+      (function() {
+        const bar = document.getElementById('sticky-cta');
+        if (!bar) return;
+        let shown = false;
+        window.addEventListener('scroll', function() {
+          if (window.scrollY > 300 && !shown) {
+            bar.classList.remove('translate-y-full');
+            shown = true;
+          }
+        }, { passive: true });
+      })();
+    </script>
   </body>
 </html>
 

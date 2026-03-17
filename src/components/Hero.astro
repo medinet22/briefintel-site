@@ -17,7 +17,8 @@
       </div>
     </div>
     
-    <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 tracking-tight">
+    <!-- Dynamic headline based on URL parameter -->
+    <h1 id="hero-headline" class="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 tracking-tight">
       ¿Llevas semanas sin decidir<br />
       <span class="text-accent">por "falta de datos"?</span>
     </h1>
@@ -28,6 +29,15 @@
     <p class="text-sm text-white/40 mb-4">
       <span class="line-through">Consultoras: €5.000–15.000</span> · <span class="text-accent">Tú: €19–119</span>
     </p>
+    
+    <!-- Pricing pills -->
+    <div class="flex flex-wrap justify-center gap-2 mb-4 text-sm">
+      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">Talent €19</a>
+      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">Competitor €35</a>
+      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">Market €49</a>
+      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">M&A €59</a>
+      <a href="#reportes" class="px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent font-medium hover:bg-accent/30 transition-colors">Pack €119 ⭐</a>
+    </div>
     
     <p class="text-md text-white/50 max-w-2xl mx-auto mb-4">
       Competidores, mercado, talento o potenciales compradores — analizamos lo que necesitas para tomar la decisión que llevas semanas posponiendo.
@@ -51,11 +61,16 @@
       >
         Elegir mi reporte →
       </a>
-      <a href="#ejemplo" class="text-white/70 text-sm hover:text-white underline">Ver ejemplo de reporte</a>
+      <p class="text-xs text-white/40 mt-1">Pide antes de las 18:00 → entrega mañana</p>
+      
+      <!-- Ver ejemplo más prominente -->
+      <a href="#ejemplo" class="inline-flex items-center gap-2 border border-white/20 text-white/70 px-6 py-3 rounded-xl text-sm hover:border-accent/50 hover:text-white transition-all">
+        👁️ Ver ejemplo REAL de reporte (22 págs.)
+      </a>
       <span class="text-sm text-white/40">Pack Estratégico €119 (ahorra €43) · Individuales desde €19</span>
     </div>
 
-    <!-- Trust badges debajo CTA -->
+    <!-- Trust badges debajo CTA + Stripe -->
     <div class="flex flex-wrap justify-center gap-4 text-sm text-white/50 mb-10">
       <span class="flex items-center gap-1.5">
         <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
@@ -68,6 +83,13 @@
       <span class="flex items-center gap-1.5">
         <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
         Entrega en 24h
+      </span>
+      <span class="flex items-center gap-1.5">
+        <!-- Stripe logo SVG -->
+        <svg class="w-10 h-4" viewBox="0 0 60 25" fill="currentColor">
+          <path d="M59.64 14.28c0-4.96-2.4-8.88-7-8.88-4.62 0-7.42 3.92-7.42 8.84 0 5.84 3.3 8.76 8.04 8.76 2.3 0 4.04-.52 5.36-1.26v-3.88c-1.32.66-2.84 1.06-4.76 1.06-1.88 0-3.56-.66-3.78-2.96h9.52c0-.26.04-1.28.04-1.68zm-9.62-1.84c0-2.2 1.34-3.12 2.58-3.12 1.2 0 2.46.92 2.46 3.12h-5.04zM38.2 5.4c-1.88 0-3.1.88-3.78 1.5l-.24-1.2h-4.26v22.56l4.84-1.02v-5.48c.7.5 1.72 1.22 3.42 1.22 3.46 0 6.6-2.78 6.6-8.92-.02-5.58-3.2-8.66-6.58-8.66zm-1.16 13.32c-1.14 0-1.82-.4-2.28-.9v-7.12c.5-.54 1.2-.94 2.28-.94 1.74 0 2.94 1.96 2.94 4.48 0 2.58-1.18 4.48-2.94 4.48zM22.06 4.14l4.86-1.04V-.02l-4.86 1.02v3.14zM22.06 5.7h4.86v16.9h-4.86V5.7zM16.82 7.34l-.3-1.64h-4.18v16.9h4.84v-11.46c1.14-1.5 3.08-1.22 3.68-1v-4.46c-.62-.24-2.88-.68-4.04 1.66zM6.78 2.26L2.04 3.24l-.02 15.48c0 2.86 2.14 4.96 5 4.96 1.58 0 2.74-.3 3.38-.64v-3.92c-.62.26-3.68 1.16-3.68-1.74V9.56h3.68V5.7H6.72l.06-3.44zM.02 10.02c0-.66.54-1.16 1.22-1.16.66 0 1.22.5 1.22 1.16s-.56 1.16-1.22 1.16c-.68 0-1.22-.5-1.22-1.16z"/>
+        </svg>
+        <span>Pago seguro</span>
       </span>
     </div>
     
@@ -110,3 +132,24 @@
     </div>
   </div>
 </section>
+
+<script>
+  // Dynamic headline based on URL parameter
+  (function() {
+    const headline = document.getElementById('hero-headline');
+    if (!headline) return;
+    
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get('q');
+    
+    const headlines = {
+      'competitor': 'Tu competidor sabe cosas<br/><span class="text-accent">que tú no. Descúbrelas en 24h.</span>',
+      'market': '¿Entrar a ese mercado o no?<br/><span class="text-accent">Respuesta fundamentada en 24h.</span>',
+      'ma': '¿Quién compraría tu empresa<br/><span class="text-accent">y a qué precio? Descúbrelo hoy.</span>'
+    };
+    
+    if (q && headlines[q]) {
+      headline.innerHTML = headlines[q];
+    }
+  })();
+</script>
