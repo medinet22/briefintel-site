@@ -74,19 +74,8 @@ const preTipo = Astro.url.searchParams.get('tipo') || '';
           <input type="hidden" name="preguntas_clave" id="preguntas_clave" />
         </div>
 
-        <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6 space-y-3">
-          <h3 class="text-sm font-semibold text-accent uppercase tracking-wider">Archivos de apoyo (opcional)</h3>
-          <p class="text-xs text-white/50">Si tienes documentación útil, súbela aquí para mejorar la precisión del informe. Ejemplos: balance financiero, estrategia comercial, presentación corporativa, pricing, pipeline de ventas o reportes internos.</p>
-
-          <div id="dropzone" class="w-full rounded-xl border border-dashed border-white/20 bg-white/[0.03] px-4 py-6 text-center transition-colors hover:border-accent/50 hover:bg-white/[0.05] cursor-pointer">
-            <p class="text-sm text-white/70">Arrastra y suelta tus archivos aquí</p>
-            <p class="text-xs text-white/40 mt-1">o haz clic para seleccionarlos (máximo 3)</p>
-            <input id="adjuntos" type="file" multiple accept=".pdf,.xlsx,.xls,.csv,.ppt,.pptx,.doc,.docx" class="hidden" />
-          </div>
-
-          <p id="adjuntosInfo" class="text-[11px] text-white/40">Los archivos se registran para contexto del análisis.</p>
-          <input type="hidden" name="adjuntos_nombres" id="adjuntos_nombres" />
-        </div>
+        <!-- Archivos de apoyo: oculto hasta implementar upload real -->
+        <input type="hidden" name="adjuntos_nombres" id="adjuntos_nombres" />
 
         <div class="bg-white/[0.02] border border-white/10 rounded-2xl p-6">
           <h3 class="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Email de entrega</h3>
