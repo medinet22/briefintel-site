@@ -82,7 +82,7 @@ const reports = [
         Elige tu reporte. <span class="text-accent">Decide mejor.</span>
       </h2>
       <p class="text-white/60 text-lg max-w-2xl mx-auto mb-4">
-        Cada reporte resuelve una pregunta estratégica diferente. Selecciona el que más impacto tenga en tu próxima decisión.
+        Cada reporte resuelve una pregunta estratégica diferente. <strong class="text-white/80">Haz clic en el que necesitas.</strong>
       </p>
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/50">
         <svg class="w-4 h-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -90,11 +90,14 @@ const reports = [
       </div>
     </div>
 
+    <!-- Tap hint -->
+    <p class="text-center text-white/30 text-xs mb-4 md:hidden">👆 Toca la tarjeta del reporte que necesitas</p>
+
     <!-- Report Cards Grid -->
     <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-4 mb-6" id="report-cards">
       {reports.map((report) => (
         <div
-          class="report-card group relative bg-white/[0.02] border border-white/10 rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:border-accent/40 hover:bg-white/[0.04]"
+          class="report-card group relative bg-white/[0.02] border border-white/10 rounded-2xl p-5 cursor-pointer transition-all duration-300 hover:border-accent/60 hover:bg-white/[0.06] hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
           data-id={report.id}
           data-price={report.price}
           data-name={report.name}
@@ -131,13 +134,15 @@ const reports = [
 
           <p class="text-xs text-accent/70 italic">{report.useCase}</p>
 
-          <!-- Select button (replaces direct Stripe link) -->
+          <!-- Select button -->
           <div class="mt-6">
-            <div class="select-btn inline-flex items-center justify-center gap-2 w-full border border-accent/40 text-accent py-3 rounded-xl text-sm font-bold transition-all duration-200 hover:bg-accent/10">
-              Seleccionar este reporte
+            <div class="select-btn flex items-center justify-center gap-2 w-full bg-accent/10 border border-accent/50 text-accent py-3 rounded-xl text-sm font-bold transition-all duration-200 group-hover:bg-accent group-hover:text-dark group-hover:border-accent">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+              Elegir este reporte
             </div>
             <div class="selected-btn hidden items-center justify-center gap-2 w-full bg-accent text-dark py-3 rounded-xl text-sm font-bold">
-              ✓ Reporte seleccionado
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
+              ✓ Seleccionado
             </div>
           </div>
         </div>
