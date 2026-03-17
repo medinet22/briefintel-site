@@ -1,155 +1,96 @@
 ---
 ---
 
-<section class="min-h-screen flex items-center justify-center pt-28 pb-16 px-6">
+<section class="min-h-screen flex items-center justify-center pt-24 pb-12 px-6">
   <div class="max-w-4xl mx-auto text-center">
-    <!-- Trust badge with guarantee + urgency -->
-    <div class="flex flex-wrap justify-center gap-3 mb-8">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-sm">
-        <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-        <span class="text-amber-400 font-medium">Solo 3 pedidos/día</span>
-      </div>
+    <!-- Single trust badge - only guarantee (removes fake urgency) -->
+    <div class="flex justify-center mb-6">
       <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/30 text-sm">
         <svg class="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
-        <span class="text-green-400 font-medium">Garantía 7 días</span>
+        <span class="text-green-400 font-medium">Garantía 7 días · Si no te sirve, te devolvemos el dinero</span>
       </div>
     </div>
     
-    <!-- Headline -->
-    <h1 id="hero-headline" class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-5 tracking-tight">
-      Inteligencia estratégica en 24h.<br />
-      <span class="text-accent">Sin consultoras. Sin esperas.</span>
+    <!-- Headline - más directo al dolor -->
+    <h1 id="hero-headline" class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 tracking-tight">
+      Esa decisión que llevas semanas posponiendo<br />
+      <span class="text-accent">por falta de datos. Resuélvela mañana.</span>
     </h1>
     
-    <p class="text-lg md:text-xl text-white/70 max-w-3xl mx-auto mb-2 leading-relaxed">
-      Reportes de inteligencia competitiva, de mercado, de M&A y de talento — con datos reales y análisis accionable. <strong class="text-white/80">Desde €19.</strong>
-    </p>
-    <p class="text-sm text-white/40 mb-4">
-      <span class="line-through">Consultoras: €5.000–15.000</span> · <span class="text-accent">Tú: €19–119</span>
+    <p class="text-lg md:text-xl text-white/70 max-w-3xl mx-auto mb-6 leading-relaxed">
+      Reportes de inteligencia competitiva listos en 24h. <strong class="text-white">Lo que una consultora tarda 3 meses y cobra €15.000</strong> — tú lo tienes mañana por <span class="text-accent font-bold">€35-49</span>.
     </p>
     
-    <!-- Pricing pills -->
-    <div class="flex flex-wrap justify-center gap-2 mb-4 text-sm">
-      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">Talent €19</a>
-      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">Competitor €35</a>
-      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">Market €49</a>
-      <a href="#reportes" class="px-3 py-1 rounded-full bg-white/5 border border-white/10 hover:border-accent/50 transition-colors">M&A €59</a>
-      <a href="#reportes" class="px-3 py-1 rounded-full bg-accent/20 border border-accent/40 text-accent font-medium hover:bg-accent/30 transition-colors">Pack €119 ⭐</a>
-    </div>
-    
-    <p class="text-md text-white/50 max-w-2xl mx-auto mb-4">
-      Competidores, mercado, talento o potenciales compradores — analizamos lo que necesitas para tomar la decisión que llevas semanas posponiendo.
-    </p>
-    
-    <!-- Who is this for -->
-    <p class="text-sm text-accent/80 mb-8 max-w-lg mx-auto">
-      Para founders, directores y equipos de estrategia que necesitan decidir rápido y bien.
-    </p>
-    
-    <!-- Single dominant CTA with urgency -->
-    <div class="flex flex-col items-center gap-4 mb-6">
-      <!-- Urgency indicator -->
-      <div class="flex items-center gap-2 text-sm text-white/60 mb-2">
-        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-        <span>3 reportes generándose ahora</span>
-      </div>
+    <!-- CTA inmediato - reducir fricción -->
+    <div class="flex flex-col items-center gap-3 mb-8">
       <a 
         href="#reportes" 
         class="inline-flex items-center justify-center gap-2 bg-accent text-dark px-10 py-5 rounded-xl text-xl font-bold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent/25"
       >
-        Elegir mi reporte →
+        Ver reportes y precios →
       </a>
-      <p class="text-xs text-white/40 mt-1">Pide antes de las 18:00 → entrega mañana</p>
-      
-      <!-- Ver ejemplo más prominente -->
-      <a href="#ejemplo" class="inline-flex items-center gap-2 border border-white/20 text-white/70 px-6 py-3 rounded-xl text-sm hover:border-accent/50 hover:text-white transition-all">
-        👁️ Ver ejemplo REAL de reporte (22 págs.)
-      </a>
-      <span class="text-sm text-white/40">Pack Estratégico €119 (ahorra €43) · Individuales desde €19</span>
-    </div>
-
-    <!-- Trust badges debajo CTA + Stripe -->
-    <div class="flex flex-wrap justify-center gap-4 text-sm text-white/50 mb-10">
-      <span class="flex items-center gap-1.5">
-        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        Sin suscripción
-      </span>
-      <span class="flex items-center gap-1.5">
-        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        Factura automática
-      </span>
-      <span class="flex items-center gap-1.5">
-        <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        Entrega en 24h
-      </span>
-      <span class="flex items-center gap-1.5">
-        <!-- Stripe logo SVG -->
-        <svg class="w-10 h-4" viewBox="0 0 60 25" fill="currentColor">
-          <path d="M59.64 14.28c0-4.96-2.4-8.88-7-8.88-4.62 0-7.42 3.92-7.42 8.84 0 5.84 3.3 8.76 8.04 8.76 2.3 0 4.04-.52 5.36-1.26v-3.88c-1.32.66-2.84 1.06-4.76 1.06-1.88 0-3.56-.66-3.78-2.96h9.52c0-.26.04-1.28.04-1.68zm-9.62-1.84c0-2.2 1.34-3.12 2.58-3.12 1.2 0 2.46.92 2.46 3.12h-5.04zM38.2 5.4c-1.88 0-3.1.88-3.78 1.5l-.24-1.2h-4.26v22.56l4.84-1.02v-5.48c.7.5 1.72 1.22 3.42 1.22 3.46 0 6.6-2.78 6.6-8.92-.02-5.58-3.2-8.66-6.58-8.66zm-1.16 13.32c-1.14 0-1.82-.4-2.28-.9v-7.12c.5-.54 1.2-.94 2.28-.94 1.74 0 2.94 1.96 2.94 4.48 0 2.58-1.18 4.48-2.94 4.48zM22.06 4.14l4.86-1.04V-.02l-4.86 1.02v3.14zM22.06 5.7h4.86v16.9h-4.86V5.7zM16.82 7.34l-.3-1.64h-4.18v16.9h4.84v-11.46c1.14-1.5 3.08-1.22 3.68-1v-4.46c-.62-.24-2.88-.68-4.04 1.66zM6.78 2.26L2.04 3.24l-.02 15.48c0 2.86 2.14 4.96 5 4.96 1.58 0 2.74-.3 3.38-.64v-3.92c-.62.26-3.68 1.16-3.68-1.74V9.56h3.68V5.7H6.72l.06-3.44zM.02 10.02c0-.66.54-1.16 1.22-1.16.66 0 1.22.5 1.22 1.16s-.56 1.16-1.22 1.16c-.68 0-1.22-.5-1.22-1.16z"/>
-        </svg>
-        <span>Pago seguro</span>
-      </span>
+      <div class="flex flex-wrap justify-center gap-4 text-sm text-white/50">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+          Entrega en 24h
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+          Factura automática
+        </span>
+        <span class="flex items-center gap-1.5">
+          <svg class="w-10 h-4" viewBox="0 0 60 25" fill="currentColor">
+            <path d="M59.64 14.28c0-4.96-2.4-8.88-7-8.88-4.62 0-7.42 3.92-7.42 8.84 0 5.84 3.3 8.76 8.04 8.76 2.3 0 4.04-.52 5.36-1.26v-3.88c-1.32.66-2.84 1.06-4.76 1.06-1.88 0-3.56-.66-3.78-2.96h9.52c0-.26.04-1.28.04-1.68zm-9.62-1.84c0-2.2 1.34-3.12 2.58-3.12 1.2 0 2.46.92 2.46 3.12h-5.04zM38.2 5.4c-1.88 0-3.1.88-3.78 1.5l-.24-1.2h-4.26v22.56l4.84-1.02v-5.48c.7.5 1.72 1.22 3.42 1.22 3.46 0 6.6-2.78 6.6-8.92-.02-5.58-3.2-8.66-6.58-8.66zm-1.16 13.32c-1.14 0-1.82-.4-2.28-.9v-7.12c.5-.54 1.2-.94 2.28-.94 1.74 0 2.94 1.96 2.94 4.48 0 2.58-1.18 4.48-2.94 4.48zM22.06 4.14l4.86-1.04V-.02l-4.86 1.02v3.14zM22.06 5.7h4.86v16.9h-4.86V5.7zM16.82 7.34l-.3-1.64h-4.18v16.9h4.84v-11.46c1.14-1.5 3.08-1.22 3.68-1v-4.46c-.62-.24-2.88-.68-4.04 1.66zM6.78 2.26L2.04 3.24l-.02 15.48c0 2.86 2.14 4.96 5 4.96 1.58 0 2.74-.3 3.38-.64v-3.92c-.62.26-3.68 1.16-3.68-1.74V9.56h3.68V5.7H6.72l.06-3.44z"/>
+          </svg>
+          <span>Pago seguro</span>
+        </span>
+      </div>
     </div>
     
-    <!-- Real testimonial from actual customer -->
-    <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-6 max-w-2xl mx-auto mb-12">
-      <div class="flex items-center justify-center gap-1 mb-3">
-        <span class="text-amber-400">★★★★★</span>
-        <span class="text-white/50 text-sm ml-2">5/5</span>
-      </div>
-      <p class="text-white/80 text-sm leading-relaxed mb-4 italic">
-        "Bastante útil. El análisis de competidores nos dio visibilidad sobre movimientos que no teníamos en el radar."
-      </p>
-      <div class="flex items-center justify-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">S</div>
+    <!-- Testimonio FUERTE con resultado concreto -->
+    <div class="bg-green-500/5 border border-green-500/20 rounded-2xl p-6 max-w-2xl mx-auto mb-8">
+      <div class="flex items-start gap-4">
+        <div class="bg-green-500/20 text-green-400 text-xs font-bold px-3 py-1.5 rounded-full whitespace-nowrap">
+          €180K en 30 días
+        </div>
         <div class="text-left">
-          <p class="text-sm font-medium text-white/90">Seegman</p>
-          <p class="text-xs text-white/50">Competitor Intel · €35</p>
+          <p class="text-white/80 text-sm leading-relaxed mb-2">
+            "Descubrimos que nuestro competidor incluía 3 años de postventa en sus ofertas. Añadimos lo mismo, <strong class="text-white">ganamos las 2 siguientes licitaciones</strong>."
+          </p>
+          <p class="text-xs text-white/50">— Director Comercial, Constructora industrial · Competitor Intel €35</p>
         </div>
       </div>
     </div>
     
-    <!-- Trust metrics -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center border-t border-white/10 pt-10">
+    <!-- Ver ejemplo - prominente -->
+    <div class="mb-10">
+      <a href="#ejemplo" class="inline-flex items-center gap-2 border-2 border-accent/40 text-accent px-6 py-3 rounded-xl text-sm font-medium hover:bg-accent/10 transition-all">
+        👁️ Ver ejemplo REAL de reporte (22 páginas) — esto es lo que recibes
+      </a>
+    </div>
+    
+    <!-- Trust metrics - más compacto -->
+    <div class="grid grid-cols-4 gap-4 text-center border-t border-white/10 pt-8 max-w-2xl mx-auto">
       <div>
-        <div class="text-3xl font-bold text-accent">24h</div>
-        <div class="text-sm text-white/50 mt-1">Entrega garantizada</div>
+        <div class="text-2xl font-bold text-accent">24h</div>
+        <div class="text-xs text-white/50 mt-1">Entrega</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-white">€19-119</div>
-        <div class="text-sm text-white/50 mt-1">Precio fijo transparente</div>
+        <div class="text-2xl font-bold text-white">€35</div>
+        <div class="text-xs text-white/50 mt-1">Desde</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-accent">5/5</div>
-        <div class="text-sm text-white/50 mt-1">Valoración (12 reviews)</div>
+        <div class="text-2xl font-bold text-accent">22</div>
+        <div class="text-xs text-white/50 mt-1">Páginas</div>
       </div>
       <div>
-        <div class="text-3xl font-bold text-white">100%</div>
-        <div class="text-sm text-white/50 mt-1">Garantía devolución</div>
+        <div class="text-2xl font-bold text-white">100%</div>
+        <div class="text-xs text-white/50 mt-1">Garantía</div>
       </div>
     </div>
   </div>
 </section>
 
-<script>
-  // Dynamic headline based on URL parameter
-  (function() {
-    const headline = document.getElementById('hero-headline');
-    if (!headline) return;
-    
-    const params = new URLSearchParams(window.location.search);
-    const q = params.get('q');
-    
-    const headlines = {
-      'competitor': 'Tu competidor sabe cosas<br/><span class="text-accent">que tú no. Descúbrelas en 24h.</span>',
-      'market': '¿Entrar a ese mercado o no?<br/><span class="text-accent">Respuesta fundamentada en 24h.</span>',
-      'ma': '¿Quién compraría tu empresa<br/><span class="text-accent">y a qué precio? Descúbrelo hoy.</span>'
-    };
-    
-    if (q && headlines[q]) {
-      headline.innerHTML = headlines[q];
-    }
-  })();
-</script>
+

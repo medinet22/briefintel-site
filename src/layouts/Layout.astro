@@ -79,13 +79,13 @@ const ogImage = `${siteUrl}/og-image.png`;
     
     <!-- Sticky CTA móvil (solo móvil, aparece al scrollear) -->
     <div id="sticky-cta" class="fixed bottom-0 left-0 right-0 z-50 md:hidden translate-y-full transition-transform duration-300 ease-in-out">
-      <div class="bg-dark border-t border-white/10 px-4 py-3 flex items-center gap-3">
-        <div class="flex-1">
-          <p class="text-sm font-bold text-white">BriefIntel — Desde €19</p>
-          <p class="text-xs text-white/50">Entrega en 24h · Garantía 7 días</p>
+      <div class="bg-dark/95 backdrop-blur-sm border-t border-white/10 px-4 py-3 flex items-center gap-3 safe-area-inset-bottom">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-bold text-white truncate">Tu reporte mañana — €35</p>
+          <p class="text-xs text-white/50">Garantía 7 días</p>
         </div>
-        <a href="#reportes" class="bg-accent text-dark px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap hover:bg-accent/90 transition-colors">
-          Elegir reporte →
+        <a href="#reportes" class="bg-accent text-dark px-5 py-3 rounded-xl text-sm font-bold whitespace-nowrap hover:bg-accent/90 transition-colors flex-shrink-0">
+          Ver reportes →
         </a>
       </div>
     </div>
