@@ -1,4 +1,5 @@
 const PIPELINE_URL = process.env.BRIEFINTEL_REPORTS_PIPELINE_ORDERS_URL || 'https://reports.getbriefintel.com/pipeline/orders';
+const IGNORED_URL = process.env.BRIEFINTEL_REPORTS_IGNORED_URL || 'https://reports.getbriefintel.com/pipeline/ignored';
 
 export default async function handler(req, res) {
   const secret = (req.query && req.query.secret) || (req.body && req.body.secret);
@@ -8,13 +9,31 @@ export default async function handler(req, res) {
   const reportsAdminKey = process.env.BRIEFINTEL_REPORTS_ADMIN_KEY || process.env.BRIEFINTEL_ADMIN_KEY || ADMIN_SECRET;
 
   try {
-    const r = await fetch(PIPELINE_URL, { headers: { 'x-admin-key': reportsAdminKey } });
+    const [r, ignoredR] = await Promise.all([
+      fetch(PIPELINE_URL, { headers: { 'x-admin-key': reportsAdminKey } }),
+      fetch(IGNORED_URL, { headers: { 'x-admin-key': reportsAdminKey } }).catch(() => null),
+    ]);
     const text = await r.text();
     let data = {};
     try { data = JSON.parse(text || '{}'); } catch { data = {}; }
     if (!r.ok) return res.status(r.status).json({ error: data.error || 'pipeline fetch failed' });
 
-    const orders = Array.isArray(data.orders) ? data.orders : [];
+    let ignoredPIs = [];
+    let ignoreBeforeDate = null;
+    if (ignoredR && ignoredR.ok) {
+      try {
+        const ig = await ignoredR.json();
+        ignoredPIs = Array.isArray(ig.ignoredPIs) ? ig.ignoredPIs : [];
+        ignoreBeforeDate = ig.ignoreBeforeDate ? new Date(ig.ignoreBeforeDate).getTime() : null;
+      } catch {}
+    }
+
+    const allOrders = Array.isArray(data.orders) ? data.orders : [];
+    const orders = allOrders.filter((o) => {
+      if (ignoredPIs.includes(o.payment_intent)) return false;
+      if (ignoreBeforeDate && new Date(o.queued_at || o.paid_at || 0).getTime() < ignoreBeforeDate) return false;
+      return true;
+    });
     const rows = orders.map((o) => ({
       payment_intent: o.payment_intent || null,
       brief_id: o.brief_id || null,
