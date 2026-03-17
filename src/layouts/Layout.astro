@@ -79,27 +79,43 @@ const ogImage = `${siteUrl}/og-image.png`;
     
     <!-- Sticky CTA móvil (solo móvil, aparece al scrollear) -->
     <div id="sticky-cta" class="fixed bottom-0 left-0 right-0 z-50 md:hidden translate-y-full transition-transform duration-300 ease-in-out">
-      <div class="bg-dark/95 backdrop-blur-sm border-t border-white/10 px-4 py-3 flex items-center gap-3 safe-area-inset-bottom">
+      <div class="bg-dark/95 backdrop-blur-sm border-t border-white/10 px-4 py-3 flex items-center gap-3">
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-bold text-white truncate">Tu reporte mañana — €35</p>
+          <p id="sticky-label" class="text-sm font-bold text-white truncate">Desde €19 · Entrega en 24h</p>
           <p class="text-xs text-white/50">Garantía 7 días</p>
         </div>
-        <a href="#reportes" class="bg-accent text-dark px-5 py-3 rounded-xl text-sm font-bold whitespace-nowrap hover:bg-accent/90 transition-colors flex-shrink-0">
+        <a id="sticky-btn" href="#reportes" class="bg-accent text-dark px-5 py-3 rounded-xl text-sm font-bold whitespace-nowrap hover:bg-accent/90 transition-colors flex-shrink-0">
           Ver reportes →
         </a>
       </div>
     </div>
     <script is:inline>
       (function() {
-        const bar = document.getElementById('sticky-cta');
+        var bar = document.getElementById('sticky-cta');
+        var label = document.getElementById('sticky-label');
+        var btn = document.getElementById('sticky-btn');
         if (!bar) return;
-        let shown = false;
+
+        // Mostrar al scrollear
         window.addEventListener('scroll', function() {
-          if (window.scrollY > 300 && !shown) {
-            bar.classList.remove('translate-y-full');
-            shown = true;
-          }
+          if (window.scrollY > 300) bar.classList.remove('translate-y-full');
         }, { passive: true });
+
+        // Escuchar selección de reporte desde ReportTypes
+        document.addEventListener('reportSelected', function(e) {
+          var d = e.detail;
+          if (d && d.name && d.price) {
+            label.textContent = d.name + ' — ' + d.price;
+            btn.textContent = 'Completar brief →';
+            btn.href = d.link || '#reportes';
+          }
+        });
+
+        document.addEventListener('reportDeselected', function() {
+          label.textContent = 'Desde €19 · Entrega en 24h';
+          btn.textContent = 'Ver reportes →';
+          btn.href = '#reportes';
+        });
       })();
     </script>
   </body>

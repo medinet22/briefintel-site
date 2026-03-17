@@ -248,6 +248,9 @@ const reports = [
       summaryCta!.setAttribute('href', link);
       summary!.classList.remove('hidden');
 
+      // Notify sticky CTA
+      document.dispatchEvent(new CustomEvent('reportSelected', { detail: { name, price, link } }));
+
       // Smooth scroll to summary
       setTimeout(() => {
         summary!.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -268,5 +271,6 @@ const reports = [
       if (selectedBtn) selectedBtn.classList.add('hidden'), selectedBtn.classList.remove('flex');
     });
     summary!.classList.add('hidden');
+    document.dispatchEvent(new CustomEvent('reportDeselected'));
   }
 </script>

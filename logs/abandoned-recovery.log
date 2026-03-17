@@ -2,3 +2,7 @@
 [2026-03-17 10:05:26 UTC] Starting abandoned cart recovery scan...
 [2026-03-17 10:05:27 UTC] Found 0 abandoned briefs (0 pending recovery)
 [2026-03-17 10:05:27 UTC] No pending recovery emails to send
+[2026-03-17 18:03:07 UTC] ERROR: BRIEFINTEL_ADMIN_SECRET not set
+[2026-03-17 18:03:13 UTC] Starting abandoned cart recovery scan...
+[2026-03-17 18:03:13 UTC] Found 0 abandoned briefs (0 pending recovery)
+[2026-03-17 18:03:13 UTC] No pending recovery emails to send
